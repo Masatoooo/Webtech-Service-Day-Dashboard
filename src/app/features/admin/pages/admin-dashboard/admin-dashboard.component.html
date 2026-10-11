@@ -83,9 +83,54 @@
     </div>
   </section>
 
-  <!-- Foto 1 Split Section: Active Initiatives + Participation Stats/Spotlight & Calendar -->
+  <!-- Dedicated Capacity Breakdown Cards (Offered Places, Places Taken, Places Remaining) -->
+  <section class="dash-cards-row mb-6" *ngIf="totals$ | async as m">
+    <!-- Card: Total Offered Places -->
+    <div class="admin-kpi-card" id="kpi-total-capacity">
+      <div class="flex justify-between items-center mb-1">
+        <span class="kpi-label">Offered Places</span>
+        <span class="badge" style="background: #EEF3F7; color: var(--color-deep-slate); font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;">
+          Total Capacity
+        </span>
+      </div>
+      <div class="kpi-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</div>
+      <div class="kpi-sub">
+        Max capacity offered across all corporate programs
+      </div>
+    </div>
+
+    <!-- Card: Places Taken -->
+    <div class="admin-kpi-card" id="kpi-places-taken">
+      <div class="flex justify-between items-center mb-1">
+        <span class="kpi-label">Places Taken</span>
+        <span class="badge badge-forest" style="font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;">
+          Confirmed
+        </span>
+      </div>
+      <div class="kpi-num" style="color: var(--color-forest);" id="kpi-val-taken">{{ m.placesTaken }}</div>
+      <div class="kpi-sub">
+        <strong>{{ m.activeRegistrations }}</strong> confirmed volunteer spots
+      </div>
+    </div>
+
+    <!-- Card: Places Remaining -->
+    <div class="admin-kpi-card" id="kpi-places-remaining">
+      <div class="flex justify-between items-center mb-1">
+        <span class="kpi-label">Places Remaining</span>
+        <span class="badge" style="background: #FDF4E7; color: #845D16; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;">
+          Open Spots
+        </span>
+      </div>
+      <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#845D16' : '#202C3B'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
+      <div class="kpi-sub">
+        Open capacity for staff sign-up
+      </div>
+    </div>
+  </section>
+
+  <!-- Foto 1 Split Section: Active Initiatives + Calendar Timeline -->
   <div class="dash-main-split mb-8">
-    <!-- Center-Left Content Area (Tasks + Stats/Spotlight) -->
+    <!-- Center-Left Content Area (Tasks + Spotlight) -->
     <div class="dash-center-col flex flex-col gap-6">
       <!-- Section: Active CSR Initiatives -->
       <section>
@@ -128,55 +173,25 @@
         </div>
       </section>
 
-      <!-- Section: Statistics Widgets & CSR Spotlight (Matching Foto 1 Row) -->
-      <section class="dash-stats-spotlight-row" *ngIf="totals$ | async as m">
-        <!-- Participation Quick Stats -->
-        <div class="dash-sub-stats flex flex-col justify-between">
-          <div>
-            <h2 class="dash-section-title mb-3">Participation Stats</h2>
-            <div class="sub-stats-grid mb-3">
-              <div class="sub-stat-box" id="kpi-places-taken">
-                <span class="sub-stat-num" style="color: var(--color-forest);" id="kpi-val-taken">{{ m.placesTaken }}</span>
-                <span class="sub-stat-lbl">Staff Enrolled</span>
-              </div>
-              <div class="sub-stat-box" id="kpi-places-remaining">
-                <span class="sub-stat-num" [style.color]="m.placesRemaining <= 5 ? '#845D16' : '#202C3B'" id="kpi-val-remaining">{{ m.placesRemaining }}</span>
-                <span class="sub-stat-lbl">Places Open</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="sub-stat-box flex justify-between items-center" id="kpi-total-capacity">
-            <div>
-              <span class="sub-stat-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</span>
-              <span class="sub-stat-lbl">Offered Capacity ({{ m.capacityUtilisationPct }}% filled)</span>
-            </div>
-            <a routerLink="/admin/activities" class="dash-view-all-link" style="font-size: 0.75rem;">
-              Manage &rarr;
-            </a>
-          </div>
+      <!-- Impact Spotlight Banner Card (Full Width in Left Column) -->
+      <div class="dash-spotlight-card">
+        <div class="spotlight-content">
+          <span class="spotlight-tag">CSR IMPACT PLATFORM</span>
+          <h3 class="spotlight-title">Corporate Social Responsibility</h3>
+          <p class="spotlight-desc">
+            Empower employees to contribute time towards marine conservation, food security, and digital literacy.
+          </p>
+          <a routerLink="/admin/activities" class="spotlight-btn">
+            Explore All Initiatives &rarr;
+          </a>
         </div>
-
-        <!-- Impact Spotlight Banner Card -->
-        <div class="dash-spotlight-card">
-          <div class="spotlight-content">
-            <span class="spotlight-tag">CSR IMPACT PLATFORM</span>
-            <h3 class="spotlight-title">Corporate Social Responsibility</h3>
-            <p class="spotlight-desc">
-              Empower employees to contribute time towards marine conservation, food security, and digital literacy.
-            </p>
-            <a routerLink="/admin/activities" class="spotlight-btn">
-              Explore Activities &rarr;
-            </a>
-          </div>
-          <div class="spotlight-graphic" aria-hidden="true" style="opacity: 0.4;">
-            <svg viewBox="0 0 80 80" fill="none" width="70" height="70">
-              <circle cx="40" cy="40" r="36" fill="rgba(255,255,255,0.08)" />
-              <path d="M26 44C22 44 18 40 18 36C18 32 22 28 26 28C30 28 34 32 34 36C34 40 38 44 42 44C46 44 50 40 50 36C50 32 54 28 58 28C62 28 66 32 66 36" stroke="#C9A66B" stroke-width="3" stroke-linecap="round" />
-            </svg>
-          </div>
+        <div class="spotlight-graphic" aria-hidden="true" style="opacity: 0.4;">
+          <svg viewBox="0 0 80 80" fill="none" width="70" height="70">
+            <circle cx="40" cy="40" r="36" fill="rgba(255,255,255,0.08)" />
+            <path d="M26 44C22 44 18 40 18 36C18 32 22 28 26 28C30 28 34 32 34 36C34 40 38 44 42 44C46 44 50 40 50 36C50 32 54 28 58 28C62 28 66 32 66 36" stroke="#C9A66B" stroke-width="3" stroke-linecap="round" />
+          </svg>
         </div>
-      </section>
+      </div>
     </div>
 
     <!-- Right Column: Calendar & Upcoming Service Days -->
