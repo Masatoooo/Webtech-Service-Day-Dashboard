@@ -56,6 +56,21 @@ export interface ParticipantRosterRow {
   isCancelled: boolean;
 }
 
+export interface FeaturedActivityItem {
+  activity: Activity;
+  ngoName: string;
+  slotSummary: ActivitySlotSummary;
+  accentColor: string;
+}
+
+export interface CalendarEventItem {
+  dateHeader: string;
+  timeRange: string;
+  title: string;
+  location: string;
+  category: string;
+}
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -70,6 +85,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   // Executive Reconciled Metrics
   totals$!: Observable<ExecutiveTotals>;
+
+  // Featured Initiatives & Schedule Timeline (Hero Sections from Foto 1)
+  featuredActivities$!: Observable<FeaturedActivityItem[]>;
+  calendarEvents$!: Observable<CalendarEventItem[]>;
 
   // Needs Attention Radar
   needsAttentionItems: NeedsAttentionItem[] = [];
@@ -147,6 +166,69 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           placesRemaining,
           capacityUtilisationPct
         };
+      })
+    );
+
+    // Featured CSR initiatives (Matching Foto 1 "Active CSR Initiatives" card list)
+    this.featuredActivities$ = combineLatest([
+      this.dataStore.activities$,
+      this.dataStore.ngos$,
+      this.dataStore.registrations$
+    ]).pipe(
+      map(([activities, ngos, registrations]) => {
+        const ngoMap = new Map<string, NGO>(ngos.map((n) => [n.id, n]));
+        const colors = ['#356859', '#C9A66B', '#202C3B', '#1F486B'];
+
+        return activities
+          .filter((a) => a.publicationStatus === 'PUBLISHED')
+          .slice(0, 4)
+          .map((activity, index) => {
+            const ngo = ngoMap.get(activity.ngoId);
+            const slotSummary = this.activityService.computeSlotSummary(activity, registrations);
+            return {
+              activity,
+              ngoName: ngo ? ngo.name : 'Vetted NGO',
+              slotSummary,
+              accentColor: colors[index % colors.length]
+            };
+          });
+      })
+    );
+
+    // Upcoming Schedule Calendar (Matching Foto 1 "Schedule Calendar" timeline)
+    this.calendarEvents$ = this.dataStore.activities$.pipe(
+      map((activities) => {
+        const sorted = [...activities]
+          .filter((a) => a.publicationStatus === 'PUBLISHED')
+          .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime());
+
+        return sorted.slice(0, 5).map((act) => {
+          const startDate = new Date(act.startDateTime);
+          const endDate = new Date(act.endDateTime);
+
+          const dateHeader = isNaN(startDate.getTime())
+            ? act.startDateTime
+            : startDate.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+              });
+
+          const startTimeStr = isNaN(startDate.getTime())
+            ? ''
+            : startDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+          const endTimeStr = isNaN(endDate.getTime())
+            ? ''
+            : endDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+          return {
+            dateHeader,
+            timeRange: `${startTimeStr} - ${endTimeStr}`,
+            title: act.title,
+            location: act.location,
+            category: act.serviceType
+          };
+        });
       })
     );
 
