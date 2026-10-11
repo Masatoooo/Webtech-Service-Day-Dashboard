@@ -430,11 +430,16 @@
       </aside>
     </div>
 
-    <!-- Registration Confirmation Modal (Task 07) -->
+    <!-- Registration Confirmation Modal -->
     <div
       class="contract-modal-backdrop"
       *ngIf="showRegistrationModal"
       (click)="closeRegistrationModal()"
+      (keydown.escape)="closeRegistrationModal()"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="detail-modal-activity-title"
+      tabindex="-1"
       id="detail-registration-modal"
     >
       <div class="contract-modal-card" (click)="$event.stopPropagation()">

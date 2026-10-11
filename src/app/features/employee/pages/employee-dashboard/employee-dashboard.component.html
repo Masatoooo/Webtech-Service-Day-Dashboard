@@ -1,87 +1,196 @@
 <div class="employee-page">
   <!-- Page Header -->
-  <header class="page-header">
+  <header class="page-header mb-6">
     <div class="flex justify-between items-center header-row">
       <div>
         <div class="role-pretitle">Staff Contributions</div>
         <h1 class="page-title">Volunteer Portal</h1>
         <p class="header-desc text-muted">
-          Welcome back<span *ngIf="currentUser$ | async as user">, <strong>{{ user.name }}</strong> ({{ user.department }})</span>.
+          Welcome back<span *ngIf="currentUser$ | async as user">, <strong>{{ user.name }}</strong> ({{ user.department }})</span>. Explore community initiatives, track registrations, and record event attendance.
         </p>
       </div>
-      <div class="header-badge-wrap">
-        <app-status-badge variant="forest" label="Employee Space"></app-status-badge>
+      <div class="header-badge-wrap flex items-center gap-2">
+        <app-status-badge variant="forest" label="Volunteer Active"></app-status-badge>
       </div>
     </div>
   </header>
 
-  <!-- Verification Banner -->
-  <div class="verification-banner mb-6">
-    <div class="verification-icon-wrap">
-      <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-      </svg>
-    </div>
-    <div class="verification-info flex-1">
-      <div class="verification-title">Task 04 Routing & Access Control Verified</div>
-      <div class="verification-desc text-muted">
-        Authenticated via demo session as
-        <strong *ngIf="currentUser$ | async as user">{{ user.name }} ({{ user.email }})</strong>.
-        Route <code class="route-code">/employee</code> is protected by <code>AuthGuard</code> and <code>RoleGuard</code>.
+  <!-- Quick Action & Upcoming Registration Hero -->
+  <section class="mb-6">
+    <ng-container *ngIf="upcomingEnrolled$ | async as enrolled; else discoverBanner">
+      <div class="card p-5" style="background: linear-gradient(135deg, #FAFDFB 0%, #FFFFFF 100%); border: 1.5px solid #CFE2D8; border-left: 6px solid var(--color-forest); border-radius: 14px; box-shadow: 0 4px 14px rgba(32, 44, 59, 0.04);">
+        <div class="flex justify-between items-start flex-wrap gap-3">
+          <div>
+            <span class="text-xs font-bold text-forest uppercase tracking-wider block mb-1">Your Next Scheduled Initiative</span>
+            <h2 class="text-xl font-bold text-deep-slate mb-1">{{ enrolled.activity.title }}</h2>
+            <p class="text-sm text-muted mb-3" *ngIf="enrolled.ngo">Partner NGO: <strong>{{ enrolled.ngo.name }}</strong></p>
+            <div class="flex items-center gap-4 text-xs text-muted flex-wrap">
+              <span class="flex items-center gap-1">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                </svg>
+                {{ enrolled.activity.startDateTime | date:'mediumDate' }} ({{ enrolled.activity.startDateTime | date:'shortTime' }}–{{ enrolled.activity.endDateTime | date:'shortTime' }})
+              </span>
+              <span class="flex items-center gap-1">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                </svg>
+                {{ enrolled.activity.location }}
+              </span>
+              <span class="flex items-center gap-1">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+                Cut-off: {{ enrolled.activity.registrationCutoff | date:'mediumDate' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <a
+              [routerLink]="['/employee/checkin']"
+              [queryParams]="{ activityId: enrolled.activity.id }"
+              class="btn btn-sm btn-primary"
+              id="hero-btn-checkin"
+            >
+              Event Check-In
+            </a>
+            <a
+              [routerLink]="['/employee/activities', enrolled.activity.id]"
+              class="btn btn-sm btn-secondary"
+              id="hero-btn-details"
+            >
+              Session Details
+            </a>
+            <a
+              routerLink="/employee/registrations"
+              class="btn btn-sm btn-secondary"
+              id="hero-btn-manage"
+            >
+              Manage Registration
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </ng-container>
+
+    <ng-template #discoverBanner>
+      <div class="card p-5 text-center" style="background: linear-gradient(135deg, #FAFBFB 0%, #F5F9F6 100%); border: 1px solid var(--color-border); border-radius: 14px;">
+        <h2 class="text-lg font-bold text-deep-slate mb-1">Make Your Corporate Volunteer Hours Count</h2>
+        <p class="text-sm text-muted mb-4 max-w-xl mx-auto">
+          You currently have no active registrations scheduled. Discover vetted partner NGO initiatives across environment, education, and community support.
+        </p>
+        <a routerLink="/employee/activities" class="btn btn-primary" id="hero-btn-browse-open">
+          Browse Open Opportunities
+        </a>
+      </div>
+    </ng-template>
+  </section>
 
   <!-- Operational Metrics Row -->
   <div class="metrics-grid mb-6">
-    <div class="metric-card">
+    <!-- 1. Approved Opportunities -->
+    <div class="metric-card" id="card-metric-opportunities">
       <div class="metric-label">Approved Opportunities</div>
       <div class="metric-val" id="emp-metric-available">
         {{ (availableActivities$ | async)?.length || 0 }}
       </div>
-      <div class="metric-meta text-muted mb-2">Open community initiatives</div>
-      <a routerLink="/employee/activities" class="btn btn-sm btn-primary" id="btn-browse-opportunities" style="font-size: 0.75rem;">
-        Browse Board →
+      <div class="metric-meta text-muted mb-3">Open initiatives available for sign-up</div>
+      <a routerLink="/employee/activities" class="btn btn-sm btn-primary" id="btn-browse-opportunities" style="font-size: 0.775rem;">
+        Explore Board &rarr;
       </a>
     </div>
 
-    <div class="metric-card">
+    <!-- 2. My Registrations -->
+    <div class="metric-card" id="card-metric-registrations">
       <div class="metric-label">My Registrations</div>
       <div class="metric-val" id="emp-metric-registrations">
         {{ (myRegistrations$ | async)?.length || 0 }}
       </div>
-      <div class="metric-meta text-muted">Active enrollments</div>
+      <div class="metric-meta text-muted mb-3">Active confirmed enrollments</div>
+      <a routerLink="/employee/registrations" class="btn btn-sm btn-secondary" id="btn-view-registrations" style="font-size: 0.775rem;">
+        Manage Records &rarr;
+      </a>
     </div>
 
-    <div class="metric-card">
-      <div class="metric-label">Community Impact</div>
-      <div class="metric-val" id="emp-metric-status">
+    <!-- 3. Event Day Check-In -->
+    <div class="metric-card" id="card-metric-checkin">
+      <div class="metric-label">On-Site Check-In</div>
+      <div class="metric-val text-forest" id="emp-metric-checkin">
         Active
       </div>
-      <div class="metric-meta text-muted">Corporate Service Participant</div>
+      <div class="metric-meta text-muted mb-3">QR scanner & arrival attendance</div>
+      <a routerLink="/employee/checkin" class="btn btn-sm btn-secondary" id="btn-portal-checkin" style="font-size: 0.775rem;">
+        Check-In Station &rarr;
+      </a>
+    </div>
+
+    <!-- 4. Notifications Inbox -->
+    <div class="metric-card" id="card-metric-notifications">
+      <div class="metric-label">In-App Notifications</div>
+      <div class="metric-val" id="emp-metric-unread">
+        {{ (unreadCount$ | async) || 0 }}
+      </div>
+      <div class="metric-meta text-muted mb-3">Unread reminders & broadcast updates</div>
+      <a routerLink="/employee/notifications" class="btn btn-sm btn-secondary" id="btn-portal-notifications" style="font-size: 0.775rem;">
+        Open Inbox &rarr;
+      </a>
     </div>
   </div>
 
-  <!-- Roadmap / Next Phase Notice -->
-  <div class="card info-card">
-    <div class="card-header">
-      <h2 class="card-title">Employee Portal Modules</h2>
+  <!-- Quick Access Navigation Grid -->
+  <section class="card p-5" style="border-radius: 14px;">
+    <h2 class="text-base font-bold text-deep-slate mb-3">Volunteer Service Hub Shortcuts</h2>
+    <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      <a routerLink="/employee/activities" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white border text-forest font-bold" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-deep-slate">Browse Opportunities</div>
+          <div class="text-xs text-muted">Filter by focus area and availability</div>
+        </div>
+      </a>
+
+      <a routerLink="/employee/registrations" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white border text-forest font-bold" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-deep-slate">My Registrations</div>
+          <div class="text-xs text-muted">View, withdraw, or transfer activities</div>
+        </div>
+      </a>
+
+      <a routerLink="/employee/checkin" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white border text-forest font-bold" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd" />
+            <path d="M11 12a1 1 0 011-1h1v1h-1v1h2v-1h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v-1h-1v1h-2a1 1 0 01-1-1v-4z" />
+          </svg>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-deep-slate">Event QR Check-In</div>
+          <div class="text-xs text-muted">Scan poster or enter demo code on site</div>
+        </div>
+      </a>
+
+      <a routerLink="/employee/notifications" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white border text-forest font-bold" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+          </svg>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-deep-slate">Notifications Inbox</div>
+          <div class="text-xs text-muted">Company bulletins and schedule alerts</div>
+        </div>
+      </a>
     </div>
-    <div class="card-body">
-      <p class="text-secondary mb-4">
-        Task 04 establishes the authentication shell and employee role routing. Subsequent task modules:
-      </p>
-      <div class="module-list">
-        <div class="module-item">
-          <strong>Task 06:</strong> Browse Opportunities & Activity Detail Discovery (Use Case 2)
-        </div>
-        <div class="module-item">
-          <strong>Task 07:</strong> Registration Workflows, Slot Limits & Cut-off Rules (Use Case 3)
-        </div>
-        <div class="module-item">
-          <strong>Task 09:</strong> Digital Ticket & QR Code Check-in Verification (Use Case 5)
-        </div>
-      </div>
-    </div>
-  </div>
+  </section>
 </div>

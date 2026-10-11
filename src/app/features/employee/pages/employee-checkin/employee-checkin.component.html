@@ -120,6 +120,8 @@
       <button
         type="button"
         class="notif-tab-btn"
+        role="tab"
+        [attr.aria-selected]="activeMode === 'SCANNER'"
         [class.active]="activeMode === 'SCANNER'"
         (click)="setMode('SCANNER')"
         id="tab-mode-scanner"
@@ -134,6 +136,8 @@
       <button
         type="button"
         class="notif-tab-btn"
+        role="tab"
+        [attr.aria-selected]="activeMode === 'MANUAL'"
         [class.active]="activeMode === 'MANUAL'"
         (click)="setMode('MANUAL')"
         id="tab-mode-manual"

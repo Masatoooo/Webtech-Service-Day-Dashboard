@@ -62,6 +62,8 @@
     <button
       type="button"
       class="notif-tab-btn"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'ALL'"
       [class.active]="activeTab === 'ALL'"
       (click)="setTab('ALL')"
       id="tab-notif-all"
@@ -73,6 +75,8 @@
     <button
       type="button"
       class="notif-tab-btn"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'UNREAD'"
       [class.active]="activeTab === 'UNREAD'"
       (click)="setTab('UNREAD')"
       id="tab-notif-unread"
@@ -84,6 +88,8 @@
     <button
       type="button"
       class="notif-tab-btn"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'REGISTRATION'"
       [class.active]="activeTab === 'REGISTRATION'"
       (click)="setTab('REGISTRATION')"
       id="tab-notif-registration"
@@ -95,6 +101,8 @@
     <button
       type="button"
       class="notif-tab-btn"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'REMINDER'"
       [class.active]="activeTab === 'REMINDER'"
       (click)="setTab('REMINDER')"
       id="tab-notif-reminders"
@@ -106,6 +114,8 @@
     <button
       type="button"
       class="notif-tab-btn"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'BROADCAST'"
       [class.active]="activeTab === 'BROADCAST'"
       (click)="setTab('BROADCAST')"
       id="tab-notif-broadcast"

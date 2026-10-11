@@ -17,6 +17,8 @@ export class App {
   readonly userRole$: Observable<UserRole | null>;
   readonly isLoginRoute$: Observable<boolean>;
 
+  isMobileMenuOpen = false;
+
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
@@ -30,6 +32,7 @@ export class App {
     this.isLoginRoute$ = this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map((event) => {
+        this.isMobileMenuOpen = false; // Auto-close menu on route navigation
         const url = event.urlAfterRedirects || event.url;
         return isAuthPath(url);
       }),
@@ -37,7 +40,16 @@ export class App {
     );
   }
 
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
   onLogout(): void {
+    this.isMobileMenuOpen = false;
     this.authService.logout();
   }
 }

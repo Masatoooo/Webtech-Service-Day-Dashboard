@@ -5,12 +5,61 @@
   </main>
 </ng-container>
 
-<!-- Modern Application Shell with Left Sidebar (Inspired by User Reference) -->
+<!-- Modern Application Shell with Left Sidebar & Responsive Mobile Navigation -->
 <div class="app-shell" *ngIf="!(isLoginRoute$ | async)">
-  <!-- Left Sidebar Navigation -->
-  <aside class="app-sidebar" aria-label="Main Navigation">
-    <!-- Brand Title -->
-    <a routerLink="/" class="sidebar-brand" aria-label="Service Day Home">
+  <!-- Mobile Navigation Top Bar (Active on viewports <= 900px) -->
+  <header class="mobile-top-bar" aria-label="Mobile Navigation Header">
+    <a routerLink="/" (click)="closeMobileMenu()" class="mobile-brand-link" aria-label="Service Day Home">
+      <div class="sidebar-brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 28 28" fill="none" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="10" width="6" height="14" rx="2" fill="#C9A66B" />
+          <rect x="11" y="4" width="6" height="20" rx="2" fill="#356859" />
+          <rect x="20" y="8" width="6" height="16" rx="2" fill="#202C3B" />
+        </svg>
+      </div>
+      <span class="brand-title sidebar-brand-name">Service Day</span>
+    </a>
+
+    <div class="mobile-top-actions">
+      <span *ngIf="currentUser$ | async as user" class="mobile-user-chip" [title]="user.name">
+        {{ user.avatarInitials || (user.name | slice:0:2 | uppercase) }}
+      </span>
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        id="btn-mobile-nav-toggle"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-controls="app-sidebar-nav"
+        aria-label="Toggle navigation menu"
+      >
+        <svg *ngIf="!isMobileMenuOpen" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" aria-hidden="true">
+          <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+        </svg>
+        <svg *ngIf="isMobileMenuOpen" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Sidebar Backdrop Overlay -->
+  <div
+    *ngIf="isMobileMenuOpen"
+    class="mobile-sidebar-backdrop"
+    (click)="closeMobileMenu()"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Main Navigation Sidebar -->
+  <aside
+    class="app-sidebar"
+    id="app-sidebar-nav"
+    [class.mobile-open]="isMobileMenuOpen"
+    aria-label="Main Navigation"
+  >
+    <!-- Brand Title (Desktop) -->
+    <a routerLink="/" (click)="closeMobileMenu()" class="sidebar-brand" aria-label="Service Day Home">
       <div class="sidebar-brand-icon" aria-hidden="true">
         <svg viewBox="0 0 28 28" fill="none" width="26" height="26" xmlns="http://www.w3.org/2000/svg">
           <rect x="2" y="10" width="6" height="14" rx="2" fill="#C9A66B" />
@@ -21,7 +70,7 @@
       <span class="brand-title sidebar-brand-name">Service Day</span>
     </a>
 
-    <!-- User Profile in Sidebar (Matching Screenshot Style) -->
+    <!-- User Profile in Sidebar -->
     <div class="sidebar-user-card" *ngIf="currentUser$ | async as user; else guestSidebar">
       <div class="sidebar-avatar-wrap">
         <div class="sidebar-avatar" aria-hidden="true">
@@ -45,7 +94,7 @@
           <div class="sidebar-avatar">SD</div>
         </div>
         <div class="sidebar-user-name">Guest User</div>
-        <a routerLink="/login" class="btn btn-sm btn-primary mt-2">Sign In</a>
+        <a routerLink="/login" (click)="closeMobileMenu()" class="btn btn-sm btn-primary mt-2">Sign In</a>
       </div>
     </ng-template>
 
@@ -57,6 +106,7 @@
           routerLink="/admin"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-admin-dashboard"
         >
@@ -69,32 +119,20 @@
         <a
           routerLink="/admin/activities"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-admin-activities"
         >
           <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
           </svg>
-          <span>Activities</span>
+          <span>Activities & NGOs</span>
         </a>
-
-        <div class="sidebar-nav-item disabled" title="Available in Task 08">
-          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8v2h1a1 1 0 001-1v-1h-2zm-2 2H7v-2h6v2zm-8-2v2H4a1 1 0 01-1-1v-1h2z" clip-rule="evenodd" />
-          </svg>
-          <span>NGO Partners</span>
-        </div>
-
-        <div class="sidebar-nav-item disabled" title="Available in Task 08">
-          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-          </svg>
-          <span>Participation</span>
-        </div>
 
         <a
           routerLink="/admin/reminders"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-admin-reminders"
         >
@@ -107,6 +145,7 @@
         <a
           routerLink="/admin/qr"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-admin-qr"
         >
@@ -124,6 +163,7 @@
           routerLink="/employee"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-employee-dashboard"
         >
@@ -136,6 +176,7 @@
         <a
           routerLink="/employee/activities"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-employee-activities"
         >
@@ -148,6 +189,7 @@
         <a
           routerLink="/employee/registrations"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-employee-registrations"
         >
@@ -161,6 +203,7 @@
         <a
           routerLink="/employee/checkin"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-employee-checkin"
         >
@@ -174,6 +217,7 @@
         <a
           routerLink="/employee/notifications"
           routerLinkActive="active"
+          (click)="closeMobileMenu()"
           class="sidebar-nav-item"
           id="nav-employee-notifications"
         >
