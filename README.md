@@ -182,5 +182,7 @@ To uphold absolute academic and professional honesty, the following constraints 
 
 ## 8. Verification & QA Documentation
 
+- **Coursework Deliverables Report:** Full technology inventory, architectural rationale, user manuals, video script, and references are detailed in [`docs/COURSEWORK_DELIVERABLES_REPORT.md`](docs/COURSEWORK_DELIVERABLES_REPORT.md).
 - **Manual QA Checklist:** A detailed 16-test scenario guide covering step-by-step reproduction instructions is available in [`docs/MANUAL_QA_CHECKLIST.md`](docs/MANUAL_QA_CHECKLIST.md).
 - **Data Layer Architecture:** Extended documentation detailing domain interfaces, serialization boundaries, and hydration flows is available in [`docs/DATA_LAYER_DOCUMENTATION.md`](docs/DATA_LAYER_DOCUMENTATION.md).
+- **Demo Credentials:** Complete role-based test account credentials and guard mechanics are available in [`docs/DEMO_CREDENTIALS.md`](docs/DEMO_CREDENTIALS.md).
