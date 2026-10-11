@@ -1,4 +1,4 @@
-/* Activity Management Page - Component Specific Styles (Under 2kB) */
+/* Activity Management Page - Modernized Warm Editorial Styles */
 .activity-mgmt-page {
   animation: fadeIn 200ms ease-out;
 }
@@ -10,7 +10,7 @@
 
 .page-title {
   font-family: var(--font-editorial);
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 600;
   color: var(--color-deep-slate);
   letter-spacing: -0.015em;
@@ -38,25 +38,16 @@
   font-size: var(--font-size-sm);
 }
 
-.th-title { min-width: 210px; }
-.th-ngo { min-width: 150px; }
-.th-schedule { min-width: 120px; }
-.th-cutoff { min-width: 130px; }
-.th-location { min-width: 130px; max-width: 170px; }
-.th-capacity { min-width: 110px; }
-.th-status { min-width: 90px; }
+.th-title { min-width: 220px; }
+.th-ngo { min-width: 160px; }
+.th-schedule { min-width: 140px; }
+.th-cutoff { min-width: 150px; }
+.th-location { min-width: 160px; max-width: 200px; }
+.th-capacity { min-width: 140px; }
+.th-status { min-width: 110px; }
 .th-actions,
 .td-actions {
-  min-width: 160px;
-  position: sticky;
-  right: 0;
-  background: var(--bg-surface);
-  z-index: 2;
-  box-shadow: -3px 0 6px rgba(32, 44, 59, 0.04);
-}
-thead .th-actions {
-  background: var(--color-soft-canvas);
-  z-index: 3;
+  min-width: 180px;
 }
 
 .title-text {
@@ -89,15 +80,39 @@ thead .th-actions {
 }
 
 .badge-status-open {
-  font-size: 0.7rem;
+  font-size: 0.725rem;
   font-weight: 600;
   color: #235C49;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-status-open::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #356859;
 }
 
 .badge-status-closed {
-  font-size: 0.7rem;
+  font-size: 0.725rem;
   font-weight: 600;
   color: #8C2920;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-status-closed::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #A52C22;
 }
 
 .location-text {
@@ -123,16 +138,20 @@ thead .th-actions {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  border-radius: 6px;
 }
 
 .btn-action-toggle {
   font-size: var(--font-size-xs);
   padding: 0.35rem 0.65rem;
+  border-radius: 6px;
 }
 
 .btn-danger-icon {
   color: #A52C22;
   padding: 0.35rem;
+  border-radius: 6px;
+  transition: all 150ms ease;
 }
 
 .btn-danger-icon:hover {
