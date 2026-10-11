@@ -1,0 +1,198 @@
+<section class="placeholder-hero mb-8">
+  <span class="eyebrow">Task 02 — Design System & Scaffolding</span>
+  <h1 class="editorial-title mb-2">Corporate Service Day Platform</h1>
+  <p class="lead">
+    Centralized governance and staff participation portal for Corporate Social Responsibility (CSR) initiatives.
+  </p>
+  <p class="text-muted">
+    System Date: {{ currentDate }} &bull; Architecture: Angular Module-Based (NgModule)
+  </p>
+</section>
+
+<!-- Section 1: Color Token System Verification -->
+<section class="card mb-8">
+  <header class="card-header">
+    <span class="eyebrow">Palette Tokens</span>
+    <h2 class="editorial-subtitle">Warm Editorial Color Palette</h2>
+  </header>
+  <div class="palette-grid">
+    <div class="swatch-item">
+      <div class="swatch" style="background-color: var(--color-midnight-navy); color: var(--color-surface-white);">#243247</div>
+      <div class="swatch-meta">
+        <strong>Midnight Navy</strong>
+        <span class="text-muted">Primary Brand / Deep</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch swatch-bordered" style="background-color: var(--color-warm-ivory); color: var(--color-midnight-navy);">#F6F1E8</div>
+      <div class="swatch-meta">
+        <strong>Warm Ivory</strong>
+        <span class="text-muted">Page Canvas / Base</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch swatch-bordered" style="background-color: var(--color-surface-white); color: var(--color-midnight-navy);">#FFFFFF</div>
+      <div class="swatch-meta">
+        <strong>Surface White</strong>
+        <span class="text-muted">Cards & Panels</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch" style="background-color: var(--color-terracotta); color: var(--color-surface-white);">#C66A4E</div>
+      <div class="swatch-meta">
+        <strong>Terracotta</strong>
+        <span class="text-muted">Primary Action Accent</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch" style="background-color: var(--color-muted-gold); color: #4F380C;">#D5B77A</div>
+      <div class="swatch-meta">
+        <strong>Muted Gold</strong>
+        <span class="text-muted">Secondary Accent / Warn</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch" style="background-color: var(--color-slate-muted); color: var(--color-surface-white);">#6D706F</div>
+      <div class="swatch-meta">
+        <strong>Slate Muted</strong>
+        <span class="text-muted">Secondary Text / Neutral</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch swatch-bordered" style="background-color: var(--color-border-warm); color: var(--color-midnight-navy);">#E2DACE</div>
+      <div class="swatch-meta">
+        <strong>Border Warm</strong>
+        <span class="text-muted">Dividers & Boundaries</span>
+      </div>
+    </div>
+    <div class="swatch-item">
+      <div class="swatch swatch-bordered" style="background-color: var(--color-neutral-soft); color: var(--color-midnight-navy);">#E9EDF0</div>
+      <div class="swatch-meta">
+        <strong>Neutral Soft</strong>
+        <span class="text-muted">Table Hover & Subtles</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: UI Controls and Typography Scale -->
+<div class="grid grid-cols-2 gap-6 mb-8">
+  <!-- Left Column: Typography & Button Actions -->
+  <article class="card">
+    <header class="card-header">
+      <span class="eyebrow">Typography & Actions</span>
+      <h3 class="mb-1">Button Hierarchy & Status Badges</h3>
+      <p class="text-muted">Interface font: DM Sans &bull; Heading font: Newsreader</p>
+    </header>
+
+    <div class="action-demo-group mb-6">
+      <div class="action-row mb-3">
+        <button type="button" class="btn btn-primary">Primary Action</button>
+        <button type="button" class="btn btn-secondary">Secondary Action</button>
+        <button type="button" class="btn btn-navy">Navy Action</button>
+        <button type="button" class="btn btn-ghost">Ghost Link</button>
+      </div>
+      <div class="action-row">
+        <button type="button" class="btn btn-primary btn-sm">Small Button</button>
+        <button type="button" class="btn btn-secondary btn-sm" disabled>Disabled State</button>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="badge-demo-group">
+      <span class="eyebrow mb-2">Operational Status Badges</span>
+      <div class="badge-row flex gap-2">
+        <span class="badge badge-terracotta">Available &bull; 12 Slots</span>
+        <span class="badge badge-gold">Cut-off Near &bull; 2 Days</span>
+        <span class="badge badge-navy">Administrator Role</span>
+        <span class="badge badge-slate">Registration Closed</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- Right Column: Form Controls Preview -->
+  <article class="card">
+    <header class="card-header">
+      <span class="eyebrow">Form Architecture</span>
+      <h3 class="mb-1">Standard Form Inputs</h3>
+      <p class="text-muted">Validated styling with consistent focus states</p>
+    </header>
+
+    <form (submit)="$event.preventDefault()" novalidate>
+      <div class="form-group">
+        <label for="demo-input-text" class="form-label required">Initiative Title</label>
+        <input
+          id="demo-input-text"
+          type="text"
+          class="form-control"
+          placeholder="e.g. Mangrove Coastal Planting Initiative"
+          value="Mangrove Coastal Planting Initiative"
+          readonly
+        >
+        <span class="form-hint">Descriptive CSR title for employee visibility.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="demo-select-category" class="form-label">Service Category</label>
+        <select id="demo-select-category" class="form-control">
+          <option>Environmental Conservation</option>
+          <option>Community Education Support</option>
+          <option>Food Security & Distribution</option>
+        </select>
+      </div>
+    </form>
+  </article>
+</div>
+
+<!-- Section 3: Semantic Table Preview -->
+<section class="card mb-8">
+  <header class="card-header flex justify-between items-center">
+    <div>
+      <span class="eyebrow">Data Presentation</span>
+      <h3 class="mb-1">Operational Record Table Preview</h3>
+    </div>
+    <span class="badge badge-navy">Read-Only Demonstration</span>
+  </header>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Reference ID</th>
+          <th>NGO Partner Organization</th>
+          <th>Service Area</th>
+          <th>Total Capacity</th>
+          <th>Cut-Off Status</th>
+          <th>Operation Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ACT-2026-001</strong></td>
+          <td>Yayasan Konservasi Laut Lestari</td>
+          <td>Environmental Care</td>
+          <td>25 Participants</td>
+          <td><span class="badge badge-gold">D-3 Remaining</span></td>
+          <td><span class="badge badge-terracotta">Published</span></td>
+        </tr>
+        <tr>
+          <td><strong>ACT-2026-002</strong></td>
+          <td>Lembaga Literasi Anak Bangsa</td>
+          <td>Youth Mentorship</td>
+          <td>15 Participants</td>
+          <td><span class="badge badge-slate">Open</span></td>
+          <td><span class="badge badge-terracotta">Published</span></td>
+        </tr>
+        <tr>
+          <td><strong>ACT-2026-003</strong></td>
+          <td>Dapur Nutrisi Sejahtera</td>
+          <td>Food Security</td>
+          <td>30 Participants</td>
+          <td><span class="badge badge-slate">Closed</span></td>
+          <td><span class="badge badge-navy">Completed</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
