@@ -49,7 +49,7 @@
           <input
             id="opp-search"
             type="text"
-            class="form-control"
+            class="filter-input"
             placeholder="Search by title, NGO, mission, or location..."
             [(ngModel)]="searchQuery"
             (input)="applyFilters()"
@@ -62,7 +62,7 @@
         <label for="filter-category" class="filter-label">Focus Area</label>
         <select
           id="filter-category"
-          class="form-control filter-select"
+          class="filter-select"
           [(ngModel)]="selectedCategory"
           (change)="applyFilters()"
         >
@@ -80,7 +80,7 @@
         <label for="filter-status" class="filter-label">Availability State</label>
         <select
           id="filter-status"
-          class="form-control filter-select"
+          class="filter-select"
           [(ngModel)]="selectedStatus"
           (change)="applyFilters()"
         >
@@ -99,7 +99,7 @@
         <label for="filter-location" class="filter-label">Location Area</label>
         <select
           id="filter-location"
-          class="form-control filter-select"
+          class="filter-select"
           [(ngModel)]="selectedLocation"
           (change)="applyFilters()"
         >
@@ -110,15 +110,19 @@
 
       <!-- Reset Filters Button -->
       <div class="filter-field">
+        <label class="filter-label" style="opacity: 0; pointer-events: none;">Reset</label>
         <button
           type="button"
-          class="btn btn-secondary"
+          class="btn btn-secondary flex items-center justify-center gap-1"
           (click)="resetFilters()"
           [disabled]="!hasActiveFilters()"
           id="btn-reset-filters"
           title="Clear search queries and reset filters"
-          style="height: 40px;"
+          style="height: 40px; font-size: 0.825rem; font-weight: 600;"
         >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+          </svg>
           Reset
         </button>
       </div>
