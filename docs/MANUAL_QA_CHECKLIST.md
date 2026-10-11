@@ -219,20 +219,22 @@ This checklist provides an evaluator or peer reviewer with a verifiable, reprodu
 
 ---
 
-### Test 16: Responsive Viewport Quality Pass
-- **Initial State:** Modern browser developer tools opened in responsive device emulation mode.
+### Test 16: Responsive Viewport Quality Pass & Mobile Pattern Audit
+- **Initial State:** Modern browser developer tools opened in responsive device emulation mode (`375px`, `390px`, `768px`, `1280px`).
 - **Steps:**
   1. **Desktop Viewport (1280px × 800px):**
      - Verify two-column grid layouts, fixed left sidebar, wide data tables, and card grids render smoothly without horizontal scrollbars.
   2. **Tablet Viewport (768px × 1024px, iPad Mini / Air):**
-     - Verify table containers scroll horizontally internally without blowing out document width (`overflow-x: auto`).
+     - Verify table containers scroll horizontally internally without blowing out document width (`overflow-x: auto`) with visual scroll hint indicator.
      - Verify header filters wrap cleanly into accessible multi-row form layouts.
-  3. **Mobile Viewport (375px × 812px, iPhone SE / iPhone 13):**
+  3. **Mobile Viewport (375px × 812px / 390px × 844px, iPhone SE / 13 / 14):**
      - Verify desktop sidebar hides and top mobile bar appears with brand icon and hamburger menu toggle.
      - Click hamburger menu: verify accessible off-canvas drawer slides in with backdrop overlay.
      - Click any navigation link: verify drawer auto-closes and navigates to target screen.
-     - Check forms, modals, QR preview cards, and KPI grids: verify full readability with no truncated text or clipped action buttons.
-- **Pass Criteria:** No critical horizontal page overflow at any target viewport; touch targets meet WCAG standards (minimum 44×44px).
+     - **Admin Header Stacking (`/admin`):** Verify greeting ("Hello, Marcus") and quick action buttons (`+ Activity Management`, `Reminders`, `QR`) stack cleanly in vertical flow without awkward horizontal text wrapping.
+     - **Hybrid Table-to-Card Pattern (`/admin`, `/admin/activities`, `/admin/qr`):** On screens `<= 768px`, dense operational tables automatically convert into readable Warm Editorial mobile cards (`.mobile-op-card`). Verify all metrics (category, NGO, capacity progress bar, cut-off, status, and action buttons) are visible and touch-accessible.
+     - **QR Printable Poster Containment (`/admin/qr`):** Verify `.qr-layout-grid` collapses to a single column, the QR code frame is centered, and neither the poster nor the attendance roster causes horizontal viewport blowout.
+- **Pass Criteria:** Zero horizontal document blowout at any target viewport (375px–1280px+); touch targets meet WCAG standards (minimum 44×44px).
 
 ---
 
