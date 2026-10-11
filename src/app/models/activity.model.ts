@@ -13,6 +13,7 @@ export type PublicationStatus =
 
 export type ActivityAvailabilityStatus =
   | 'AVAILABLE'
+  | 'ALMOST_FULL'
   | 'FULL'
   | 'REGISTRATION_CLOSED'
   | 'CANCELLED'

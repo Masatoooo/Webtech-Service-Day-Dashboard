@@ -35,6 +35,22 @@ export class ActivityService {
     );
   }
 
+  /**
+   * UC-02 / FR-08: Approved opportunities visible to employees (excluding internal drafts).
+   */
+  getEmployeeActivities(): Observable<Activity[]> {
+    return combineLatest([this.store.activities$, this.store.ngos$]).pipe(
+      map(([activities, ngos]) => {
+        const approvedNgoIds = new Set(
+          ngos.filter((n) => n.approvalStatus === 'APPROVED').map((n) => n.id)
+        );
+        return activities.filter(
+          (act) => act.publicationStatus !== 'DRAFT' && approvedNgoIds.has(act.ngoId)
+        );
+      })
+    );
+  }
+
   getActivityById(id: string): Observable<Activity | undefined> {
     return this.store.activities$.pipe(
       map((list) => list.find((act) => act.id === id))
@@ -126,6 +142,8 @@ export class ActivityService {
       availabilityStatus = 'REGISTRATION_CLOSED';
     } else if (remainingSlots === 0) {
       availabilityStatus = 'FULL';
+    } else if (remainingSlots <= 3) {
+      availabilityStatus = 'ALMOST_FULL';
     } else {
       availabilityStatus = 'AVAILABLE';
     }

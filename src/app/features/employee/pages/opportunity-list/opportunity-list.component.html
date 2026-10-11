@@ -1,0 +1,383 @@
+<div class="employee-page">
+  <!-- Page Header -->
+  <header class="page-header mb-6">
+    <div class="flex justify-between items-center header-row">
+      <div>
+        <div class="role-pretitle">Employee Discovery</div>
+        <h1 class="page-title">Service Day Opportunities</h1>
+        <p class="header-desc text-muted">
+          Browse verified community engagement initiatives sponsored for Corporate Service Day. Discover projects, check requirements, and prepare your participation.
+        </p>
+      </div>
+      <div class="header-badge-wrap">
+        <app-status-badge variant="forest" label="Staff Opportunities"></app-status-badge>
+      </div>
+    </div>
+  </header>
+
+  <!-- Metric Counters Row -->
+  <div class="metrics-grid mb-6">
+    <div class="metric-card">
+      <div class="metric-label">Approved Initiatives</div>
+      <div class="metric-val" id="metric-total-opps">{{ totalApproved }}</div>
+      <div class="metric-meta text-muted">Verified NGO partnerships</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Open for Registration</div>
+      <div class="metric-val" id="metric-available-opps">{{ totalAvailable }}</div>
+      <div class="metric-meta text-muted">Ready for participant enrollment</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Almost Full</div>
+      <div class="metric-val" id="metric-almost-opps">{{ totalAlmostFull }}</div>
+      <div class="metric-meta text-muted">Limited places remaining (≤ 3 slots)</div>
+    </div>
+  </div>
+
+  <!-- Search and Filter Card -->
+  <div class="opp-filter-card">
+    <div class="opp-filter-grid">
+      <!-- Search Input -->
+      <div class="filter-field">
+        <label for="opp-search" class="filter-label">Search Activities & NGOs</label>
+        <div class="filter-input-wrap">
+          <svg class="filter-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+          <input
+            id="opp-search"
+            type="text"
+            class="form-control"
+            placeholder="Search by title, NGO, mission, or location..."
+            [(ngModel)]="searchQuery"
+            (input)="applyFilters()"
+          />
+        </div>
+      </div>
+
+      <!-- Service Category Filter -->
+      <div class="filter-field">
+        <label for="filter-category" class="filter-label">Focus Area</label>
+        <select
+          id="filter-category"
+          class="form-control filter-select"
+          [(ngModel)]="selectedCategory"
+          (change)="applyFilters()"
+        >
+          <option value="ALL">All Focus Areas</option>
+          <option value="ENVIRONMENT">Environment & Nature</option>
+          <option value="EDUCATION">Education & Youth</option>
+          <option value="FOOD_SECURITY">Food Security</option>
+          <option value="COMMUNITY">Community Support</option>
+          <option value="HEALTH">Public Health</option>
+        </select>
+      </div>
+
+      <!-- Availability / Status Filter -->
+      <div class="filter-field">
+        <label for="filter-status" class="filter-label">Availability State</label>
+        <select
+          id="filter-status"
+          class="form-control filter-select"
+          [(ngModel)]="selectedStatus"
+          (change)="applyFilters()"
+        >
+          <option value="ALL">All Statuses</option>
+          <option value="AVAILABLE">Available</option>
+          <option value="ALMOST_FULL">Almost Full</option>
+          <option value="FULL">Capacity Full</option>
+          <option value="REGISTRATION_CLOSED">Registration Closed</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
+      </div>
+
+      <!-- Location Filter -->
+      <div class="filter-field">
+        <label for="filter-location" class="filter-label">Location Area</label>
+        <select
+          id="filter-location"
+          class="form-control filter-select"
+          [(ngModel)]="selectedLocation"
+          (change)="applyFilters()"
+        >
+          <option value="ALL">All Locations</option>
+          <option *ngFor="let loc of availableLocations" [value]="loc">{{ loc }}</option>
+        </select>
+      </div>
+
+      <!-- Reset Filters Button -->
+      <div class="filter-field">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="resetFilters()"
+          [disabled]="!hasActiveFilters()"
+          id="btn-reset-filters"
+          title="Clear search queries and reset filters"
+          style="height: 40px;"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Count Bar -->
+  <div class="flex justify-between items-center mb-4" style="font-size: 0.85rem; color: var(--color-secondary-text);">
+    <div>
+      Showing <strong>{{ filteredOpportunities.length }}</strong> of {{ allOpportunities.length }} approved opportunities
+      <span *ngIf="hasActiveFilters()" class="text-muted">(filtered)</span>
+    </div>
+  </div>
+
+  <!-- Opportunities Editorial List -->
+  <div class="opp-list" *ngIf="filteredOpportunities.length > 0; else noResultsTemplate">
+    <div
+      *ngFor="let item of filteredOpportunities"
+      class="opp-card"
+      [id]="'opp-card-' + item.activity.id"
+      [style.border-left-color]="
+        item.activity.serviceType === 'ENVIRONMENT' ? '#356859' :
+        item.activity.serviceType === 'EDUCATION' ? '#1B5299' :
+        item.activity.serviceType === 'FOOD_SECURITY' ? '#C9A66B' :
+        item.activity.serviceType === 'COMMUNITY' ? '#692A8E' : '#A82828'
+      "
+    >
+      <!-- Main Content Block -->
+      <div class="opp-main-info">
+        <!-- Top Tags Row -->
+        <div class="opp-header-row">
+          <span
+            class="badge-category"
+            [ngClass]="'category-' + item.activity.serviceType.toLowerCase()"
+          >
+            {{ getCategoryLabel(item.activity.serviceType) }}
+          </span>
+
+          <span class="opp-ngo-name flex items-center gap-1" *ngIf="item.ngo">
+            <svg viewBox="0 0 20 20" fill="#356859" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            {{ item.ngo.name }}
+          </span>
+        </div>
+
+        <!-- Activity Title -->
+        <h2 class="opp-title">
+          <a
+            [routerLink]="['/employee/activities', item.activity.id]"
+            class="opp-title-link"
+            [id]="'link-title-' + item.activity.id"
+          >
+            {{ item.activity.title }}
+          </a>
+        </h2>
+
+        <!-- Short Description -->
+        <p class="opp-desc">
+          {{ item.activity.description }}
+        </p>
+
+        <!-- Aligned Metadata Row -->
+        <div class="opp-meta-row">
+          <!-- Date & Time -->
+          <span class="opp-meta-item" title="Schedule">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+            </svg>
+            <strong>{{ item.activity.startDateTime | date:'mediumDate' }}</strong>
+            <span>({{ item.activity.startDateTime | date:'shortTime' }} – {{ item.activity.endDateTime | date:'shortTime' }})</span>
+          </span>
+
+          <!-- Location -->
+          <span class="opp-meta-item" title="Location">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+            </svg>
+            <span>{{ item.activity.location }}</span>
+          </span>
+
+          <!-- Capacity & Remaining Places -->
+          <span class="opp-meta-item" title="Capacity Status">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+            </svg>
+            <span>Capacity: <strong>{{ item.slotSummary.filledSlots }}/{{ item.slotSummary.capacity }}</strong></span>
+            <span class="text-muted">({{ item.slotSummary.remainingSlots }} left)</span>
+          </span>
+
+          <!-- Registration Cut-off -->
+          <span class="opp-meta-item" title="Registration Deadline">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+            </svg>
+            <span>Cut-off: <strong>{{ item.activity.registrationCutoff | date:'mediumDate' }}</strong></span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Action & Multi-State Badge Block -->
+      <div class="opp-action-block">
+        <!-- Multi-State Availability Badge (Icon + Text: Does NOT rely on color alone) -->
+        <div [ngSwitch]="item.slotSummary.availabilityStatus">
+          <!-- Available -->
+          <span *ngSwitchCase="'AVAILABLE'" class="avail-pill avail-pill-available">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            Available ({{ item.slotSummary.remainingSlots }} spots)
+          </span>
+
+          <!-- Almost Full -->
+          <span *ngSwitchCase="'ALMOST_FULL'" class="avail-pill avail-pill-almost">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            Almost Full ({{ item.slotSummary.remainingSlots }} spots left)
+          </span>
+
+          <!-- Capacity Full -->
+          <span *ngSwitchCase="'FULL'" class="avail-pill avail-pill-full">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.366zm1.414-1.414L6.525 5.11a6 6 0 018.366 8.366zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
+            </svg>
+            Capacity Full
+          </span>
+
+          <!-- Registration Closed -->
+          <span *ngSwitchCase="'REGISTRATION_CLOSED'" class="avail-pill avail-pill-closed">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+            </svg>
+            Registration Closed
+          </span>
+
+          <!-- Cancelled -->
+          <span *ngSwitchCase="'CANCELLED'" class="avail-pill avail-pill-cancelled">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+            Activity Cancelled
+          </span>
+
+          <!-- Completed -->
+          <span *ngSwitchCase="'COMPLETED'" class="avail-pill avail-pill-completed">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
+            </svg>
+            Initiative Completed
+          </span>
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="flex items-center gap-2 mt-1">
+          <!-- View Details Button -->
+          <a
+            [routerLink]="['/employee/activities', item.activity.id]"
+            class="btn btn-sm btn-secondary"
+            [id]="'btn-details-' + item.activity.id"
+          >
+            View Details
+          </a>
+
+          <!-- Register CTA Contract -->
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            [disabled]="!isActionable(item.slotSummary.availabilityStatus)"
+            (click)="openRegistrationContract(item)"
+            [id]="'btn-register-' + item.activity.id"
+            [title]="
+              !isActionable(item.slotSummary.availabilityStatus)
+                ? 'Sign-up unavailable (' + item.slotSummary.availabilityStatus + ')'
+                : 'Sign up for this activity'
+            "
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty Results State -->
+  <ng-template #noResultsTemplate>
+    <div class="opp-empty-card" id="opp-empty-state">
+      <div class="opp-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <h3 class="opp-empty-title">No matching opportunities found</h3>
+      <p class="opp-empty-desc">
+        We couldn't find any approved activities matching your current filters. Try adjusting your search query, focus area, or availability selection.
+      </p>
+      <button
+        type="button"
+        class="btn btn-primary mt-2"
+        (click)="resetFilters()"
+        id="btn-empty-reset"
+      >
+        Clear Filters
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Clean Informational Registration Modal (Task 06 Contract: No Fake Success) -->
+  <div
+    class="contract-modal-backdrop"
+    *ngIf="contractModalItem"
+    (click)="closeRegistrationContract()"
+    id="contract-modal"
+  >
+    <div class="contract-modal-card" (click)="$event.stopPropagation()">
+      <div class="contract-badge">Task 06 Discovery Contract</div>
+      <h3 class="contract-modal-title">Registration Workflow</h3>
+      <p class="contract-modal-body">
+        You are discovering <strong>{{ contractModalItem.activity.title }}</strong> hosted by <strong>{{ contractModalItem.ngo?.name }}</strong>.
+      </p>
+
+      <div class="contract-detail-box">
+        <div class="contract-detail-item">
+          <span class="text-muted">Schedule</span>
+          <strong>{{ contractModalItem.activity.startDateTime | date:'mediumDate' }}</strong>
+        </div>
+        <div class="contract-detail-item">
+          <span class="text-muted">Available Capacity</span>
+          <strong>{{ contractModalItem.slotSummary.remainingSlots }} places remaining</strong>
+        </div>
+        <div class="contract-detail-item">
+          <span class="text-muted">Registration Cut-off</span>
+          <strong>{{ contractModalItem.activity.registrationCutoff | date:'mediumDate' }}</strong>
+        </div>
+      </div>
+
+      <div class="alert alert-info mb-4" style="font-size: 0.825rem; line-height: 1.45;">
+        <strong>Task Pack Specification:</strong> Full registration mutations, duplicate prevention, dynamic slot allocation, and cancellation rules are implemented in <strong>Task 07 (Use Case 3)</strong>. For complete requirements and logistics, inspect the Activity Details.
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeRegistrationContract()"
+          id="btn-modal-close"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="navigateToDetails(contractModalItem.activity.id)"
+          id="btn-modal-view-details"
+        >
+          View Full Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

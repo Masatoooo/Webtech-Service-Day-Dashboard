@@ -39,7 +39,10 @@
       <div class="metric-val" id="emp-metric-available">
         {{ (availableActivities$ | async)?.length || 0 }}
       </div>
-      <div class="metric-meta text-muted">Open community initiatives</div>
+      <div class="metric-meta text-muted mb-2">Open community initiatives</div>
+      <a routerLink="/employee/activities" class="btn btn-sm btn-primary" id="btn-browse-opportunities" style="font-size: 0.75rem;">
+        Browse Board →
+      </a>
     </div>
 
     <div class="metric-card">

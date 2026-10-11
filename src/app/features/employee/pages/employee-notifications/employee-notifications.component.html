@@ -1,0 +1,63 @@
+<div class="employee-page">
+  <!-- Page Header -->
+  <header class="page-header mb-6">
+    <div class="flex justify-between items-center header-row">
+      <div>
+        <div class="role-pretitle">Communications</div>
+        <h1 class="page-title">Notifications & Announcements</h1>
+        <p class="header-desc text-muted">
+          Staff announcements, reminder notices, and registration updates.
+        </p>
+      </div>
+      <div class="header-badge-wrap">
+        <app-status-badge variant="forest" label="In-App Updates"></app-status-badge>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contract Notice -->
+  <div class="verification-banner mb-6">
+    <div class="verification-icon-wrap">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="verification-info flex-1">
+      <div class="verification-title">Task 06 Navigation Contract</div>
+      <div class="verification-desc text-muted">
+        In-app notifications and scheduled reminders will be fully integrated with registration triggers in <strong>Task 07</strong> and automated broadcasts in <strong>Task 09</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications List -->
+  <div *ngIf="notifications$ | async as notifs">
+    <div *ngIf="notifs.length > 0; else noNotifs" class="opp-list">
+      <div *ngFor="let n of notifs" class="card p-4">
+        <div class="flex justify-between items-start mb-2">
+          <div class="font-bold text-base" style="color: var(--color-deep-slate);">
+            {{ n.title }}
+          </div>
+          <span class="badge badge-warm" style="font-size: 0.75rem;">
+            {{ n.type }}
+          </span>
+        </div>
+        <p class="text-secondary text-sm mb-2" style="line-height: 1.5;">
+          {{ n.message }}
+        </p>
+        <div class="text-muted text-xs">
+          {{ n.createdAt | date:'medium' }}
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noNotifs>
+      <div class="opp-empty-card">
+        <h3 class="opp-empty-title">No notifications yet</h3>
+        <p class="opp-empty-desc">
+          You are all caught up! System broadcasts and reminders will appear here.
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</div>
