@@ -1,0 +1,84 @@
+<div class="employee-page">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="flex justify-between items-center header-row">
+      <div>
+        <div class="role-pretitle">Staff Contributions</div>
+        <h1 class="page-title">Volunteer Portal</h1>
+        <p class="header-desc text-muted">
+          Welcome back<span *ngIf="currentUser$ | async as user">, <strong>{{ user.name }}</strong> ({{ user.department }})</span>.
+        </p>
+      </div>
+      <div class="header-badge-wrap">
+        <app-status-badge variant="forest" label="Employee Space"></app-status-badge>
+      </div>
+    </div>
+  </header>
+
+  <!-- Verification Banner -->
+  <div class="verification-banner mb-6">
+    <div class="verification-icon-wrap">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="verification-info flex-1">
+      <div class="verification-title">Task 04 Routing & Access Control Verified</div>
+      <div class="verification-desc text-muted">
+        Authenticated via demo session as
+        <strong *ngIf="currentUser$ | async as user">{{ user.name }} ({{ user.email }})</strong>.
+        Route <code class="route-code">/employee</code> is protected by <code>AuthGuard</code> and <code>RoleGuard</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Operational Metrics Row -->
+  <div class="metrics-grid mb-6">
+    <div class="metric-card">
+      <div class="metric-label">Approved Opportunities</div>
+      <div class="metric-val" id="emp-metric-available">
+        {{ (availableActivities$ | async)?.length || 0 }}
+      </div>
+      <div class="metric-meta text-muted">Open community initiatives</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">My Registrations</div>
+      <div class="metric-val" id="emp-metric-registrations">
+        {{ (myRegistrations$ | async)?.length || 0 }}
+      </div>
+      <div class="metric-meta text-muted">Active enrollments</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Community Impact</div>
+      <div class="metric-val" id="emp-metric-status">
+        Active
+      </div>
+      <div class="metric-meta text-muted">Corporate Service Participant</div>
+    </div>
+  </div>
+
+  <!-- Roadmap / Next Phase Notice -->
+  <div class="card info-card">
+    <div class="card-header">
+      <h2 class="card-title">Employee Portal Modules</h2>
+    </div>
+    <div class="card-body">
+      <p class="text-secondary mb-4">
+        Task 04 establishes the authentication shell and employee role routing. Subsequent task modules:
+      </p>
+      <div class="module-list">
+        <div class="module-item">
+          <strong>Task 06:</strong> Browse Opportunities & Activity Detail Discovery (Use Case 2)
+        </div>
+        <div class="module-item">
+          <strong>Task 07:</strong> Registration Workflows, Slot Limits & Cut-off Rules (Use Case 3)
+        </div>
+        <div class="module-item">
+          <strong>Task 09:</strong> Digital Ticket & QR Code Check-in Verification (Use Case 5)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

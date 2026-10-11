@@ -1,0 +1,100 @@
+/* Admin Dashboard Component Specific Overrides (< 1.5kB) */
+.dashboard-viewport {
+  animation: fadeIn 200ms ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dash-greeting-title {
+  font-family: var(--font-interface);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-deep-slate);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.dash-greeting-date {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary-text);
+  margin-top: 3px;
+}
+
+.dash-search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-secondary-text);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.dash-search-btn:hover {
+  background: #F4F6F4;
+  color: var(--color-deep-slate);
+  border-color: var(--color-deep-slate);
+}
+
+.btn-dash-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-deep-slate);
+  color: #FFFFFF;
+  padding: 0.6rem 1.15rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 6px rgba(32, 44, 59, 0.12);
+}
+
+.btn-dash-action:hover {
+  background: #151D27;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.dash-main-split {
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 1.5rem;
+}
+
+.dash-section-title {
+  font-family: var(--font-interface);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-deep-slate);
+}
+
+.dash-view-all-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-forest);
+  text-decoration: none;
+}
+
+.dash-view-all-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1100px) {
+  .dash-main-split {
+    grid-template-columns: 1fr;
+  }
+  .dash-cards-row {
+    grid-template-columns: 1fr;
+  }
+}

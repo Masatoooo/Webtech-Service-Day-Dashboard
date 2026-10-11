@@ -1,30 +1,158 @@
-<header class="app-header">
-  <div class="container flex justify-between items-center header-inner">
-    <div class="brand-group">
-      <div class="brand-title">Service Day</div>
-      <div class="brand-divider" aria-hidden="true"></div>
-      <div class="brand-subtitle">Corporate Staff Contributions</div>
-    </div>
-    <div class="header-status">
-      <span class="status-indicator" aria-hidden="true"></span>
-      <span class="status-label">Warm Editorial &bull; Task 02 Active</span>
-    </div>
-  </div>
-</header>
-
-<main class="app-main">
-  <div class="container py-8">
+<!-- When on Login or Register route, render full-screen auth without sidebar -->
+<ng-container *ngIf="isLoginRoute$ | async">
+  <main class="app-main-login">
     <router-outlet></router-outlet>
-  </div>
-</main>
+  </main>
+</ng-container>
 
-<footer class="app-footer">
-  <div class="container flex justify-between items-center footer-inner">
-    <div class="footer-copy">
-      <strong>Service Day Dashboard</strong> &mdash; Corporate Social Responsibility (CSR) Management Platform.
+<!-- Modern Application Shell with Left Sidebar (Inspired by User Reference) -->
+<div class="app-shell" *ngIf="!(isLoginRoute$ | async)">
+  <!-- Left Sidebar Navigation -->
+  <aside class="app-sidebar" aria-label="Main Navigation">
+    <!-- Brand Title -->
+    <a routerLink="/" class="sidebar-brand" aria-label="Service Day Home">
+      <div class="sidebar-brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 28 28" fill="none" width="26" height="26" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="10" width="6" height="14" rx="2" fill="#C9A66B" />
+          <rect x="11" y="4" width="6" height="20" rx="2" fill="#356859" />
+          <rect x="20" y="8" width="6" height="16" rx="2" fill="#202C3B" />
+        </svg>
+      </div>
+      <span class="brand-title sidebar-brand-name">Service Day</span>
+    </a>
+
+    <!-- User Profile in Sidebar (Matching Screenshot Style) -->
+    <div class="sidebar-user-card" *ngIf="currentUser$ | async as user; else guestSidebar">
+      <div class="sidebar-avatar-wrap">
+        <div class="sidebar-avatar" aria-hidden="true">
+          {{ user.avatarInitials || (user.name | slice:0:2 | uppercase) }}
+        </div>
+        <div class="sidebar-status-dot" title="Active demo session"></div>
+      </div>
+      <div class="sidebar-user-name">{{ user.name }}</div>
+      <div class="sidebar-user-email">{{ user.email }}</div>
+      <span
+        class="sidebar-role-badge"
+        [class.role-admin]="user.role === 'ADMIN'"
+      >
+        {{ user.role === 'ADMIN' ? 'Administrator' : 'Employee' }}
+      </span>
     </div>
-    <div class="footer-meta text-muted">
-      Frontend Assessment &bull; CLO2
+
+    <ng-template #guestSidebar>
+      <div class="sidebar-user-card">
+        <div class="sidebar-avatar-wrap">
+          <div class="sidebar-avatar">SD</div>
+        </div>
+        <div class="sidebar-user-name">Guest User</div>
+        <a routerLink="/login" class="btn btn-sm btn-primary mt-2">Sign In</a>
+      </div>
+    </ng-template>
+
+    <!-- Role-Aware Vertical Navigation Menu -->
+    <nav class="sidebar-nav" aria-label="Sidebar Menu" *ngIf="isAuthenticated$ | async">
+      <!-- Administrator Navigation Menu -->
+      <ng-container *ngIf="(userRole$ | async) === 'ADMIN'">
+        <a
+          routerLink="/admin"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="sidebar-nav-item"
+          id="nav-admin-dashboard"
+        >
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a
+          routerLink="/admin/activities"
+          routerLinkActive="active"
+          class="sidebar-nav-item"
+          id="nav-admin-activities"
+        >
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+          </svg>
+          <span>Activities</span>
+        </a>
+
+        <div class="sidebar-nav-item disabled" title="Available in Task 08">
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8v2h1a1 1 0 001-1v-1h-2zm-2 2H7v-2h6v2zm-8-2v2H4a1 1 0 01-1-1v-1h2z" clip-rule="evenodd" />
+          </svg>
+          <span>NGO Partners</span>
+        </div>
+
+        <div class="sidebar-nav-item disabled" title="Available in Task 08">
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+          </svg>
+          <span>Participation</span>
+        </div>
+
+        <div class="sidebar-nav-item disabled" title="Available in Task 09">
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+          </svg>
+          <span>Reports</span>
+        </div>
+      </ng-container>
+
+      <!-- Employee Navigation Menu -->
+      <ng-container *ngIf="(userRole$ | async) === 'EMPLOYEE'">
+        <a
+          routerLink="/employee"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="sidebar-nav-item"
+          id="nav-employee-dashboard"
+        >
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+          <span>Volunteer Portal</span>
+        </a>
+
+        <div class="sidebar-nav-item disabled" title="Available in Task 06">
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+          </svg>
+          <span>Opportunities</span>
+        </div>
+
+        <div class="sidebar-nav-item disabled" title="Available in Task 07">
+          <svg class="sidebar-nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+          </svg>
+          <span>My Registrations</span>
+        </div>
+      </ng-container>
+    </nav>
+
+    <!-- Sidebar Footer with Sign Out -->
+    <div class="sidebar-footer">
+      <button
+        *ngIf="isAuthenticated$ | async"
+        type="button"
+        class="sidebar-btn-signout"
+        (click)="onLogout()"
+        id="btn-header-signout"
+        title="Sign out of current demo session"
+      >
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+        </svg>
+        <span>Sign Out</span>
+      </button>
+      <div class="sidebar-wave-accent" aria-hidden="true"></div>
     </div>
-  </div>
-</footer>
+  </aside>
+
+  <!-- Main Viewport Router Outlet -->
+  <main class="app-main-viewport">
+    <router-outlet></router-outlet>
+  </main>
+</div>

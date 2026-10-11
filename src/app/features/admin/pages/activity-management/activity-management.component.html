@@ -1,0 +1,820 @@
+<div class="activity-mgmt-page">
+  <!-- Page Header -->
+  <header class="page-header mb-6">
+    <div class="flex justify-between items-center header-row">
+      <div>
+        <div class="eyebrow">Governance Portal &bull; Use Case 01</div>
+        <h1 class="page-title">CSR Activity & NGO Management</h1>
+        <p class="header-desc text-muted">
+          Oversee initiative lifecycles, coordinate partner NGOs, govern volunteer capacity, and validate registration cut-offs.
+        </p>
+      </div>
+
+      <div class="header-actions flex items-center gap-3">
+        <a routerLink="/admin" class="btn btn-secondary btn-sm" id="btn-back-overview">
+          &larr; Overview
+        </a>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="openCreateModal()"
+          id="btn-open-create-activity"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+          New Activity
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- In-Page Feedback Toast / Alert -->
+  <div
+    *ngIf="toastMessage"
+    class="alert-feedback mb-6 flex items-center justify-between"
+    [class.alert-feedback-success]="toastType === 'success'"
+    [class.alert-feedback-error]="toastType === 'error'"
+    [class.alert-feedback-info]="toastType === 'info'"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="flex items-center gap-3">
+      <svg *ngIf="toastType === 'success'" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      <svg *ngIf="toastType === 'error'" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      <span class="feedback-text">{{ toastMessage }}</span>
+    </div>
+    <button type="button" class="btn-dismiss" (click)="dismissToast()" aria-label="Dismiss message">&times;</button>
+  </div>
+
+  <!-- Operational Summary Strip -->
+  <div class="metrics-strip mb-6">
+    <div class="metric-col">
+      <span class="metric-col-label">Total Activities</span>
+      <span class="metric-col-val" id="metric-total-activities">{{ metrics.total }}</span>
+      <span class="metric-col-sub">All managed initiatives</span>
+    </div>
+    <div class="metric-col">
+      <span class="metric-col-label">Published / Open</span>
+      <span class="metric-col-val text-forest" id="metric-published-activities">{{ metrics.published }}</span>
+      <span class="metric-col-sub">Discoverable by employees</span>
+    </div>
+    <div class="metric-col">
+      <span class="metric-col-label">Draft / In Review</span>
+      <span class="metric-col-val text-brass" id="metric-draft-activities">{{ metrics.draft }}</span>
+      <span class="metric-col-sub">Admin-only staging</span>
+    </div>
+    <div class="metric-col">
+      <span class="metric-col-label">Cancelled / Inactive</span>
+      <span class="metric-col-val text-secondary" id="metric-cancelled-activities">{{ metrics.cancelled }}</span>
+      <span class="metric-col-sub">Records preserved</span>
+    </div>
+    <div class="metric-col metric-col-fill">
+      <span class="metric-col-label">Slot Utilisation</span>
+      <span class="metric-col-val" id="metric-utilisation-rate">{{ metrics.utilisationRate }}%</span>
+      <span class="metric-col-sub">{{ metrics.totalRegistered }} of {{ metrics.totalCapacity }} volunteers enrolled</span>
+    </div>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="filter-card mb-6">
+    <div class="filter-grid">
+      <!-- Search Field -->
+      <div class="search-box">
+        <label for="input-activity-search" class="sr-only">Search activities</label>
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+          <input
+            id="input-activity-search"
+            type="text"
+            class="filter-input"
+            placeholder="Search title, NGO, description, location..."
+            [value]="searchTerm"
+            (input)="onSearchChange($any($event.target).value)"
+          />
+        </div>
+      </div>
+
+      <!-- Publication Status Filter -->
+      <div class="filter-field">
+        <label for="select-filter-status" class="filter-label">Status</label>
+        <select
+          id="select-filter-status"
+          class="filter-select"
+          [value]="selectedStatus"
+          (change)="onFilterStatusChange($any($event.target).value)"
+        >
+          <option value="ALL">All Statuses</option>
+          <option value="PUBLISHED">Published</option>
+          <option value="DRAFT">Draft</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
+      </div>
+
+      <!-- Service Type Filter -->
+      <div class="filter-field">
+        <label for="select-filter-type" class="filter-label">Service Type</label>
+        <select
+          id="select-filter-type"
+          class="filter-select"
+          [value]="selectedServiceType"
+          (change)="onFilterServiceTypeChange($any($event.target).value)"
+        >
+          <option value="ALL">All Categories</option>
+          <option *ngFor="let st of serviceTypes" [value]="st.value">{{ st.label }}</option>
+        </select>
+      </div>
+
+      <!-- NGO Filter -->
+      <div class="filter-field">
+        <label for="select-filter-ngo" class="filter-label">Partner NGO</label>
+        <select
+          id="select-filter-ngo"
+          class="filter-select"
+          [value]="selectedNgoId"
+          (change)="onFilterNgoChange($any($event.target).value)"
+        >
+          <option value="ALL">All Partner NGOs</option>
+          <option *ngFor="let ngo of availableNGOs" [value]="ngo.id">
+            {{ ngo.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Reset / Results Row -->
+      <div class="filter-actions flex items-end">
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          (click)="resetFilters()"
+          id="btn-reset-filters"
+          title="Reset search and filters"
+        >
+          Reset Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Active filter meta counter -->
+    <div class="filter-meta-bar flex justify-between items-center mt-3 pt-3">
+      <span class="meta-count text-secondary" id="text-results-count">
+        Showing <strong>{{ filteredRows.length }}</strong> of {{ allRows.length }} activities
+      </span>
+      <span *ngIf="searchTerm || selectedStatus !== 'ALL' || selectedServiceType !== 'ALL' || selectedNgoId !== 'ALL'" class="active-badge">
+        Filtered Results
+      </span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="state-container py-8 text-center" aria-live="polite">
+    <div class="spinner mb-3" aria-hidden="true"></div>
+    <div class="text-secondary font-medium">Loading activity records...</div>
+  </div>
+
+  <!-- Activities Table -->
+  <div *ngIf="!isLoading && filteredRows.length > 0" class="table-container mb-8">
+    <table class="activity-table" aria-label="Managed CSR Activities Table">
+      <thead>
+        <tr>
+          <th scope="col" class="th-title">Activity & Category</th>
+          <th scope="col" class="th-ngo">Partner NGO</th>
+          <th scope="col" class="th-schedule">Schedule</th>
+          <th scope="col" class="th-cutoff">Registration Cut-off</th>
+          <th scope="col" class="th-location">Location</th>
+          <th scope="col" class="th-capacity">Capacity & Slots</th>
+          <th scope="col" class="th-status">Status</th>
+          <th scope="col" class="th-actions text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of filteredRows; let idx = index" class="activity-row" [id]="'row-' + row.activity.id">
+          <!-- Title & Service Type -->
+          <td class="td-title">
+            <div class="activity-cell-title">
+              <span class="title-text" [title]="row.activity.title">{{ row.activity.title }}</span>
+              <div class="cell-sub flex items-center gap-2 mt-1">
+                <span class="type-pill" [attr.data-type]="row.activity.serviceType">
+                  {{ row.activity.serviceType | titlecase }}
+                </span>
+                <span class="id-tag">#{{ row.activity.id }}</span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Partner NGO -->
+          <td class="td-ngo">
+            <div class="ngo-cell">
+              <span class="ngo-name">{{ row.ngo?.name || 'Unassigned NGO' }}</span>
+              <div class="ngo-badge-wrap mt-1">
+                <span
+                  class="badge-pill"
+                  [class.badge-approved]="row.ngo?.approvalStatus === 'APPROVED'"
+                  [class.badge-pending]="row.ngo?.approvalStatus === 'PENDING'"
+                  [class.badge-rejected]="row.ngo?.approvalStatus === 'REJECTED'"
+                >
+                  {{ row.ngo?.approvalStatus || 'APPROVED' }}
+                </span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Schedule -->
+          <td class="td-schedule">
+            <div class="schedule-cell">
+              <div class="schedule-date">
+                {{ row.activity.startDateTime | date:'dd MMM yyyy' }}
+              </div>
+              <div class="schedule-time text-muted">
+                {{ row.activity.startDateTime | date:'HH:mm' }} &ndash; {{ row.activity.endDateTime | date:'HH:mm' }}
+              </div>
+            </div>
+          </td>
+
+          <!-- Cut-Off -->
+          <td class="td-cutoff">
+            <div class="cutoff-cell">
+              <span class="cutoff-date">{{ row.activity.registrationCutoff | date:'dd MMM yyyy, HH:mm' }}</span>
+              <div class="cutoff-meta mt-1">
+                <span *ngIf="row.isCutoffPassed" class="badge-status-closed">
+                  Cut-off Passed
+                </span>
+                <span *ngIf="!row.isCutoffPassed" class="badge-status-open">
+                  Open for Registration
+                </span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Location -->
+          <td class="td-location">
+            <span class="location-text" [title]="row.activity.location">{{ row.activity.location }}</span>
+          </td>
+
+          <!-- Capacity & Registrations -->
+          <td class="td-capacity">
+            <div class="capacity-progress">
+              <div class="capacity-numbers flex justify-between items-center">
+                <span class="capacity-count">
+                  <strong>{{ row.slotSummary.filledSlots }}</strong> / {{ row.activity.capacity }}
+                </span>
+                <span class="capacity-pct text-muted">{{ row.slotSummary.utilisationPercentage }}%</span>
+              </div>
+              <div class="capacity-progress-bar" aria-hidden="true">
+                <div
+                  class="capacity-progress-fill"
+                  [class.fill-full]="row.slotSummary.availabilityStatus === 'FULL'"
+                  [class.fill-high]="row.slotSummary.utilisationPercentage >= 80 && row.slotSummary.availabilityStatus !== 'FULL'"
+                  [style.width.%]="row.slotSummary.utilisationPercentage"
+                ></div>
+              </div>
+              <div class="availability-tag mt-1">
+                <span class="avail-badge" [attr.data-avail]="row.slotSummary.availabilityStatus">
+                  {{ row.slotSummary.availabilityStatus }}
+                </span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Publication Status -->
+          <td class="td-status">
+            <span
+              class="pub-status-badge"
+              [class.pub-published]="row.activity.publicationStatus === 'PUBLISHED'"
+              [class.pub-draft]="row.activity.publicationStatus === 'DRAFT'"
+              [class.pub-cancelled]="row.activity.publicationStatus === 'CANCELLED'"
+              [class.pub-completed]="row.activity.publicationStatus === 'COMPLETED'"
+            >
+              {{ row.activity.publicationStatus }}
+            </span>
+          </td>
+
+          <!-- Row Actions -->
+          <td class="td-actions text-right">
+            <div class="row-actions flex items-center justify-end gap-1">
+              <!-- Edit Action -->
+              <button
+                type="button"
+                class="btn btn-sm btn-secondary btn-icon-text"
+                (click)="openEditModal(row)"
+                [id]="'btn-edit-' + row.activity.id"
+                title="Edit activity details"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
+                Edit
+              </button>
+
+              <!-- Quick Status Toggle -->
+              <button
+                *ngIf="row.activity.publicationStatus === 'DRAFT'"
+                type="button"
+                class="btn btn-sm btn-primary btn-action-toggle"
+                (click)="onQuickStatusChange(row.activity, 'PUBLISHED')"
+                [id]="'btn-publish-' + row.activity.id"
+                title="Publish activity for employee discovery"
+              >
+                Publish
+              </button>
+
+              <button
+                *ngIf="row.activity.publicationStatus === 'PUBLISHED'"
+                type="button"
+                class="btn btn-sm btn-ghost btn-action-toggle"
+                (click)="onQuickStatusChange(row.activity, 'DRAFT')"
+                [id]="'btn-draft-' + row.activity.id"
+                title="Revert to Draft"
+              >
+                Draft
+              </button>
+
+              <!-- Cancel / Deactivate Action -->
+              <button
+                *ngIf="row.activity.publicationStatus !== 'CANCELLED' && row.activity.publicationStatus !== 'COMPLETED'"
+                type="button"
+                class="btn btn-sm btn-ghost text-secondary"
+                (click)="openCancelDialog(row)"
+                [id]="'btn-cancel-act-' + row.activity.id"
+                title="Cancel activity"
+              >
+                Cancel
+              </button>
+
+              <!-- Delete Action -->
+              <button
+                type="button"
+                class="btn btn-sm btn-ghost btn-danger-icon"
+                (click)="openDeleteDialog(row)"
+                [id]="'btn-delete-' + row.activity.id"
+                title="Delete activity record"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="sr-only">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredRows.length === 0" class="empty-state card text-center py-12 mb-8">
+    <div class="empty-icon-wrapper mb-3" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+    </div>
+    <h3 class="empty-title font-semibold mb-2">No Activities Found</h3>
+    <p class="empty-desc text-secondary max-w-md mx-auto mb-4">
+      No activities matched your current search query or filter criteria. Clear filters or create a new CSR initiative.
+    </p>
+    <div class="empty-actions flex justify-center gap-3">
+      <button type="button" class="btn btn-secondary" (click)="resetFilters()">
+        Clear Filters
+      </button>
+      <button type="button" class="btn btn-primary" (click)="openCreateModal()">
+        + New Activity
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       CREATE / EDIT ACTIVITY MODAL FORM
+       ========================================================================= -->
+  <div
+    *ngIf="isFormModalOpen"
+    class="modal-backdrop"
+    (click)="closeFormModal()"
+    (keydown.escape)="closeFormModal()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-form-title"
+  >
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-header-title" id="modal-form-title">
+            {{ isEditing ? 'Edit Activity Details' : 'Create New CSR Activity' }}
+          </h2>
+          <p class="modal-header-desc">
+            {{ isEditing ? 'Update schedule, capacity limits, and partner NGO affiliation.' : 'Configure initiative details, schedule cut-offs, and volunteer capacity.' }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="modal-btn-close"
+          (click)="closeFormModal()"
+          aria-label="Close form modal"
+          id="btn-close-activity-modal"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <!-- Error Alert within Form -->
+        <div *ngIf="formError" class="alert alert-error mb-4">
+          {{ formError }}
+        </div>
+
+        <!-- Cross-field Schedule Alert -->
+        <div
+          *ngIf="formSubmitted && activityForm.errors?.['invalidDateOrder']"
+          class="alert alert-error mb-4"
+          id="error-date-order"
+        >
+          {{ activityForm.errors?.['invalidDateOrder'] }}
+        </div>
+        <div
+          *ngIf="formSubmitted && activityForm.errors?.['invalidCutoff']"
+          class="alert alert-error mb-4"
+          id="error-cutoff-order"
+        >
+          {{ activityForm.errors?.['invalidCutoff'] }}
+        </div>
+        <div
+          *ngIf="formSubmitted && activityForm.errors?.['capacityBelowRegistrations']"
+          class="alert alert-error mb-4"
+          id="error-capacity-below"
+        >
+          {{ activityForm.errors?.['capacityBelowRegistrations'] }}
+        </div>
+
+        <form [formGroup]="activityForm" (ngSubmit)="onSaveActivity()" id="activity-mgmt-form">
+          <!-- Activity Title -->
+          <div class="form-group mb-4">
+            <label for="form-activity-title" class="form-label required">Activity Title</label>
+            <input
+              id="form-activity-title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              placeholder="e.g. Mangrove Coastal Restoration & Planting"
+            />
+            <span
+              *ngIf="formSubmitted && activityForm.get('title')?.hasError('required')"
+              class="form-error"
+            >
+              Activity title is required.
+            </span>
+            <span
+              *ngIf="formSubmitted && activityForm.get('title')?.hasError('minlength')"
+              class="form-error"
+            >
+              Title must be at least 3 characters.
+            </span>
+          </div>
+
+          <!-- NGO Selector & Service Type Row -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <!-- Partner NGO Selector -->
+            <div class="form-group">
+              <label for="form-activity-ngo" class="form-label required">Partner NGO</label>
+              <select
+                id="form-activity-ngo"
+                class="form-control"
+                formControlName="ngoId"
+              >
+                <option value="" disabled>Select vetted partner NGO...</option>
+                <option *ngFor="let ngo of availableNGOs" [value]="ngo.id">
+                  {{ ngo.name }} ({{ ngo.approvalStatus }})
+                </option>
+              </select>
+              <span
+                *ngIf="formSubmitted && activityForm.get('ngoId')?.hasError('required')"
+                class="form-error"
+              >
+                Please select a partner NGO.
+              </span>
+              <!-- Warning if selected NGO is pending approval -->
+              <span
+                *ngIf="getSelectedNgo()?.approvalStatus === 'PENDING'"
+                class="form-hint text-brass font-medium"
+              >
+                Note: This NGO is currently PENDING approval.
+              </span>
+            </div>
+
+            <!-- Service Type -->
+            <div class="form-group">
+              <label for="form-activity-type" class="form-label required">Service Category</label>
+              <select
+                id="form-activity-type"
+                class="form-control"
+                formControlName="serviceType"
+              >
+                <option *ngFor="let st of serviceTypes" [value]="st.value">
+                  {{ st.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="form-group mb-4">
+            <label for="form-activity-location" class="form-label required">Venue / Location</label>
+            <input
+              id="form-activity-location"
+              type="text"
+              class="form-control"
+              formControlName="location"
+              placeholder="e.g. Taman Wisata Alam Angke Kapuk, Jakarta Utara"
+            />
+            <span
+              *ngIf="formSubmitted && activityForm.get('location')?.hasError('required')"
+              class="form-error"
+            >
+              Location is required.
+            </span>
+          </div>
+
+          <!-- Capacity & Publication Status Row -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <!-- Capacity -->
+            <div class="form-group">
+              <label for="form-activity-capacity" class="form-label required">Volunteer Capacity</label>
+              <input
+                id="form-activity-capacity"
+                type="number"
+                min="1"
+                step="1"
+                class="form-control"
+                formControlName="capacity"
+              />
+              <span
+                *ngIf="formSubmitted && activityForm.get('capacity')?.hasError('required')"
+                class="form-error"
+              >
+                Capacity is required.
+              </span>
+              <span
+                *ngIf="formSubmitted && (activityForm.get('capacity')?.hasError('min') || activityForm.get('capacity')?.hasError('pattern'))"
+                class="form-error"
+              >
+                Capacity must be a positive integer (at least 1).
+              </span>
+              <span *ngIf="isEditing && editingActiveRegistrationsCount > 0" class="form-hint">
+                Current active registrations: {{ editingActiveRegistrationsCount }}
+              </span>
+            </div>
+
+            <!-- Publication Status -->
+            <div class="form-group">
+              <label for="form-activity-status" class="form-label required">Publication Status</label>
+              <select
+                id="form-activity-status"
+                class="form-control"
+                formControlName="publicationStatus"
+              >
+                <option *ngFor="let ps of publicationStatuses" [value]="ps.value">
+                  {{ ps.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Schedule Dates: Start & End Row -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="form-group">
+              <label for="form-activity-start" class="form-label required">Start Date & Time</label>
+              <input
+                id="form-activity-start"
+                type="datetime-local"
+                class="form-control"
+                formControlName="startDateTime"
+              />
+              <span
+                *ngIf="formSubmitted && activityForm.get('startDateTime')?.hasError('required')"
+                class="form-error"
+              >
+                Start date and time is required.
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="form-activity-end" class="form-label required">End Date & Time</label>
+              <input
+                id="form-activity-end"
+                type="datetime-local"
+                class="form-control"
+                formControlName="endDateTime"
+              />
+              <span
+                *ngIf="formSubmitted && activityForm.get('endDateTime')?.hasError('required')"
+                class="form-error"
+              >
+                End date and time is required.
+              </span>
+            </div>
+          </div>
+
+          <!-- Registration Cut-Off -->
+          <div class="form-group mb-4">
+            <label for="form-activity-cutoff" class="form-label required">Registration Cut-Off Deadline</label>
+            <input
+              id="form-activity-cutoff"
+              type="datetime-local"
+              class="form-control"
+              formControlName="registrationCutoff"
+            />
+            <span class="form-hint">
+              Registration closes for staff after this timestamp. Must be on or before the start time.
+            </span>
+            <span
+              *ngIf="formSubmitted && activityForm.get('registrationCutoff')?.hasError('required')"
+              class="form-error"
+            >
+              Registration cut-off timestamp is required.
+            </span>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group mb-2">
+            <label for="form-activity-desc" class="form-label required">Initiative Description & Objectives</label>
+            <textarea
+              id="form-activity-desc"
+              rows="3"
+              class="form-control"
+              formControlName="description"
+              placeholder="Outline the goals, volunteer tasks, and impact of this initiative..."
+            ></textarea>
+            <span
+              *ngIf="formSubmitted && activityForm.get('description')?.hasError('required')"
+              class="form-error"
+            >
+              Description is required.
+            </span>
+            <span
+              *ngIf="formSubmitted && activityForm.get('description')?.hasError('minlength')"
+              class="form-error"
+            >
+              Description must be at least 10 characters long.
+            </span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeFormModal()"
+          id="btn-cancel-activity-modal"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onSaveActivity()"
+          id="btn-submit-activity"
+        >
+          {{ isEditing ? 'Save Changes' : 'Create Activity' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       DESTRUCTIVE CONFIRMATION DIALOG (DELETE, DELETE_BLOCKED, CANCEL)
+       ========================================================================= -->
+  <div
+    *ngIf="isConfirmDialogOpen"
+    class="modal-backdrop"
+    (click)="closeConfirmDialog()"
+    (keydown.escape)="closeConfirmDialog()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-confirm-title"
+  >
+    <div class="modal-dialog modal-dialog-sm" (click)="$event.stopPropagation()">
+      <!-- Delete Blocked State (Active Registrations Exist - BR-14) -->
+      <ng-container *ngIf="confirmDialogType === 'DELETE_BLOCKED'">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-header-title text-error" id="modal-confirm-title">
+              Deletion Blocked &bull; Active Registrations Exist
+            </h2>
+            <p class="modal-header-desc">
+              Audit preservation policy (Business Rule BR-14)
+            </p>
+          </div>
+          <button type="button" class="modal-btn-close" (click)="closeConfirmDialog()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-secondary mb-3">
+            Activity <strong>"{{ targetRow?.activity?.title }}"</strong> currently has
+            <strong class="text-error">{{ targetRow?.activeRegistrationsCount }}</strong> active employee registration(s).
+          </p>
+          <p class="text-secondary mb-3">
+            To prevent orphaned staff records and preserve event audit history, direct deletion is blocked.
+          </p>
+          <div class="alert alert-warning">
+            <strong>Recommended Policy:</strong> Cancel this activity instead. Staff registrations will be updated to cancelled status, and audit records will remain intact.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeConfirmDialog()">
+            Dismiss
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onConfirmAction()"
+            id="btn-confirm-cancel-instead"
+          >
+            Cancel Activity Instead
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Standard Safe Delete (0 Registrations) -->
+      <ng-container *ngIf="confirmDialogType === 'DELETE'">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-header-title" id="modal-confirm-title">
+              Delete Activity Record
+            </h2>
+            <p class="modal-header-desc">
+              Permanent removal confirmation
+            </p>
+          </div>
+          <button type="button" class="modal-btn-close" (click)="closeConfirmDialog()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-secondary mb-3">
+            Are you sure you want to permanently delete <strong>"{{ targetRow?.activity?.title }}"</strong>?
+          </p>
+          <p class="text-secondary font-medium">
+            This activity has no active registrations. This action cannot be undone.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeConfirmDialog()" id="btn-cancel-delete">
+            Keep Activity
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="onConfirmAction()"
+            id="btn-confirm-delete"
+          >
+            Delete Permanently
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Cancel / Deactivate Confirmation -->
+      <ng-container *ngIf="confirmDialogType === 'CANCEL'">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-header-title" id="modal-confirm-title">
+              Deactivate / Cancel Activity
+            </h2>
+            <p class="modal-header-desc">
+              Initiative lifecycle status change
+            </p>
+          </div>
+          <button type="button" class="modal-btn-close" (click)="closeConfirmDialog()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-secondary mb-3">
+            Are you sure you want to cancel <strong>"{{ targetRow?.activity?.title }}"</strong>?
+          </p>
+          <p class="text-secondary">
+            The activity will be marked as <code>CANCELLED</code>, volunteer registrations will be preserved, and employees will no longer be able to register.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeConfirmDialog()">
+            Keep Active
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onConfirmAction()"
+            id="btn-confirm-cancel-activity"
+          >
+            Confirm Cancellation
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

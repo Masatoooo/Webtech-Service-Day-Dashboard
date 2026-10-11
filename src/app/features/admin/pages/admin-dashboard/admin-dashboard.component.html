@@ -1,0 +1,202 @@
+<div class="dashboard-viewport">
+  <!-- Top Greeting & Header Bar (Matching Reference Screenshot) -->
+  <header class="dash-top-bar flex justify-between items-center mb-6">
+    <div class="dash-greeting-block">
+      <h1 class="dash-greeting-title">
+        Hello, {{ (currentUser$ | async)?.name?.split(' ')?.[0] || 'Marcus' }}
+      </h1>
+      <p class="dash-greeting-date text-secondary">{{ todayFormatted }}</p>
+    </div>
+
+    <div class="dash-top-actions flex items-center gap-3">
+      <!-- Quick Search Trigger -->
+      <a routerLink="/admin/activities" class="dash-search-btn" title="Search activities">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+      </a>
+
+      <!-- Primary Action: New Activity (Matching "Add New Project" button) -->
+      <a
+        routerLink="/admin/activities"
+        class="btn-dash-action"
+        id="btn-add-activity"
+      >
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        <span>Manage Activities</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- 3 Top Colorful Highlight Cards (Matching 3 Rounded Cards in Reference Screenshot) -->
+  <section class="dash-cards-row grid grid-cols-3 gap-4 mb-6" *ngIf="metrics$ | async as m">
+    <!-- Card 1: Deep Slate / Purple -->
+    <div class="dash-stat-card card-slate" routerLink="/admin/activities">
+      <div class="stat-card-header flex justify-between items-center">
+        <span class="stat-pill pill-slate">+{{ m.totalActivities }} Total</span>
+        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
+      </div>
+      <div class="stat-card-body">
+        <h2 class="stat-card-title">Managed Activities</h2>
+        <div class="stat-card-meta flex justify-between items-center">
+          <span>{{ m.publishedActivities }} published</span>
+          <span>{{ m.publishedPct }}%</span>
+        </div>
+        <div class="stat-progress-track">
+          <div class="stat-progress-bar" [style.width.%]="m.publishedPct"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Forest Teal / Cyan -->
+    <div class="dash-stat-card card-teal" routerLink="/admin/activities">
+      <div class="stat-card-header flex justify-between items-center">
+        <span class="stat-pill pill-teal">+{{ m.totalNgos }} NGOs</span>
+        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
+      </div>
+      <div class="stat-card-body">
+        <h2 class="stat-card-title">Partner NGOs</h2>
+        <div class="stat-card-meta flex justify-between items-center">
+          <span>{{ m.approvedNgos }} approved</span>
+          <span>100% active</span>
+        </div>
+        <div class="stat-progress-track">
+          <div class="stat-progress-bar" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Warm Brass / Coral -->
+    <div class="dash-stat-card card-brass" routerLink="/admin/activities">
+      <div class="stat-card-header flex justify-between items-center">
+        <span class="stat-pill pill-brass">+{{ m.totalCapacity }} Slots</span>
+        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
+      </div>
+      <div class="stat-card-body">
+        <h2 class="stat-card-title">Volunteer Capacity</h2>
+        <div class="stat-card-meta flex justify-between items-center">
+          <span>{{ m.enrolledSlots }} enrolled</span>
+          <span>{{ m.utilisationPct }}%</span>
+        </div>
+        <div class="stat-progress-track">
+          <div class="stat-progress-bar" [style.width.%]="m.utilisationPct"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lower Section: 2 Columns (Main Tasks + Statistics/Spotlight) & Right Calendar Column -->
+  <div class="dash-main-split">
+    <!-- Center-Left Content Area (Tasks + Stats) -->
+    <div class="dash-center-col">
+      <!-- Section: Tasks for Today / Active Initiatives (Matching Reference Screenshot) -->
+      <section class="mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="dash-section-title">Active CSR Initiatives</h2>
+          <a routerLink="/admin/activities" class="dash-view-all-link">View all &rarr;</a>
+        </div>
+
+        <div class="dash-tasks-list">
+          <div
+            *ngFor="let item of featuredActivities$ | async"
+            class="dash-task-item"
+            [style.border-left-color]="item.accentColor"
+            routerLink="/admin/activities"
+          >
+            <div class="task-info">
+              <h3 class="task-title">{{ item.activity.title }}</h3>
+              <p class="task-sub text-secondary">
+                {{ item.ngoName }} &bull; {{ item.activity.location }}
+              </p>
+            </div>
+            <div class="task-meta flex items-center gap-3">
+              <span class="task-slots-badge">
+                {{ item.slotSummary.filledSlots }} / {{ item.activity.capacity }} slots
+              </span>
+              <div class="task-status-indicator" [class.status-ready]="item.activity.publicationStatus === 'PUBLISHED'">
+                <svg *ngIf="item.activity.publicationStatus === 'PUBLISHED'" viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Statistics Widgets & CSR Spotlight (Matching Reference Screenshot) -->
+      <section class="dash-stats-spotlight-row grid grid-cols-2 gap-4">
+        <!-- Quick Metric Chips -->
+        <div class="dash-sub-stats" *ngIf="metrics$ | async as m">
+          <h2 class="dash-section-title mb-3">Participation Stats</h2>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div class="sub-stat-box">
+              <span class="sub-stat-num" id="admin-metric-registrations">{{ m.enrolledSlots }}</span>
+              <span class="sub-stat-lbl">Staff Enrolled</span>
+            </div>
+            <div class="sub-stat-box">
+              <span class="sub-stat-num" id="admin-metric-ngos">{{ m.totalNgos }}</span>
+              <span class="sub-stat-lbl">Partner NGOs</span>
+            </div>
+          </div>
+          <div class="sub-stat-box flex justify-between items-center">
+            <div>
+              <span class="sub-stat-num" id="admin-metric-activities">{{ m.totalActivities }}</span>
+              <span class="sub-stat-lbl">Total Initiatives</span>
+            </div>
+            <a routerLink="/admin/activities" class="btn btn-sm btn-secondary">
+              Open List
+            </a>
+          </div>
+        </div>
+
+        <!-- Impact Spotlight Banner Card (Matching Pro Plan card in reference) -->
+        <div class="dash-spotlight-card">
+          <div class="spotlight-content">
+            <span class="spotlight-tag">CSR IMPACT PLATFORM</span>
+            <h3 class="spotlight-title">Corporate Social Responsibility</h3>
+            <p class="spotlight-desc">
+              Empower employees to contribute time towards marine conservation, food security, and digital literacy.
+            </p>
+            <a routerLink="/admin/activities" class="spotlight-btn">
+              Explore Activities &rarr;
+            </a>
+          </div>
+          <div class="spotlight-graphic" aria-hidden="true">
+            <svg viewBox="0 0 80 80" fill="none" width="70" height="70">
+              <circle cx="40" cy="40" r="36" fill="rgba(255,255,255,0.08)" />
+              <path d="M26 44C22 44 18 40 18 36C18 32 22 28 26 28C30 28 34 32 34 36C34 40 38 44 42 44C46 44 50 40 50 36C50 32 54 28 58 28C62 28 66 32 66 36" stroke="#C9A66B" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column: Calendar & Upcoming Service Days (Matching Reference Screenshot) -->
+    <aside class="dash-calendar-col">
+      <div class="calendar-panel-header flex justify-between items-center mb-4">
+        <h2 class="dash-section-title">Schedule Calendar</h2>
+        <div class="calendar-bell-icon" title="Notifications">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="calendar-timeline">
+        <div *ngFor="let ev of calendarEvents$ | async" class="timeline-entry">
+          <div class="timeline-date-header">{{ ev.dateHeader }}</div>
+          <div class="timeline-event-card">
+            <div class="timeline-time">{{ ev.timeRange }}</div>
+            <div class="timeline-bar" aria-hidden="true"></div>
+            <div class="timeline-details">
+              <span class="timeline-title">{{ ev.title }}</span>
+              <span class="timeline-location text-secondary">{{ ev.location }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

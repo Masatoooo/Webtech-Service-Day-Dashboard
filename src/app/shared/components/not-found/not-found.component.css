@@ -1,0 +1,55 @@
+.not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  padding: var(--space-8) var(--space-4);
+}
+
+.not-found-card {
+  max-width: 500px;
+  width: 100%;
+  background-color: var(--color-surface-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-8);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.not-found-code {
+  font-family: var(--font-interface);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-forest);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.03em;
+}
+
+.not-found-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+  color: var(--color-deep-slate);
+}
+
+.not-found-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-6);
+}
+
+.not-found-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}

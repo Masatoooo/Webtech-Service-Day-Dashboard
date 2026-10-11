@@ -1,0 +1,56 @@
+[
+  {
+    "id": "notif-1",
+    "recipientUserId": "usr-emp-1",
+    "title": "Registration Confirmed",
+    "message": "Your registration for 'Mangrove Coastal Restoration & Planting' on November 14, 2026 has been successfully confirmed.",
+    "type": "REGISTRATION",
+    "createdAt": "2026-10-08T09:15:00",
+    "readAt": "2026-10-08T10:00:00",
+    "deliveryStatus": "DELIVERED",
+    "activityId": "act-1"
+  },
+  {
+    "id": "notif-2",
+    "recipientUserId": "usr-emp-1",
+    "title": "Registration Confirmed",
+    "message": "Your registration for 'Youth STEM Robotics Mentorship Workshop' on November 15, 2026 is confirmed.",
+    "type": "REGISTRATION",
+    "createdAt": "2026-10-09T11:00:00",
+    "readAt": null,
+    "deliveryStatus": "DELIVERED",
+    "activityId": "act-2"
+  },
+  {
+    "id": "notif-3",
+    "recipientUserId": "ALL",
+    "title": "Service Day 2026 Opportunities Published",
+    "message": "Welcome to Annual Corporate Service Day. Please browse approved NGO initiatives and reserve your contribution slot before cut-off deadlines.",
+    "type": "BROADCAST",
+    "createdAt": "2026-10-07T08:00:00",
+    "readAt": null,
+    "deliveryStatus": "DELIVERED"
+  },
+  {
+    "id": "notif-4",
+    "recipientUserId": "usr-emp-4",
+    "title": "Registration Cancellation Processed",
+    "message": "Your participation in 'Mangrove Coastal Restoration & Planting' was cancelled upon your request. Your slot has been released back to the general pool.",
+    "type": "CANCELLATION",
+    "createdAt": "2026-10-09T08:00:00",
+    "readAt": "2026-10-09T08:05:00",
+    "deliveryStatus": "DELIVERED",
+    "activityId": "act-1"
+  },
+  {
+    "id": "notif-5",
+    "recipientUserId": "usr-emp-2",
+    "title": "Upcoming Registration Cut-Off Notice",
+    "message": "Registration for 'Coral Reef Nursery Monitoring & Cleanup' will close in 24 hours. Please finalize any adjustments promptly.",
+    "type": "REMINDER",
+    "createdAt": "2026-10-04T09:00:00",
+    "readAt": null,
+    "deliveryStatus": "DELIVERED",
+    "activityId": "act-5"
+  }
+]

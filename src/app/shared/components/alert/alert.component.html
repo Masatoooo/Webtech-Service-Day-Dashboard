@@ -1,0 +1,13 @@
+<div
+  class="alert"
+  [class.alert-info]="type === 'info'"
+  [class.alert-success]="type === 'success'"
+  [class.alert-warning]="type === 'warning'"
+  [class.alert-error]="type === 'error'"
+  role="alert"
+>
+  <div class="alert-content">
+    <ng-content></ng-content>
+    <span *ngIf="message">{{ message }}</span>
+  </div>
+</div>

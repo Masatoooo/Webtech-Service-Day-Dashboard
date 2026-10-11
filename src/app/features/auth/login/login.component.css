@@ -1,0 +1,19 @@
+:host{display:block;width:100%;height:100%}
+.form-header{margin-bottom:1.5rem}
+.brand-kicker{font-size:.725rem;font-weight:700;letter-spacing:.12em;color:var(--text-secondary);display:block;margin-bottom:.3rem}
+.brand-title-wrap{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.35rem}
+.brand-logo-icon{width:28px;height:28px}
+.brand-name{font-size:1.35rem;font-weight:800;letter-spacing:.06em;color:var(--color-deep-slate);margin:0}
+.form-subtitle{font-size:.8125rem;color:var(--text-secondary);margin:0}
+.login-fields-form{margin-bottom:1rem}
+.form-group{margin-bottom:.875rem}
+.field-meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:.3rem;gap:.5rem}
+.form-hint{font-size:.725rem;padding-left:.5rem;display:block}
+.btn-text-link{background:none;border:none;color:var(--color-forest);font-size:.735rem;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.btn-text-link:hover{color:var(--color-forest-hover)}
+.form-actions{margin-top:1.25rem}
+.demo-notice{margin-top:1rem}
+.demo-notice-text{font-size:.75rem;color:var(--text-secondary);margin:0}
+.demo-code{font-family:monospace;font-size:.7rem;background:#EEF2F4;padding:.15rem .35rem;border-radius:4px;color:var(--color-deep-slate)}
+.forgot-pw-view{animation:fadeIn .2s ease-in-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}

@@ -1,0 +1,198 @@
+<div class="login-page-wrapper">
+  <!-- Subtle decorative ambient background accents inspired by reference screenshot -->
+  <div class="bg-accent-shape shape-top-left" aria-hidden="true"></div>
+  <div class="bg-accent-shape shape-bottom-right" aria-hidden="true"></div>
+
+  <!-- Centered Split Card Container inspired by reference screenshot -->
+  <div class="login-card-container">
+    
+    <!-- Left Section: Authentication Form (White) -->
+    <div class="login-form-side">
+      <div class="form-content-inner">
+        <!-- Brand Header (Normal Sign In) -->
+        <div *ngIf="!showForgotPasswordModal" class="form-header text-center">
+          <span class="brand-kicker">WELCOME TO</span>
+          <div class="brand-title-wrap">
+            <svg class="brand-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 20C6.686 20 4 17.314 4 14C4 10.686 6.686 8 10 8C13.314 8 16 11 16 14C16 17 18.686 20 22 20C25.314 20 28 17.314 28 14C28 10.686 25.314 8 22 8C18.686 8 16 11 16 14" stroke="#356859" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h1 class="brand-name">SERVICE DAY</h1>
+          </div>
+          <p class="form-subtitle">Sign in to access your corporate volunteer workspace.</p>
+        </div>
+
+        <!-- Forgot Password View -->
+        <div *ngIf="showForgotPasswordModal" class="forgot-pw-view">
+          <div class="form-header text-center">
+            <span class="brand-kicker">PASSWORD ASSISTANCE</span>
+            <div class="brand-title-wrap">
+              <h2 class="brand-name">Reset Password</h2>
+            </div>
+            <p class="form-subtitle">Enter your corporate email to receive reset instructions.</p>
+          </div>
+
+          <app-alert *ngIf="forgotPasswordSuccess" type="success">
+            {{ forgotPasswordSuccess }}
+          </app-alert>
+          <app-alert *ngIf="forgotPasswordError" type="error">
+            {{ forgotPasswordError }}
+          </app-alert>
+
+          <div *ngIf="!forgotPasswordSuccess" class="login-fields-form">
+            <div class="form-group">
+              <div class="input-pill-wrapper">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                <input
+                  id="reset-email"
+                  type="email"
+                  class="pill-input"
+                  [value]="forgotPasswordEmail"
+                  (input)="forgotPasswordEmail = $any($event.target).value"
+                  placeholder="Corporate email address"
+                  autocomplete="email"
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn-pill-submit"
+                id="btn-submit-reset"
+                (click)="onSendPasswordReset()"
+                [disabled]="isResetting"
+              >
+                <span *ngIf="!isResetting">SEND RESET LINK</span>
+                <span *ngIf="isResetting">DISPATCHING...</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-switch-prompt text-center">
+            <button type="button" class="btn-text-link" id="btn-back-to-login" (click)="closeForgotPassword()">
+              &larr; Return to Sign In
+            </button>
+          </div>
+        </div>
+
+        <!-- Normal Sign In Form View -->
+        <ng-container *ngIf="!showForgotPasswordModal">
+          <!-- Accessible Error Alert -->
+          <app-alert *ngIf="errorMessage" type="error">
+            {{ errorMessage }}
+          </app-alert>
+
+          <!-- Form with rounded pill inputs -->
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="login-fields-form">
+            <div class="form-group">
+              <div class="input-pill-wrapper" [class.input-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+                  <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                </svg>
+                <input
+                  id="login-email"
+                  type="email"
+                  class="pill-input"
+                  formControlName="email"
+                  placeholder="Corporate email address"
+                  autocomplete="email"
+                  aria-required="true"
+                />
+              </div>
+              <span
+                *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                class="form-hint text-error"
+              >
+                Please provide a valid corporate email address.
+              </span>
+            </div>
+
+            <div class="form-group">
+              <div class="input-pill-wrapper">
+                <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                </svg>
+                <input
+                  id="login-password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="pill-input"
+                  formControlName="password"
+                  placeholder="Password"
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  class="btn-toggle-pw"
+                  id="btn-toggle-password"
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                >
+                  <svg *ngIf="!showPassword" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                  </svg>
+                  <svg *ngIf="showPassword" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.262l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.479z" clip-rule="evenodd" />
+                    <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                  </svg>
+                </button>
+              </div>
+              <div class="field-meta-row">
+                <span class="form-hint text-muted">Demo: any password accepted.</span>
+                <button type="button" class="btn-text-link" id="btn-forgot-password" (click)="openForgotPassword()">
+                  Forgot Password?
+                </button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="btn-pill-submit"
+                id="btn-login-submit"
+                [disabled]="isLoading"
+              >
+                <span *ngIf="!isLoading">SIGN IN</span>
+                <span *ngIf="isLoading">AUTHENTICATING...</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Register switch option -->
+          <div class="auth-switch-prompt text-center">
+            <span class="auth-switch-text">Don't have an account? </span>
+            <a routerLink="/register" class="link-auth-strong" id="link-goto-register">Sign Up Now</a>
+          </div>
+
+          <!-- Clean Demo Notice (no box card, clean typography) -->
+          <div class="demo-notice text-center">
+            <p class="demo-notice-text">
+              Demo credentials available in <code class="demo-code">docs/DEMO_CREDENTIALS.md</code>
+            </p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Right Section: Brand Side (Deep Slate, sleek & unified) -->
+    <div class="login-brand-side">
+      <div class="brand-side-content text-center">
+        <!-- Prominent Brand Emblem in Center -->
+        <div class="hero-emblem-wrap">
+          <svg class="hero-emblem-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20 40C13.37 40 8 34.63 8 28C8 21.37 13.37 16 20 16C26.63 16 32 22 32 28C32 34 37.37 40 44 40C50.63 40 56 34.63 56 28C56 21.37 50.63 16 44 16C37.37 16 32 22 32 28" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="hero-brand-name">SERVICE DAY</h2>
+        <div class="hero-brand-divider" aria-hidden="true"></div>
+        <p class="hero-brand-description">
+          Make your time count. Connect with corporate community initiatives and make a meaningful difference.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="not-found-container">
+  <div class="card not-found-card">
+    <div class="card-body text-center">
+      <div class="not-found-code">404</div>
+      <h1 class="editorial-title not-found-title">Page Not Located</h1>
+      <p class="not-found-desc">
+        The requested URL could not be found within the Service Day platform. The resource may have been relocated or you may lack authorization to access it.
+      </p>
+
+      <div class="not-found-actions">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="navigateReturn()"
+          id="btn-return-home"
+        >
+          <svg class="icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+          {{ returnLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

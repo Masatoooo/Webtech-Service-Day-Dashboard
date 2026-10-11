@@ -1,0 +1,22 @@
+[
+  {
+    "id": "att-1",
+    "registrationId": "reg-12",
+    "activityId": "act-10",
+    "employeeId": "usr-emp-1",
+    "checkedInAt": "2026-10-01T08:45:00",
+    "status": "CHECKED_IN",
+    "verificationMethod": "QR_SCAN",
+    "token": "TOKEN-ACT10-DEMO-991"
+  },
+  {
+    "id": "att-2",
+    "registrationId": "reg-13",
+    "activityId": "act-10",
+    "employeeId": "usr-emp-2",
+    "checkedInAt": "2026-10-01T08:52:00",
+    "status": "CHECKED_IN",
+    "verificationMethod": "MANUAL_FALLBACK",
+    "token": "TOKEN-ACT10-DEMO-992"
+  }
+]
