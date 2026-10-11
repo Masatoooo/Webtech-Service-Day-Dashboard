@@ -183,54 +183,118 @@
           </div>
         </div>
 
-        <div class="table-responsive" *ngIf="participantRoster.length > 0; else emptyRosterTemplate">
-          <table class="table admin-table" id="table-activity-roster">
-            <thead>
-              <tr>
-                <th>Volunteer Name</th>
-                <th>Department</th>
-                <th>Registration</th>
-                <th>Check-In Status</th>
-                <th>Arrival Time</th>
-                <th>Method</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of participantRoster" [id]="'roster-row-' + row.employeeId">
-                <td class="font-semibold">{{ row.employeeName }}</td>
-                <td class="text-xs text-muted">{{ row.department }}</td>
-                <td>
-                  <span
-                    class="notif-badge"
-                    [ngClass]="{
-                      'notif-badge-registration': row.registrationStatus === 'ACTIVE',
-                      'notif-badge-cancellation': row.registrationStatus === 'CANCELLED'
-                    }"
-                  >
-                    {{ row.registrationStatus }}
+        <div *ngIf="participantRoster.length > 0; else emptyRosterTemplate">
+          <!-- Desktop / Tablet Table View -->
+          <div class="table-responsive desktop-only-table">
+            <div class="table-scroll-hint" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+              <span>Swipe horizontally to view full roster</span>
+            </div>
+            <table class="table admin-table" id="table-activity-roster">
+              <thead>
+                <tr>
+                  <th>Volunteer Name</th>
+                  <th>Department</th>
+                  <th>Registration</th>
+                  <th>Check-In Status</th>
+                  <th>Arrival Time</th>
+                  <th>Method</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of participantRoster" [id]="'roster-row-' + row.employeeId">
+                  <td class="font-semibold">{{ row.employeeName }}</td>
+                  <td class="text-xs text-muted">{{ row.department }}</td>
+                  <td>
+                    <span
+                      class="notif-badge"
+                      [ngClass]="{
+                        'notif-badge-registration': row.registrationStatus === 'ACTIVE',
+                        'notif-badge-cancellation': row.registrationStatus === 'CANCELLED'
+                      }"
+                    >
+                      {{ row.registrationStatus }}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      class="sim-status-badge"
+                      [ngClass]="{
+                        'sim-status-simulated': row.isCheckedIn,
+                        'sim-status-scheduled': !row.isCheckedIn && row.registrationStatus === 'ACTIVE',
+                        'sim-status-failed': row.registrationStatus === 'CANCELLED'
+                      }"
+                    >
+                      {{ row.isCheckedIn ? 'Checked In' : (row.registrationStatus === 'ACTIVE' ? 'Pending Arrival' : 'Cancelled') }}
+                    </span>
+                  </td>
+                  <td class="text-xs font-mono whitespace-nowrap">
+                    {{ row.checkedInAt ? (row.checkedInAt | date:'shortTime') : '—' }}
+                  </td>
+                  <td class="text-xs text-muted">
+                    {{ row.method || '—' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Cards View (<= 768px) -->
+          <div class="mobile-only-cards">
+            <div
+              *ngFor="let row of participantRoster"
+              class="mobile-op-card"
+              [id]="'mobile-roster-row-' + row.employeeId"
+            >
+              <div class="flex justify-between items-start gap-2">
+                <div>
+                  <h4 class="font-bold text-sm" style="color: var(--color-deep-slate); margin: 0;">
+                    {{ row.employeeName }}
+                  </h4>
+                  <div class="text-xs text-muted">{{ row.department }}</div>
+                </div>
+                <span
+                  class="notif-badge"
+                  [ngClass]="{
+                    'notif-badge-registration': row.registrationStatus === 'ACTIVE',
+                    'notif-badge-cancellation': row.registrationStatus === 'CANCELLED'
+                  }"
+                >
+                  {{ row.registrationStatus }}
+                </span>
+              </div>
+
+              <div class="mt-2 pt-2" style="border-top: 1px dashed #F0F4F2;">
+                <div class="mobile-info-row">
+                  <span class="mobile-info-lbl">Status</span>
+                  <span class="mobile-info-val">
+                    <span
+                      class="sim-status-badge"
+                      [ngClass]="{
+                        'sim-status-simulated': row.isCheckedIn,
+                        'sim-status-scheduled': !row.isCheckedIn && row.registrationStatus === 'ACTIVE',
+                        'sim-status-failed': row.registrationStatus === 'CANCELLED'
+                      }"
+                    >
+                      {{ row.isCheckedIn ? 'Checked In' : (row.registrationStatus === 'ACTIVE' ? 'Pending Arrival' : 'Cancelled') }}
+                    </span>
                   </span>
-                </td>
-                <td>
-                  <span
-                    class="sim-status-badge"
-                    [ngClass]="{
-                      'sim-status-simulated': row.isCheckedIn,
-                      'sim-status-scheduled': !row.isCheckedIn && row.registrationStatus === 'ACTIVE',
-                      'sim-status-failed': row.registrationStatus === 'CANCELLED'
-                    }"
-                  >
-                    {{ row.isCheckedIn ? 'Checked In' : (row.registrationStatus === 'ACTIVE' ? 'Pending Arrival' : 'Cancelled') }}
-                  </span>
-                </td>
-                <td class="text-xs font-mono whitespace-nowrap">
-                  {{ row.checkedInAt ? (row.checkedInAt | date:'shortTime') : '—' }}
-                </td>
-                <td class="text-xs text-muted">
-                  {{ row.method || '—' }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+
+                <div class="mobile-info-row" *ngIf="row.checkedInAt">
+                  <span class="mobile-info-lbl">Arrival Time</span>
+                  <span class="mobile-info-val font-mono">{{ row.checkedInAt | date:'shortTime' }}</span>
+                </div>
+
+                <div class="mobile-info-row" *ngIf="row.method">
+                  <span class="mobile-info-lbl">Check-In Method</span>
+                  <span class="mobile-info-val">{{ row.method }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <ng-template #emptyRosterTemplate>

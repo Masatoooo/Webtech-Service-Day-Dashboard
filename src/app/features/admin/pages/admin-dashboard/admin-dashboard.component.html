@@ -269,8 +269,14 @@
       </div>
     </div>
 
-    <!-- Table Container -->
-    <div class="dash-table-wrap">
+    <!-- Table Container (Desktop / Tablet View) -->
+    <div class="dash-table-wrap desktop-only-table">
+      <div class="table-scroll-hint" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+          <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Swipe horizontally to view all columns</span>
+      </div>
       <div style="overflow-x: auto;">
         <table class="dash-table" aria-label="Activity Operational Monitoring Table">
           <thead>
@@ -430,6 +436,103 @@
         </table>
       </div>
     </div>
+
+    <!-- Mobile Operational Cards View (Phone Viewports <= 768px) -->
+    <div class="mobile-only-cards" *ngIf="filteredOperationalRows.length > 0">
+      <div
+        *ngFor="let row of filteredOperationalRows"
+        class="mobile-op-card"
+        [id]="'mobile-row-act-' + row.activity.id"
+      >
+        <div class="flex justify-between items-start gap-2">
+          <div style="flex: 1; min-width: 0;">
+            <div class="flex items-center gap-2">
+              <span
+                class="badge-category"
+                style="font-size: 0.675rem; padding: 2px 6px;"
+                [ngClass]="'category-' + row.activity.serviceType.toLowerCase()"
+              >
+                {{ getCategoryLabel(row.activity.serviceType) }}
+              </span>
+              <span class="text-xs text-muted">#{{ row.activity.id }}</span>
+            </div>
+            <h3 class="mobile-card-title">{{ row.activity.title }}</h3>
+          </div>
+          <div [ngSwitch]="row.slotSummary.availabilityStatus" style="flex-shrink: 0;">
+            <span *ngSwitchCase="'AVAILABLE'" class="avail-pill avail-pill-available">Available</span>
+            <span *ngSwitchCase="'ALMOST_FULL'" class="avail-pill avail-pill-almost">Almost Full</span>
+            <span *ngSwitchCase="'FULL'" class="avail-pill avail-pill-full">Full</span>
+            <span *ngSwitchCase="'REGISTRATION_CLOSED'" class="avail-pill avail-pill-closed">Closed</span>
+            <span *ngSwitchCase="'CANCELLED'" class="avail-pill avail-pill-cancelled">Cancelled</span>
+            <span *ngSwitchCase="'COMPLETED'" class="avail-pill avail-pill-completed">Completed</span>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <div class="mobile-info-row">
+            <span class="mobile-info-lbl">Partner NGO</span>
+            <span class="mobile-info-val">{{ row.ngo?.name || 'Vetted NGO' }}</span>
+          </div>
+
+          <div class="mobile-info-row">
+            <span class="mobile-info-lbl">Schedule</span>
+            <span class="mobile-info-val">
+              {{ row.activity.startDateTime | date:'mediumDate' }} • {{ row.activity.startDateTime | date:'shortTime' }}
+            </span>
+          </div>
+
+          <div class="mobile-info-row">
+            <span class="mobile-info-lbl">Cut-Off</span>
+            <span class="mobile-info-val" [style.color]="row.isCutoffPassed ? '#A52C22' : 'inherit'">
+              {{ row.activity.registrationCutoff | date:'mediumDate' }}
+              <strong *ngIf="row.isCutoffPassed" style="color: #A52C22;">(Locked)</strong>
+            </span>
+          </div>
+
+          <!-- Capacity Bar -->
+          <div class="mt-2 pt-2" style="border-top: 1px dashed #F0F4F2;">
+            <div class="flex justify-between items-center text-xs mb-1">
+              <span class="font-semibold" style="color: var(--color-deep-slate);">
+                Places: <strong>{{ row.slotSummary.filledSlots }} / {{ row.activity.capacity }}</strong>
+              </span>
+              <span class="font-bold" [style.color]="row.slotSummary.remainingSlots <= 3 ? '#845D16' : '#235C49'">
+                {{ row.slotSummary.remainingSlots }} remaining ({{ row.slotSummary.utilisationPercentage }}%)
+              </span>
+            </div>
+            <div style="height: 6px; background: #E8ECEE; border-radius: 3px; overflow: hidden; width: 100%;">
+              <div
+                [style.width.%]="row.slotSummary.utilisationPercentage"
+                [style.background]="
+                  row.slotSummary.availabilityStatus === 'FULL' ? '#A52C22' :
+                  row.slotSummary.availabilityStatus === 'ALMOST_FULL' ? '#845D16' : '#356859'
+                "
+                style="height: 100%; transition: width 200ms ease;"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-3 pt-2" style="border-top: 1px solid #EEF2F0;">
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            (click)="filterRosterByActivity(row.activity.id)"
+          >
+            Roster ({{ row.slotSummary.filledSlots }})
+          </button>
+          <a
+            routerLink="/admin/activities"
+            class="btn btn-sm btn-primary"
+          >
+            Manage
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredOperationalRows.length === 0" class="mobile-only-cards p-6 text-center text-muted" style="background: white; border: 1px solid var(--color-border); border-radius: 12px;">
+      No CSR activities matched your current search and filters.
+    </div>
   </section>
 
   <!-- Scope 5: Participant Monitoring & Attendance Roster (Grouped by Activity) -->
@@ -513,8 +616,14 @@
       </div>
     </div>
 
-    <!-- Participant Roster Table -->
-    <div class="dash-table-wrap">
+    <!-- Participant Roster Table (Desktop / Tablet View) -->
+    <div class="dash-table-wrap desktop-only-table">
+      <div class="table-scroll-hint" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+          <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Swipe horizontally to view all columns</span>
+      </div>
       <div style="overflow-x: auto;">
         <table class="dash-table" aria-label="Staff Participant Roster Table">
           <thead>
@@ -632,6 +741,79 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- Participant Roster Mobile Cards View (<= 768px) -->
+    <div class="mobile-only-cards" *ngIf="filteredRosterRows.length > 0">
+      <div
+        *ngFor="let row of filteredRosterRows"
+        class="mobile-op-card"
+        [id]="'mobile-roster-row-' + row.registration.id"
+      >
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <h4 class="font-bold text-sm" style="color: var(--color-deep-slate); margin: 0;">
+              {{ row.user?.name || 'Staff Member' }}
+            </h4>
+            <div class="text-xs text-muted">{{ row.user?.department || 'General Staff' }} • {{ row.user?.email }}</div>
+          </div>
+          <div>
+            <span
+              *ngIf="row.registration.status === 'ACTIVE'"
+              class="badge badge-forest"
+              style="font-size: 0.725rem; padding: 2px 7px;"
+            >
+              Active
+            </span>
+            <span
+              *ngIf="row.registration.status === 'CANCELLED'"
+              class="badge"
+              style="background: #EEF2F4; color: #5F6B76; border: 1px solid #D1DADC; font-size: 0.725rem; padding: 2px 7px;"
+            >
+              Withdrawn
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-2 pt-2" style="border-top: 1px dashed #F0F4F2;">
+          <div class="mobile-info-row">
+            <span class="mobile-info-lbl">Enrolled In</span>
+            <span class="mobile-info-val">{{ row.activity?.title || 'Activity #' + row.registration.activityId }}</span>
+          </div>
+
+          <div class="mobile-info-row">
+            <span class="mobile-info-lbl">Booking Date</span>
+            <span class="mobile-info-val">{{ row.registration.registeredAt | date:'mediumDate' }} • {{ row.registration.registeredAt | date:'shortTime' }}</span>
+          </div>
+
+          <div class="mobile-info-row">
+            <span class="mobile-info-lbl">Attendance</span>
+            <span class="mobile-info-val">
+              <span
+                *ngIf="row.attendance?.status === 'CHECKED_IN' || row.attendance?.status === 'PRESENT'"
+                style="color: var(--color-forest); font-weight: 700;"
+              >
+                ✓ Checked In ({{ row.attendance?.checkedInAt | date:'shortTime' }})
+              </span>
+              <span
+                *ngIf="!row.attendance && row.registration.status === 'ACTIVE'"
+                style="color: #1F486B; font-weight: 600;"
+              >
+                Awaiting Check-in
+              </span>
+              <span *ngIf="row.registration.status === 'CANCELLED'" class="text-muted">—</span>
+            </span>
+          </div>
+
+          <div *ngIf="row.registration.cancellationReason" class="mt-2 text-xs text-muted" style="font-style: italic; background: #F7F9FA; padding: 0.4rem 0.6rem; border-radius: 6px;">
+            Withdrawal reason: "{{ row.registration.cancellationReason }}"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredRosterRows.length === 0" class="mobile-only-cards p-6 text-center text-muted" style="background: white; border: 1px solid var(--color-border); border-radius: 12px;">
+      No participant registrations matched your search criteria.
     </div>
   </section>
 </div>

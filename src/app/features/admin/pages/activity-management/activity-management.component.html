@@ -185,7 +185,13 @@
   </div>
 
   <!-- Activities Table (Modernized & Sleek) -->
-  <div *ngIf="!isLoading && filteredRows.length > 0" class="dash-table-wrap mb-8">
+  <div *ngIf="!isLoading && filteredRows.length > 0" class="dash-table-wrap desktop-only-table mb-8">
+    <div class="table-scroll-hint" aria-hidden="true">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+      <span>Swipe horizontally to view all columns</span>
+    </div>
     <div style="overflow-x: auto;">
       <table class="dash-table activity-table" aria-label="Managed CSR Activities Table">
         <thead>
@@ -377,6 +383,129 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Activities Mobile Cards View (<= 768px) -->
+  <div *ngIf="!isLoading && filteredRows.length > 0" class="mobile-only-cards mb-8">
+    <div
+      *ngFor="let row of filteredRows"
+      class="mobile-op-card"
+      [id]="'mobile-act-mgmt-' + row.activity.id"
+    >
+      <div class="flex justify-between items-start gap-2">
+        <div style="flex: 1; min-width: 0;">
+          <div class="flex items-center gap-2">
+            <span class="type-pill" [attr.data-type]="row.activity.serviceType">
+              {{ row.activity.serviceType | titlecase }}
+            </span>
+            <span class="text-xs text-muted">#{{ row.activity.id }}</span>
+          </div>
+          <h3 class="mobile-card-title">{{ row.activity.title }}</h3>
+        </div>
+        <span
+          class="pub-status-badge"
+          [class.pub-published]="row.activity.publicationStatus === 'PUBLISHED'"
+          [class.pub-draft]="row.activity.publicationStatus === 'DRAFT'"
+          [class.pub-cancelled]="row.activity.publicationStatus === 'CANCELLED'"
+          [class.pub-completed]="row.activity.publicationStatus === 'COMPLETED'"
+        >
+          {{ row.activity.publicationStatus }}
+        </span>
+      </div>
+
+      <div class="mt-3">
+        <div class="mobile-info-row">
+          <span class="mobile-info-lbl">Partner NGO</span>
+          <span class="mobile-info-val">{{ row.ngo?.name || 'Unassigned NGO' }}</span>
+        </div>
+
+        <div class="mobile-info-row">
+          <span class="mobile-info-lbl">Schedule</span>
+          <span class="mobile-info-val">
+            {{ row.activity.startDateTime | date:'dd MMM yyyy, HH:mm' }} – {{ row.activity.endDateTime | date:'HH:mm' }}
+          </span>
+        </div>
+
+        <div class="mobile-info-row">
+          <span class="mobile-info-lbl">Location</span>
+          <span class="mobile-info-val">{{ row.activity.location }}</span>
+        </div>
+
+        <div class="mobile-info-row">
+          <span class="mobile-info-lbl">Cut-off Deadline</span>
+          <span class="mobile-info-val" [style.color]="row.isCutoffPassed ? '#A52C22' : 'inherit'">
+            {{ row.activity.registrationCutoff | date:'dd MMM yyyy, HH:mm' }}
+            <strong *ngIf="row.isCutoffPassed" style="color: #A52C22;">(Locked)</strong>
+          </span>
+        </div>
+
+        <!-- Capacity Bar -->
+        <div class="mt-2 pt-2" style="border-top: 1px dashed #F0F4F2;">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold" style="color: var(--color-deep-slate);">
+              Capacity: <strong>{{ row.slotSummary.filledSlots }} / {{ row.activity.capacity }}</strong>
+            </span>
+            <span class="font-bold text-muted">{{ row.slotSummary.utilisationPercentage }}%</span>
+          </div>
+          <div style="height: 6px; background: #E8ECEE; border-radius: 3px; overflow: hidden; width: 100%;">
+            <div
+              [style.width.%]="row.slotSummary.utilisationPercentage"
+              [style.background]="
+                row.slotSummary.availabilityStatus === 'FULL' ? '#A52C22' :
+                row.slotSummary.availabilityStatus === 'ALMOST_FULL' ? '#845D16' : '#356859'
+              "
+              style="height: 100%; transition: width 200ms ease;"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="flex flex-wrap justify-end gap-2 mt-3 pt-2" style="border-top: 1px solid #EEF2F0;">
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="openEditModal(row)"
+        >
+          Edit
+        </button>
+
+        <button
+          *ngIf="row.activity.publicationStatus === 'DRAFT'"
+          type="button"
+          class="btn btn-sm btn-primary"
+          (click)="onQuickStatusChange(row.activity, 'PUBLISHED')"
+        >
+          Publish
+        </button>
+
+        <button
+          *ngIf="row.activity.publicationStatus === 'PUBLISHED'"
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="onQuickStatusChange(row.activity, 'DRAFT')"
+        >
+          Draft
+        </button>
+
+        <button
+          *ngIf="row.activity.publicationStatus !== 'CANCELLED' && row.activity.publicationStatus !== 'COMPLETED'"
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="openCancelDialog(row)"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-danger-ghost"
+          (click)="openDeleteDialog(row)"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   </div>
 
