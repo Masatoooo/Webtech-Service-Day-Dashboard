@@ -1509,6 +1509,30 @@ hr,
   position: relative;
 }
 
+.sidebar-btn-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  background: transparent;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  color: var(--color-slate-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-btn-reset:hover {
+  background: #F4F7F5;
+  border-color: var(--color-forest);
+  color: var(--color-forest);
+}
+
 .sidebar-btn-signout {
   display: flex;
   align-items: center;

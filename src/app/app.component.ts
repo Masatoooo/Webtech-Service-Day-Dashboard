@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
+import { DataStoreService } from './core/services/data-store.service';
 import { User, UserRole } from './models';
 
 @Component({
@@ -21,6 +22,7 @@ export class App {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly dataStore: DataStoreService,
     private readonly router: Router
   ) {
     this.currentUser$ = this.authService.currentUser$;
@@ -51,5 +53,13 @@ export class App {
   onLogout(): void {
     this.isMobileMenuOpen = false;
     this.authService.logout();
+  }
+
+  onResetDemoData(): void {
+    if (confirm('Reset all demo data back to default initial seed state? This will restore all default activities, bookings, and notifications.')) {
+      this.dataStore.resetDemoData().subscribe(() => {
+        window.location.reload();
+      });
+    }
   }
 }
