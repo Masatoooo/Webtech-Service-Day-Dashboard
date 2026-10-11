@@ -1,0 +1,297 @@
+<div class="employee-page">
+  <!-- Page Header -->
+  <header class="page-header mb-6">
+    <div class="flex justify-between items-center header-row flex-wrap gap-3">
+      <div>
+        <div class="role-pretitle">Event Day Operations</div>
+        <h1 class="page-title">Event Check-In & Attendance</h1>
+        <p class="header-desc text-muted">
+          Scan the on-site venue QR code or enter the event reference code to record your arrival.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <app-status-badge variant="forest" label="On-Site Check-In"></app-status-badge>
+        <div class="sim-badge-alert" title="Transparent simulation note">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
+            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
+          </svg>
+          Demo Check-In Simulation
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Security / Demonstration Honesty Banner -->
+  <div class="simulation-disclaimer-banner mb-6" id="banner-checkin-security">
+    <div class="banner-icon">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="banner-text">
+      <strong>Frontend Demonstration Note:</strong> This check-in verification is processed locally in the frontend demo environment against your enrolled registrations. Authoritative cryptographic validation will be handled by the server backend.
+    </div>
+  </div>
+
+  <!-- Success Confirmation Card (Scope 5 & 6) -->
+  <div *ngIf="checkInSuccess" class="checkin-success-card mb-6" id="card-checkin-success">
+    <div class="success-header">
+      <div class="success-icon-badge">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="28" height="28" aria-hidden="true">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div>
+        <span class="success-pretitle text-forest font-semibold text-xs uppercase tracking-wider">Attendance Confirmed</span>
+        <h2 class="success-title font-bold text-xl text-deep-slate mt-1">
+          Welcome to {{ checkInSuccess.activity.title }}!
+        </h2>
+        <p class="text-sm text-muted mt-1">
+          Your check-in has been successfully recorded on site. Thank you for participating in Corporate Service Day!
+        </p>
+      </div>
+    </div>
+
+    <div class="success-details-grid mt-4">
+      <div class="success-detail-item">
+        <span class="detail-lbl">Initiative</span>
+        <span class="detail-val font-semibold">{{ checkInSuccess.activity.title }}</span>
+      </div>
+      <div class="success-detail-item">
+        <span class="detail-lbl">Location</span>
+        <span class="detail-val">{{ checkInSuccess.activity.location }}</span>
+      </div>
+      <div class="success-detail-item">
+        <span class="detail-lbl">Arrival Timestamp</span>
+        <span class="detail-val font-mono">{{ checkInSuccess.attendance.checkedInAt | date:'mediumDate' }} • {{ checkInSuccess.attendance.checkedInAt | date:'mediumTime' }}</span>
+      </div>
+      <div class="success-detail-item">
+        <span class="detail-lbl">Verification Method</span>
+        <span class="detail-val">
+          <span
+            class="sim-status-badge"
+            [ngClass]="{
+              'sim-status-simulated': checkInSuccess.attendance.verificationMethod === 'QR_SCAN',
+              'sim-status-scheduled': checkInSuccess.attendance.verificationMethod === 'MANUAL_FALLBACK'
+            }"
+          >
+            {{ checkInSuccess.attendance.verificationMethod === 'QR_SCAN' ? 'Camera QR Scan' : 'Manual Demo Fallback' }}
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="success-actions mt-6 flex gap-3 flex-wrap">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="resetCheckIn()"
+        id="btn-checkin-another"
+      >
+        Check In Another Activity
+      </button>
+
+      <a
+        routerLink="/employee/registrations"
+        class="btn btn-primary"
+        id="btn-view-my-registrations"
+      >
+        View My Registrations
+      </a>
+    </div>
+  </div>
+
+  <!-- Error Alert (Scope 7 & 8) -->
+  <div *ngIf="checkInError" class="alert-box alert-error mb-6" id="alert-checkin-error">
+    <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20" class="flex-shrink-0" aria-hidden="true">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+    </svg>
+    <div class="alert-content">
+      <strong>Check-In Verification Notice:</strong>
+      <p class="mb-0 mt-1">{{ checkInError }}</p>
+    </div>
+  </div>
+
+  <!-- Check-In Hub Card -->
+  <div *ngIf="!checkInSuccess" class="admin-section">
+    <!-- Mode Selection Nav Tabs -->
+    <div class="notif-nav-tabs mb-6" role="tablist">
+      <button
+        type="button"
+        class="notif-tab-btn"
+        [class.active]="activeMode === 'SCANNER'"
+        (click)="setMode('SCANNER')"
+        id="tab-mode-scanner"
+      >
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd" />
+          <path d="M11 12a1 1 0 011-1h1v1h-1v1h2v-1h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v-1h-1v1h-2a1 1 0 01-1-1v-4z" />
+        </svg>
+        <span>Camera QR Scanner</span>
+      </button>
+
+      <button
+        type="button"
+        class="notif-tab-btn"
+        [class.active]="activeMode === 'MANUAL'"
+        (click)="setMode('MANUAL')"
+        id="tab-mode-manual"
+      >
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+          <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+        </svg>
+        <span>Manual Demo Fallback</span>
+      </button>
+    </div>
+
+    <!-- MODE 1: CAMERA SCANNER (Scope 4 & Acceptance Criteria) -->
+    <div *ngIf="activeMode === 'SCANNER'" class="scanner-container">
+      <div class="scanner-intro text-center mb-4">
+        <h3 class="section-heading">Point Camera at Activity QR Poster</h3>
+        <p class="section-subheading text-muted">
+          Align the venue QR code within the viewfinder box below to complete check-in.
+        </p>
+      </div>
+
+      <!-- Viewfinder Container -->
+      <div class="viewfinder-wrapper">
+        <div id="qr-scanner-viewfinder" class="qr-viewfinder-element"></div>
+
+        <div *ngIf="scannerState === 'IDLE' || scannerState === 'STOPPED'" class="scanner-placeholder">
+          <div class="placeholder-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <p class="text-sm font-semibold text-deep-slate mt-2">Camera is currently inactive</p>
+          <p class="text-xs text-muted mb-4">Click below to grant camera access and activate the scanner viewfinder.</p>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="startScanner()"
+            id="btn-start-scanner"
+          >
+            Activate Camera Scanner
+          </button>
+        </div>
+
+        <div *ngIf="scannerState === 'STARTING'" class="scanner-placeholder">
+          <div class="spinner mb-2"></div>
+          <p class="text-sm font-semibold">Requesting camera access...</p>
+          <p class="text-xs text-muted">Please accept browser permission prompts to proceed.</p>
+        </div>
+
+        <div *ngIf="scannerState === 'PERMISSION_DENIED'" class="scanner-placeholder alert-denied">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="36" height="36" class="text-danger mb-2" aria-hidden="true">
+            <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
+          </svg>
+          <p class="text-sm font-semibold text-danger">Camera Access Blocked</p>
+          <p class="text-xs text-muted mb-3">You can enable camera permissions in your browser URL bar, or use the manual fallback code.</p>
+          <div class="flex gap-2">
+            <button type="button" class="btn btn-sm btn-secondary" (click)="startScanner()">
+              Retry Camera
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" (click)="setMode('MANUAL')">
+              Use Manual Code
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scanner Controls Bar -->
+      <div *ngIf="scannerState === 'SCANNING'" class="scanner-actions-bar text-center mt-4">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="stopScanner()"
+          id="btn-stop-scanner"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
+          </svg>
+          Stop Camera
+        </button>
+      </div>
+    </div>
+
+    <!-- MODE 2: MANUAL DEMO FALLBACK (Scope 4) -->
+    <div *ngIf="activeMode === 'MANUAL'" class="manual-container">
+      <div class="manual-intro mb-4">
+        <h3 class="section-heading">Manual Check-In Code Entry</h3>
+        <p class="section-subheading text-muted">
+          For testing environments or devices without camera hardware, enter the activity check-in token below.
+        </p>
+      </div>
+
+      <!-- Token Input Form -->
+      <div class="form-group mb-4">
+        <label class="form-label" for="input-manual-token">Activity Check-In Token or Code <span class="text-danger">*</span></label>
+        <div class="flex gap-2 flex-wrap">
+          <input
+            type="text"
+            id="input-manual-token"
+            class="form-control"
+            placeholder="e.g. SDD-CHK-act-1-9872 or paste scanned JSON payload"
+            [(ngModel)]="manualTokenInput"
+          />
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="submitManualCheckIn()"
+            id="btn-submit-manual-checkin"
+            [disabled]="isCheckingIn || !manualTokenInput.trim()"
+          >
+            {{ isCheckingIn ? 'Verifying...' : 'Validate & Check-In' }}
+          </button>
+        </div>
+        <small class="form-help text-muted">Tokens are provided on the admin activity QR poster.</small>
+      </div>
+
+      <!-- Quick Helper: Current Employee's Active Registrations -->
+      <div class="demo-helpers-card mt-6" *ngIf="employeeRegistrations.length > 0">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-xs font-bold text-deep-slate uppercase tracking-wider">
+            Your Active Enrolled Initiatives (Quick Demo Helper)
+          </span>
+          <span class="text-xs text-muted">1-click token prefill for testing</span>
+        </div>
+
+        <div class="helper-list">
+          <div
+            *ngFor="let item of employeeRegistrations"
+            class="helper-item flex justify-between items-center p-3 mb-2 rounded border"
+            [class.helper-checked-in]="item.isCheckedIn"
+          >
+            <div>
+              <div class="font-semibold text-sm text-deep-slate">{{ item.activity.title }}</div>
+              <div class="text-xs text-muted">{{ item.activity.location }} • {{ item.activity.startDateTime | date:'shortDate' }}</div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span
+                class="sim-status-badge text-xs"
+                [class.sim-status-simulated]="item.isCheckedIn"
+                [class.sim-status-scheduled]="!item.isCheckedIn"
+              >
+                {{ item.isCheckedIn ? 'Already Checked In' : 'Registered / Ready' }}
+              </span>
+
+              <button
+                *ngIf="!item.isCheckedIn"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                (click)="selectDemoActivityToken(item.activity.id)"
+                [id]="'btn-prefill-token-' + item.activity.id"
+              >
+                Fill Token
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

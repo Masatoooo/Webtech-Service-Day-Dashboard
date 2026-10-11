@@ -1,0 +1,250 @@
+<div class="admin-page">
+  <!-- Header -->
+  <header class="page-header mb-6">
+    <div class="flex justify-between items-center header-row flex-wrap gap-3">
+      <div>
+        <div class="role-pretitle">Event Operations</div>
+        <h1 class="page-title">Activity QR Codes & Check-In Management</h1>
+        <p class="header-desc text-muted">
+          Generate activity check-in QR codes, print entrance posters, and track real-time volunteer arrivals.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <app-status-badge variant="forest" label="Check-In Station Active"></app-status-badge>
+        <div class="sim-badge-alert" title="Transparent simulation note">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
+            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
+          </svg>
+          Demo Check-In • Opaque Reference
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Security / Demonstration Honesty Banner -->
+  <div class="simulation-disclaimer-banner mb-6" id="banner-qr-security">
+    <div class="banner-icon">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="banner-text">
+      <strong>Frontend Demonstration Notice:</strong> The generated QR code contains an activity-specific opaque reference token without employee PII or credentials. Check-in validation is simulated in the browser prototype. Authoritative cryptographic validation will be implemented in the backend tier.
+    </div>
+  </div>
+
+  <!-- Activity Selector Bar -->
+  <div class="admin-section mb-6">
+    <div class="form-group mb-0">
+      <label class="form-label" for="select-qr-activity">Select Initiative to Generate Venue Check-In Poster</label>
+      <select
+        id="select-qr-activity"
+        class="form-control"
+        [ngModel]="selectedActivityId"
+        (ngModelChange)="onSelectActivity($event)"
+      >
+        <option *ngFor="let act of activities" [value]="act.id">
+          {{ act.title }} — {{ act.location }} ({{ act.startDateTime | date:'mediumDate' }})
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Two Column Content Layout -->
+  <div class="qr-layout-grid" *ngIf="selectedActivity; else noActivityTemplate">
+    <!-- LEFT: Printable Venue Poster Card (Scope 2 & 3) -->
+    <div class="qr-poster-panel">
+      <div class="venue-poster" id="printable-venue-poster">
+        <!-- Poster Top Header -->
+        <div class="poster-header">
+          <div class="poster-org">Corporate Service Day 2026</div>
+          <h2 class="poster-title">{{ selectedActivity.title }}</h2>
+          <div class="poster-ngo" *ngIf="selectedNgo">
+            Partner NGO: <strong>{{ selectedNgo.name }}</strong>
+          </div>
+        </div>
+
+        <!-- Event Logistics Brief -->
+        <div class="poster-logistics">
+          <div class="poster-item">
+            <span class="poster-lbl">Date & Time</span>
+            <span class="poster-val">{{ selectedActivity.startDateTime | date:'fullDate' }} • {{ selectedActivity.startDateTime | date:'shortTime' }}</span>
+          </div>
+          <div class="poster-item">
+            <span class="poster-lbl">Location / Meeting Point</span>
+            <span class="poster-val">{{ selectedActivity.location }}</span>
+          </div>
+        </div>
+
+        <!-- High-Resolution QR Code -->
+        <div class="poster-qr-frame">
+          <div *ngIf="generatingQr" class="qr-loading text-center p-6 text-muted">
+            Generating high-resolution QR code...
+          </div>
+          <img
+            *ngIf="!generatingQr && qrInfo?.qrDataUrl"
+            [src]="qrInfo?.qrDataUrl"
+            alt="Service Day Check-In QR Code"
+            class="poster-qr-img"
+            id="qr-code-img"
+          />
+        </div>
+
+        <!-- Volunteer Instructions -->
+        <div class="poster-instructions">
+          <h3 class="instructions-heading">Volunteer Check-In Instructions</h3>
+          <ol class="instructions-list">
+            <li>Log in to your <strong>Service Day Volunteer Portal</strong>.</li>
+            <li>Select <strong>Event Check-In</strong> from the navigation menu.</li>
+            <li>Scan this QR code using your smartphone camera.</li>
+            <li>Or enter manual demo check-in code below if no camera is available.</li>
+          </ol>
+        </div>
+
+        <!-- Demo Manual Code & 1-Click Copy -->
+        <div class="poster-token-box" *ngIf="qrInfo">
+          <div class="token-lbl">Manual Demo Check-In Code:</div>
+          <div class="token-row flex items-center justify-between gap-2 mt-1">
+            <code class="token-val" id="text-demo-token">{{ qrInfo.token }}</code>
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              (click)="copyTokenToClipboard()"
+              id="btn-copy-code"
+              title="Copy token for manual check-in testing"
+            >
+              {{ copyFeedback ? copyFeedback : 'Copy Code' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Poster Action Toolbar (Hidden during print via CSS) -->
+      <div class="poster-actions-bar mt-4">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="printPoster()"
+          id="btn-print-poster"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+          </svg>
+          Print Venue Poster
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="downloadQrImage()"
+          id="btn-download-qr"
+          [disabled]="!qrInfo?.qrDataUrl"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          Download QR PNG
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Live Attendance & Check-In Roster (Scope 6) -->
+    <div class="qr-roster-panel">
+      <!-- Attendance Metrics Row -->
+      <div class="metrics-grid mb-4">
+        <div class="metric-card">
+          <div class="metric-label">Registered Volunteers</div>
+          <div class="metric-val" id="metric-registered-volunteers">{{ registeredCount }} / {{ selectedActivity.capacity }}</div>
+          <div class="metric-meta text-muted">Active confirmed slots</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Checked-In Volunteers</div>
+          <div class="metric-val text-forest" id="metric-checked-in-volunteers">{{ checkedInCount }}</div>
+          <div class="metric-meta text-muted">Arrivals recorded on site</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Attendance Rate</div>
+          <div class="metric-val" id="metric-attendance-rate">{{ attendanceRate }}%</div>
+          <div class="metric-meta text-muted">{{ registeredCount - checkedInCount }} pending arrival</div>
+        </div>
+      </div>
+
+      <!-- Live Roster Table -->
+      <div class="admin-section">
+        <div class="section-header-row mb-3">
+          <div>
+            <h3 class="section-heading">Participant Attendance Roster</h3>
+            <p class="section-subheading text-muted">
+              Live status for enrolled staff on this initiative. Updates automatically upon scan.
+            </p>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="participantRoster.length > 0; else emptyRosterTemplate">
+          <table class="table admin-table" id="table-activity-roster">
+            <thead>
+              <tr>
+                <th>Volunteer Name</th>
+                <th>Department</th>
+                <th>Registration</th>
+                <th>Check-In Status</th>
+                <th>Arrival Time</th>
+                <th>Method</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of participantRoster" [id]="'roster-row-' + row.employeeId">
+                <td class="font-semibold">{{ row.employeeName }}</td>
+                <td class="text-xs text-muted">{{ row.department }}</td>
+                <td>
+                  <span
+                    class="notif-badge"
+                    [ngClass]="{
+                      'notif-badge-registration': row.registrationStatus === 'ACTIVE',
+                      'notif-badge-cancellation': row.registrationStatus === 'CANCELLED'
+                    }"
+                  >
+                    {{ row.registrationStatus }}
+                  </span>
+                </td>
+                <td>
+                  <span
+                    class="sim-status-badge"
+                    [ngClass]="{
+                      'sim-status-simulated': row.isCheckedIn,
+                      'sim-status-scheduled': !row.isCheckedIn && row.registrationStatus === 'ACTIVE',
+                      'sim-status-failed': row.registrationStatus === 'CANCELLED'
+                    }"
+                  >
+                    {{ row.isCheckedIn ? 'Checked In' : (row.registrationStatus === 'ACTIVE' ? 'Pending Arrival' : 'Cancelled') }}
+                  </span>
+                </td>
+                <td class="text-xs font-mono whitespace-nowrap">
+                  {{ row.checkedInAt ? (row.checkedInAt | date:'shortTime') : '—' }}
+                </td>
+                <td class="text-xs text-muted">
+                  {{ row.method || '—' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #emptyRosterTemplate>
+          <div class="empty-state-card text-center p-6 text-muted">
+            <p class="text-sm">No employee registrations recorded for this activity yet.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noActivityTemplate>
+    <div class="empty-state-card text-center p-8 text-muted">
+      <p>Please select an initiative above to generate a venue check-in poster.</p>
+    </div>
+  </ng-template>
+</div>

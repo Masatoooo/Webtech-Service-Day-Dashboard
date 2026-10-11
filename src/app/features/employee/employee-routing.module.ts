@@ -5,6 +5,7 @@ import { OpportunityListComponent } from './pages/opportunity-list/opportunity-l
 import { ActivityDetailComponent } from './pages/activity-detail/activity-detail.component';
 import { MyRegistrationsComponent } from './pages/my-registrations/my-registrations.component';
 import { EmployeeNotificationsComponent } from './pages/employee-notifications/employee-notifications.component';
+import { EmployeeCheckinComponent } from './pages/employee-checkin/employee-checkin.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'notifications',
     component: EmployeeNotificationsComponent
+  },
+  {
+    path: 'checkin',
+    component: EmployeeCheckinComponent
   }
 ];
 

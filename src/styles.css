@@ -3083,5 +3083,288 @@ hr,
 .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
 .empty-state-card { text-align: center; padding: 2rem 1rem; color: var(--color-secondary-text); }
 
+/* ==========================================================================
+   TASK 10 — QR CODE GENERATION & EMPLOYEE CHECK-IN STYLES
+   ========================================================================== */
+.qr-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 460px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .qr-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.venue-poster {
+  background: white;
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 16px rgba(32, 44, 59, 0.06);
+  text-align: center;
+}
+
+.poster-header {
+  border-bottom: 2px solid #E8EFEA;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.poster-org {
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-forest);
+  margin-bottom: 0.25rem;
+}
+
+.poster-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-deep-slate);
+  margin: 0 0 0.35rem 0;
+  line-height: 1.3;
+}
+
+.poster-ngo {
+  font-size: 0.825rem;
+  color: var(--color-secondary-text);
+}
+
+.poster-logistics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: #F7FAF8;
+  border: 1px solid #E0ECE5;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1.15rem;
+  text-align: left;
+}
+
+.poster-lbl {
+  display: block;
+  font-size: 0.675rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #5A6D7C;
+}
+
+.poster-val {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-deep-slate);
+}
+
+.poster-qr-frame {
+  background: white;
+  border: 2px solid #DCE6E0;
+  border-radius: 12px;
+  padding: 0.85rem;
+  display: inline-block;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 2px 8px rgba(32, 44, 59, 0.04);
+}
+
+.poster-qr-img {
+  width: 240px;
+  height: 240px;
+  display: block;
+  margin: 0 auto;
+}
+
+.poster-instructions {
+  background: #FCFDFD;
+  border: 1px solid #E4EAE7;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.instructions-heading {
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-deep-slate);
+  margin: 0 0 0.4rem 0;
+}
+
+.instructions-list {
+  font-size: 0.775rem;
+  color: #3C4A57;
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.5;
+}
+
+.poster-token-box {
+  background: #F4F8F6;
+  border: 1px dashed #A6CFBC;
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+}
+
+.token-lbl {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-forest);
+}
+
+.token-val {
+  font-family: monospace;
+  font-size: 0.825rem;
+  color: #1A3026;
+  font-weight: 700;
+}
+
+.poster-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* Check-In Success Card */
+.checkin-success-card {
+  background: #FAFDFB;
+  border: 2px solid #BFDEC9;
+  border-left: 6px solid var(--color-forest);
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 14px rgba(32, 44, 59, 0.05);
+}
+
+.success-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.success-icon-badge {
+  width: 52px;
+  height: 52px;
+  background: #E8F5EE;
+  color: var(--color-forest);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.success-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  background: white;
+  border: 1px solid #DCE7E1;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.success-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.detail-lbl {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-secondary-text);
+}
+
+.detail-val {
+  font-size: 0.875rem;
+  color: var(--color-deep-slate);
+}
+
+/* Viewfinder and Scanner Styles */
+.viewfinder-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111827;
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-viewfinder-element {
+  width: 100%;
+}
+
+.scanner-placeholder {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: #F9FBFA;
+  width: 100%;
+  height: 100%;
+}
+
+.placeholder-icon {
+  color: #64748B;
+  display: inline-flex;
+}
+
+.alert-denied {
+  background: #FFF5F5;
+}
+
+.demo-helpers-card {
+  background: #F8FAF9;
+  border: 1px solid #DFE7E2;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.helper-item {
+  background: white;
+  border-color: #E2EAE5;
+  transition: all var(--transition-fast);
+}
+
+.helper-item:hover {
+  border-color: #BED5C8;
+}
+
+.helper-checked-in {
+  opacity: 0.65;
+  background: #F8F9FA;
+}
+
+/* Print View Media Query */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-venue-poster, #printable-venue-poster * {
+    visibility: visible;
+  }
+  #printable-venue-poster {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 1rem;
+  }
+}
+
+
 
 

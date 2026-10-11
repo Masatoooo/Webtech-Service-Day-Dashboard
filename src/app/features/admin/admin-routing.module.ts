@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { ActivityManagementComponent } from './pages/activity-management/activity-management.component';
 import { AdminRemindersComponent } from './pages/admin-reminders/admin-reminders.component';
+import { AdminQrComponent } from './pages/admin-qr/admin-qr.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'reminders',
     component: AdminRemindersComponent
+  },
+  {
+    path: 'qr',
+    component: AdminQrComponent
   }
 ];
 

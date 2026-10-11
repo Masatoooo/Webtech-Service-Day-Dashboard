@@ -6,12 +6,14 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { ActivityManagementComponent } from './pages/activity-management/activity-management.component';
 import { AdminRemindersComponent } from './pages/admin-reminders/admin-reminders.component';
+import { AdminQrComponent } from './pages/admin-qr/admin-qr.component';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
     ActivityManagementComponent,
-    AdminRemindersComponent
+    AdminRemindersComponent,
+    AdminQrComponent
   ],
   imports: [
     CommonModule,

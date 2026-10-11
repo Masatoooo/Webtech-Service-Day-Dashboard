@@ -11,3 +11,26 @@ export interface Attendance {
   verificationMethod: CheckInMethod;
   token: string;             // Opaque token for activity check-in (no PII)
 }
+
+export interface ActivityQrInfo {
+  activityId: string;
+  token: string;
+  qrPayload: string;
+  qrDataUrl?: string;
+  generatedAt: string;
+}
+
+export interface CheckInValidationResult {
+  allowed: boolean;
+  reason?: string;
+  activity?: import('./activity.model').Activity;
+  registration?: import('./registration.model').Registration;
+  existingAttendance?: Attendance;
+}
+
+export interface CheckInSuccessResult {
+  attendance: Attendance;
+  activity: import('./activity.model').Activity;
+  registration: import('./registration.model').Registration;
+  isDemoSimulation: true;
+}

@@ -9,6 +9,7 @@ import { OpportunityListComponent } from './pages/opportunity-list/opportunity-l
 import { ActivityDetailComponent } from './pages/activity-detail/activity-detail.component';
 import { MyRegistrationsComponent } from './pages/my-registrations/my-registrations.component';
 import { EmployeeNotificationsComponent } from './pages/employee-notifications/employee-notifications.component';
+import { EmployeeCheckinComponent } from './pages/employee-checkin/employee-checkin.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { EmployeeNotificationsComponent } from './pages/employee-notifications/e
     OpportunityListComponent,
     ActivityDetailComponent,
     MyRegistrationsComponent,
-    EmployeeNotificationsComponent
+    EmployeeNotificationsComponent,
+    EmployeeCheckinComponent
   ],
   imports: [
     CommonModule,
