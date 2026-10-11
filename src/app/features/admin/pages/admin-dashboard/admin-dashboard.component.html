@@ -23,72 +23,72 @@
     </div>
   </header>
 
-  <!-- Foto 1 Hero Cards (Slate, Teal, Brass) -->
+  <!-- 3 Top Colorful Highlight Cards (Foto 1 Aesthetic with Reconciled Executive Totals) -->
   <section class="dash-cards-row mb-6" *ngIf="totals$ | async as m">
-    <!-- Card 1: Slate -->
-    <div class="dash-stat-card card-slate">
-      <div class="flex justify-between items-center">
-        <span class="stat-pill">Confirmed Spots</span>
-        <span class="stat-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-        </span>
+    <!-- Card 1: Slate (Managed Activities) -->
+    <div class="dash-stat-card card-slate" id="kpi-total-activities" routerLink="/admin/activities" title="View all managed activities">
+      <div class="stat-card-header flex justify-between items-center">
+        <span class="stat-pill pill-slate">+<span id="kpi-val-activities">{{ m.totalActivities }}</span> Total</span>
+        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
       </div>
-      <div>
-        <div class="stat-card-title">{{ m.placesTaken }} Confirmed Spots</div>
-        <div class="stat-card-meta">{{ m.placesRemaining }} places open for staff sign-up</div>
+      <div class="stat-card-body">
+        <h2 class="stat-card-title">Managed Activities</h2>
+        <div class="stat-card-meta flex justify-between items-center">
+          <span><strong>{{ m.publishedActivities }}</strong> published initiatives</span>
+          <span>{{ m.totalActivities > 0 ? (m.publishedActivities / m.totalActivities * 100 | number:'1.0-0') : 0 }}%</span>
+        </div>
         <div class="stat-progress-track">
-          <div class="stat-progress-bar" [style.width.%]="m.capacityUtilisationPct"></div>
+          <div
+            class="stat-progress-bar"
+            [style.width.%]="m.totalActivities > 0 ? (m.publishedActivities / m.totalActivities) * 100 : 0"
+          ></div>
         </div>
       </div>
     </div>
 
-    <!-- Card 2: Teal -->
-    <div class="dash-stat-card card-teal">
-      <div class="flex justify-between items-center">
-        <span class="stat-pill">Capacity Utilisation</span>
-        <span class="stat-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-        </span>
+    <!-- Card 2: Teal (Partner NGOs & Governance) -->
+    <div class="dash-stat-card card-teal" id="kpi-ngos-ratio" routerLink="/admin/activities" title="View partner NGOs">
+      <div class="stat-card-header flex justify-between items-center">
+        <span class="stat-pill pill-teal">+<span id="kpi-val-ngos">{{ m.totalNgos }}</span> NGOs</span>
+        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
       </div>
-      <div>
-        <div class="stat-card-title">{{ m.capacityUtilisationPct }}% Capacity Filled</div>
-        <div class="stat-card-meta">{{ m.placesTaken }} of {{ m.totalOfferedPlaces }} total places allocated</div>
-        <div class="stat-progress-track">
-          <div class="stat-progress-bar" [style.width.%]="m.capacityUtilisationPct"></div>
+      <div class="stat-card-body">
+        <h2 class="stat-card-title">Partner NGOs</h2>
+        <div class="stat-card-meta flex justify-between items-center">
+          <span><strong>{{ m.approvedNgos }}</strong> approved</span>
+          <span>{{ m.cancelledRegistrations }} withdrawn</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Card 3: Brass -->
-    <div class="dash-stat-card card-brass">
-      <div class="flex justify-between items-center">
-        <span class="stat-pill">CSR Programs & NGOs</span>
-        <span class="stat-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-          </svg>
-        </span>
-      </div>
-      <div>
-        <div class="stat-card-title">{{ m.totalActivities }} Active Programs</div>
-        <div class="stat-card-meta">{{ m.totalNgos }} Partner NGOs &bull; {{ m.publishedActivities }} published</div>
         <div class="stat-progress-track">
           <div class="stat-progress-bar" style="width: 100%;"></div>
         </div>
       </div>
     </div>
+
+    <!-- Card 3: Brass (Volunteer Capacity & Utilisation) -->
+    <div class="dash-stat-card card-brass" id="kpi-utilisation" routerLink="/admin/activities" title="View capacity utilization">
+      <div class="stat-card-header flex justify-between items-center">
+        <span class="stat-pill pill-brass"><span id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}</span>% Filled</span>
+        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
+      </div>
+      <div class="stat-card-body">
+        <h2 class="stat-card-title">Volunteer Capacity</h2>
+        <div class="stat-card-meta flex justify-between items-center">
+          <span><strong>{{ m.placesTaken }}</strong> enrolled of {{ m.totalOfferedPlaces }}</span>
+          <span>{{ m.placesRemaining }} open</span>
+        </div>
+        <div class="stat-progress-track">
+          <div class="stat-progress-bar" [style.width.%]="m.capacityUtilisationPct"></div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- Foto 1 Split Section: Active Initiatives + Calendar Timeline -->
-  <section class="dash-main-split mb-8">
-    <!-- Left Column: Tasks / Initiatives + Participation Stats + Spotlight Banner -->
-    <div class="flex flex-col gap-6">
-      <!-- Active CSR Initiatives Card List -->
-      <div>
+  <!-- Foto 1 Split Section: Active Initiatives + Participation Stats/Spotlight & Calendar -->
+  <div class="dash-main-split mb-8">
+    <!-- Center-Left Content Area (Tasks + Stats/Spotlight) -->
+    <div class="dash-center-col flex flex-col gap-6">
+      <!-- Section: Active CSR Initiatives -->
+      <section>
         <div class="flex justify-between items-center mb-3">
           <h2 class="dash-section-title">Active CSR Initiatives</h2>
           <a routerLink="/admin/activities" class="dash-view-all-link">Manage Initiatives &rarr;</a>
@@ -126,54 +126,71 @@
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Participation Quick Stats (Foto 1 Sub-Stats) -->
-      <div *ngIf="totals$ | async as m" class="sub-stats-grid">
-        <div class="sub-stat-box">
-          <span class="sub-stat-num">{{ m.totalOfferedPlaces }}</span>
-          <span class="sub-stat-lbl">Offered Capacity</span>
-        </div>
-        <div class="sub-stat-box">
-          <span class="sub-stat-num" style="color: var(--color-forest);">{{ m.placesTaken }}</span>
-          <span class="sub-stat-lbl">Active Registrations</span>
-        </div>
-        <div class="sub-stat-box">
-          <span class="sub-stat-num" style="color: var(--color-deep-slate);">{{ m.totalNgos }}</span>
-          <span class="sub-stat-lbl">Partner NGOs</span>
-        </div>
-      </div>
+      <!-- Section: Statistics Widgets & CSR Spotlight (Matching Foto 1 Row) -->
+      <section class="dash-stats-spotlight-row" *ngIf="totals$ | async as m">
+        <!-- Participation Quick Stats -->
+        <div class="dash-sub-stats flex flex-col justify-between">
+          <div>
+            <h2 class="dash-section-title mb-3">Participation Stats</h2>
+            <div class="sub-stats-grid mb-3">
+              <div class="sub-stat-box" id="kpi-places-taken">
+                <span class="sub-stat-num" style="color: var(--color-forest);" id="kpi-val-taken">{{ m.placesTaken }}</span>
+                <span class="sub-stat-lbl">Staff Enrolled</span>
+              </div>
+              <div class="sub-stat-box" id="kpi-places-remaining">
+                <span class="sub-stat-num" [style.color]="m.placesRemaining <= 5 ? '#845D16' : '#202C3B'" id="kpi-val-remaining">{{ m.placesRemaining }}</span>
+                <span class="sub-stat-lbl">Places Open</span>
+              </div>
+            </div>
+          </div>
 
-      <!-- Spotlight Banner: CSR Impact Platform -->
-      <div class="dash-spotlight-card">
-        <div>
-          <span class="spotlight-tag">CSR IMPACT PLATFORM</span>
-          <h3 class="spotlight-title">Corporate Staff Contributions</h3>
-          <p class="spotlight-desc">
-            Reconciled volunteer tracking, partner NGO management, and live attendance check-in.
-          </p>
-          <a routerLink="/admin/activities" class="spotlight-btn">View All Initiatives &rarr;</a>
+          <div class="sub-stat-box flex justify-between items-center" id="kpi-total-capacity">
+            <div>
+              <span class="sub-stat-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</span>
+              <span class="sub-stat-lbl">Offered Capacity ({{ m.capacityUtilisationPct }}% filled)</span>
+            </div>
+            <a routerLink="/admin/activities" class="dash-view-all-link" style="font-size: 0.75rem;">
+              Manage &rarr;
+            </a>
+          </div>
         </div>
-        <div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48" style="opacity: 0.35;">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
+
+        <!-- Impact Spotlight Banner Card -->
+        <div class="dash-spotlight-card">
+          <div class="spotlight-content">
+            <span class="spotlight-tag">CSR IMPACT PLATFORM</span>
+            <h3 class="spotlight-title">Corporate Social Responsibility</h3>
+            <p class="spotlight-desc">
+              Empower employees to contribute time towards marine conservation, food security, and digital literacy.
+            </p>
+            <a routerLink="/admin/activities" class="spotlight-btn">
+              Explore Activities &rarr;
+            </a>
+          </div>
+          <div class="spotlight-graphic" aria-hidden="true" style="opacity: 0.4;">
+            <svg viewBox="0 0 80 80" fill="none" width="70" height="70">
+              <circle cx="40" cy="40" r="36" fill="rgba(255,255,255,0.08)" />
+              <path d="M26 44C22 44 18 40 18 36C18 32 22 28 26 28C30 28 34 32 34 36C34 40 38 44 42 44C46 44 50 40 50 36C50 32 54 28 58 28C62 28 66 32 66 36" stroke="#C9A66B" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
 
-    <!-- Right Column: Schedule Calendar Timeline -->
+    <!-- Right Column: Calendar & Upcoming Service Days -->
     <aside class="dash-calendar-col">
-      <div class="flex justify-between items-center mb-4">
+      <div class="calendar-panel-header flex justify-between items-center mb-4">
         <h2 class="dash-section-title" style="margin: 0;">Schedule Calendar</h2>
         <div class="calendar-bell-icon" title="Upcoming activities timeline">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
           </svg>
         </div>
       </div>
 
-      <div *ngIf="(calendarEvents$ | async) as events">
+      <div class="calendar-timeline" *ngIf="(calendarEvents$ | async) as events">
         <div *ngIf="events.length === 0" class="text-xs text-muted text-center py-4">
           No upcoming scheduled events.
         </div>
@@ -182,98 +199,16 @@
           <div class="timeline-date-header">{{ ev.dateHeader }}</div>
           <div class="timeline-event-card">
             <div class="timeline-time">{{ ev.timeRange }}</div>
-            <div class="timeline-bar"></div>
+            <div class="timeline-bar" aria-hidden="true"></div>
             <div class="timeline-details">
               <span class="timeline-title">{{ ev.title }}</span>
-              <span class="text-xs text-muted">{{ ev.location }}</span>
+              <span class="timeline-location text-xs text-muted">{{ ev.location }}</span>
             </div>
           </div>
         </div>
       </div>
     </aside>
-  </section>
-
-  <!-- Section Header for Reconciled KPI Totals Overview -->
-  <div class="flex items-center justify-between mb-4 mt-6 pt-4" style="border-top: 1px solid var(--color-border);">
-    <div>
-      <h2 class="dash-section-title" style="font-size: 1.15rem; margin: 0;">
-        Executive Operational Intelligence & Reconciled KPIs
-      </h2>
-      <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
-        Real-time capacity reconciliation across all service categories and partner organizations.
-      </p>
-    </div>
   </div>
-
-  <!-- Scope 1 & 2: Executive KPI Totals Overview (Reconciled with Business Rules) -->
-  <section class="mb-6" *ngIf="totals$ | async as m">
-    <div class="admin-kpi-grid">
-      <!-- Total Activities -->
-      <div class="admin-kpi-card" id="kpi-total-activities">
-        <div class="kpi-label">Total Activities</div>
-        <div class="kpi-num" id="kpi-val-activities">{{ m.totalActivities }}</div>
-        <div class="kpi-sub">
-          <strong>{{ m.publishedActivities }}</strong> published initiatives
-        </div>
-      </div>
-
-      <!-- Total Offered Places -->
-      <div class="admin-kpi-card" id="kpi-total-capacity">
-        <div class="kpi-label">Offered Places</div>
-        <div class="kpi-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</div>
-        <div class="kpi-sub">
-          Max capacity across programs
-        </div>
-      </div>
-
-      <!-- Places Taken (Active Registrations) -->
-      <div class="admin-kpi-card" id="kpi-places-taken">
-        <div class="kpi-label">Places Taken</div>
-        <div class="kpi-num" style="color: var(--color-forest);" id="kpi-val-taken">{{ m.placesTaken }}</div>
-        <div class="kpi-sub">
-          <strong>{{ m.activeRegistrations }}</strong> confirmed volunteer spots
-        </div>
-      </div>
-
-      <!-- Places Remaining -->
-      <div class="admin-kpi-card" id="kpi-places-remaining">
-        <div class="kpi-label">Places Remaining</div>
-        <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#845D16' : '#202C3B'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
-        <div class="kpi-sub">
-          Open capacity for staff sign-up
-        </div>
-      </div>
-
-      <!-- Capacity Utilisation -->
-      <div class="admin-kpi-card" id="kpi-utilisation">
-        <div class="kpi-label">Capacity Utilisation</div>
-        <div class="kpi-num" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</div>
-        <div class="kpi-sub">
-          {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
-        </div>
-        <div class="kpi-progress-bar">
-          <div
-            class="kpi-progress-fill"
-            [style.width.%]="m.capacityUtilisationPct"
-            [style.background]="m.capacityUtilisationPct >= 90 ? '#A52C22' : m.capacityUtilisationPct >= 70 ? '#845D16' : '#356859'"
-          ></div>
-        </div>
-      </div>
-
-      <!-- Partner NGOs & Enrollment Ratio -->
-      <div class="admin-kpi-card" id="kpi-ngos-ratio">
-        <div class="kpi-label">Partner NGOs & History</div>
-        <div class="kpi-num" id="kpi-val-ngos">{{ m.totalNgos }}</div>
-        <div class="kpi-sub">
-          {{ m.approvedNgos }} approved • {{ m.cancelledRegistrations }} withdrawn
-        </div>
-      </div>
-    </div>
-
-    <div class="text-xs text-muted" style="margin-top: -0.5rem; margin-bottom: 1.5rem; font-style: italic;">
-      * Figures derived dynamically from central observables (demo session data store). Slot counts reconcile: Total Offered = Taken + Remaining.
-    </div>
-  </section>
 
   <!-- Scope 4: Operational Triage & "Needs Attention" Radar -->
   <section class="attention-card mb-6" id="section-needs-attention">
