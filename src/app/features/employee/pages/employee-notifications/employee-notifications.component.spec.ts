@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, BehaviorSubject } from 'rxjs';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { EmployeeNotificationsComponent } from './employee-notifications.component';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DataStoreService } from '../../../../core/services/data-store.service';
@@ -64,6 +65,28 @@ describe('EmployeeNotificationsComponent (Task 06: Employee Notifications UI)', 
       createdAt: '2026-10-09T08:00:00',
       readAt: null,
       deliveryStatus: 'DELIVERED'
+    },
+    {
+      id: 'notif-5',
+      recipientUserId: 'usr-emp-1',
+      title: 'Upcoming Service Day in 7 Days',
+      message: 'Reminder for your scheduled volunteer day.',
+      type: 'REMINDER',
+      createdAt: '2026-10-10T08:00:00',
+      readAt: null,
+      deliveryStatus: 'DELIVERED',
+      activityId: 'act-1'
+    },
+    {
+      id: 'notif-6',
+      recipientUserId: 'usr-emp-1',
+      title: 'Registration Transfer Confirmed',
+      message: 'Transferred to Youth STEM Robotics.',
+      type: 'TRANSFER',
+      createdAt: '2026-10-10T09:00:00',
+      readAt: '2026-10-10T10:00:00',
+      deliveryStatus: 'DELIVERED',
+      activityId: 'act-2'
     }
   ];
 
@@ -100,19 +123,29 @@ describe('EmployeeNotificationsComponent (Task 06: Employee Notifications UI)', 
   });
 
   it('should filter notifications for current employee and ALL broadcasts only', () => {
-    expect(component.allNotifications.length).toBe(3);
-    expect(component.totalCount).toBe(3);
-    expect(component.unreadCount).toBe(2);
-    expect(component.registrationCount).toBe(2);
+    // 5 notifications for usr-emp-1 or ALL (notif-1, notif-2, notif-3, notif-5, notif-6)
+    expect(component.allNotifications.length).toBe(5);
+    expect(component.totalCount).toBe(5);
+    // Unread: notif-2, notif-3, notif-5 = 3
+    expect(component.unreadCount).toBe(3);
+    // Registration & Transfer: notif-1, notif-2, notif-6 = 3
+    expect(component.registrationCount).toBe(3);
+    // Reminders: notif-5 = 1
+    expect(component.reminderCount).toBe(1);
+    // Broadcast: notif-3 = 1
     expect(component.broadcastCount).toBe(1);
   });
 
   it('should filter notifications by tab selection', () => {
     component.setTab('UNREAD');
-    expect(component.filteredNotifications.length).toBe(2);
+    expect(component.filteredNotifications.length).toBe(3);
 
     component.setTab('REGISTRATION');
-    expect(component.filteredNotifications.length).toBe(2);
+    expect(component.filteredNotifications.length).toBe(3);
+
+    component.setTab('REMINDER');
+    expect(component.filteredNotifications.length).toBe(1);
+    expect(component.filteredNotifications[0].id).toBe('notif-5');
 
     component.setTab('BROADCAST');
     expect(component.filteredNotifications.length).toBe(1);
@@ -134,7 +167,7 @@ describe('EmployeeNotificationsComponent (Task 06: Employee Notifications UI)', 
   });
 
   it('should mark all unread notifications as read', () => {
-    expect(component.unreadCount).toBe(2);
+    expect(component.unreadCount).toBe(3);
     component.markAllAsRead();
     expect(component.unreadCount).toBe(0);
   });

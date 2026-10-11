@@ -7,6 +7,8 @@ export const STORAGE_KEYS = {
   REGISTRATIONS: 'sdd_registrations',
   NOTIFICATIONS: 'sdd_notifications',
   ATTENDANCE: 'sdd_attendance',
+  REMINDER_RULES: 'sdd_reminder_rules',
+  NOTIFICATION_HISTORY: 'sdd_notification_history',
   INITIALIZED: 'sdd_initialized'
 } as const;
 

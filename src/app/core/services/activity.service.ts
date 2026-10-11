@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Observable, combineLatest, map, of } from 'rxjs';
 import {
   Activity,
@@ -8,12 +8,16 @@ import {
   Registration
 } from '../../models';
 import { DataStoreService } from './data-store.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityService {
-  constructor(private readonly store: DataStoreService) {}
+  constructor(
+    private readonly store: DataStoreService,
+    @Optional() private readonly notificationService?: NotificationService
+  ) {}
 
   getActivities(): Observable<Activity[]> {
     return this.store.activities$;
@@ -67,16 +71,34 @@ export class ActivityService {
     return of(newActivity);
   }
 
-  updateActivity(id: string, updates: Partial<Omit<Activity, 'id'>>): Observable<Activity> {
+  updateActivity(id: string, updates: Partial<Omit<Activity, 'id'>>, changeSummary?: string): Observable<Activity> {
     const current = this.store.activitiesSnapshot;
     const index = current.findIndex((a) => a.id === id);
     if (index === -1) {
       throw new Error(`[ActivityService] Activity with id "${id}" not found.`);
     }
-    const updated: Activity = { ...current[index], ...updates };
+    const previous = current[index];
+    const updated: Activity = { ...previous, ...updates };
     const nextList = [...current];
     nextList[index] = updated;
     this.store.setActivities(nextList);
+
+    // Notify registered participants if date/location/title changed or if change summary provided
+    if (this.notificationService) {
+      const hasSignificantChanges =
+        (updates.startDateTime && updates.startDateTime !== previous.startDateTime) ||
+        (updates.location && updates.location !== previous.location) ||
+        (updates.title && updates.title !== previous.title) ||
+        changeSummary;
+
+      if (hasSignificantChanges) {
+        this.notificationService.notifyActivityUpdated(
+          updated,
+          changeSummary || 'Schedule or operational details were updated by coordinators'
+        );
+      }
+    }
+
     return of(updated);
   }
 

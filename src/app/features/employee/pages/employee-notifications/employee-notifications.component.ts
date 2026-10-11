@@ -5,7 +5,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { DataStoreService } from '../../../../core/services/data-store.service';
 import { Notification, User } from '../../../../models';
 
-export type NotificationTab = 'ALL' | 'UNREAD' | 'REGISTRATION' | 'BROADCAST';
+export type NotificationTab = 'ALL' | 'UNREAD' | 'REGISTRATION' | 'REMINDER' | 'BROADCAST';
 
 @Component({
   selector: 'app-employee-notifications',
@@ -25,6 +25,7 @@ export class EmployeeNotificationsComponent implements OnInit, OnDestroy {
   totalCount: number = 0;
   unreadCount: number = 0;
   registrationCount: number = 0;
+  reminderCount: number = 0;
   broadcastCount: number = 0;
 
   constructor(
@@ -51,8 +52,13 @@ export class EmployeeNotificationsComponent implements OnInit, OnDestroy {
         // Recalculate counter metrics
         this.totalCount = this.allNotifications.length;
         this.unreadCount = this.allNotifications.filter((n) => !n.readAt).length;
-        this.registrationCount = this.allNotifications.filter((n) => n.type === 'REGISTRATION').length;
-        this.broadcastCount = this.allNotifications.filter((n) => n.type === 'BROADCAST').length;
+        this.registrationCount = this.allNotifications.filter(
+          (n) => n.type === 'REGISTRATION' || n.type === 'TRANSFER' || n.type === 'CANCELLATION'
+        ).length;
+        this.reminderCount = this.allNotifications.filter((n) => n.type === 'REMINDER').length;
+        this.broadcastCount = this.allNotifications.filter(
+          (n) => n.type === 'BROADCAST' || n.type === 'ACTIVITY_UPDATE'
+        ).length;
 
         this.applyFilter();
       });
@@ -74,10 +80,17 @@ export class EmployeeNotificationsComponent implements OnInit, OnDestroy {
         this.filteredNotifications = this.allNotifications.filter((n) => !n.readAt);
         break;
       case 'REGISTRATION':
-        this.filteredNotifications = this.allNotifications.filter((n) => n.type === 'REGISTRATION');
+        this.filteredNotifications = this.allNotifications.filter(
+          (n) => n.type === 'REGISTRATION' || n.type === 'TRANSFER' || n.type === 'CANCELLATION'
+        );
+        break;
+      case 'REMINDER':
+        this.filteredNotifications = this.allNotifications.filter((n) => n.type === 'REMINDER');
         break;
       case 'BROADCAST':
-        this.filteredNotifications = this.allNotifications.filter((n) => n.type === 'BROADCAST');
+        this.filteredNotifications = this.allNotifications.filter(
+          (n) => n.type === 'BROADCAST' || n.type === 'ACTIVITY_UPDATE'
+        );
         break;
       case 'ALL':
       default:

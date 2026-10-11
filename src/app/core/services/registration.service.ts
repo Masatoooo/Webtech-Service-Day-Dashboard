@@ -200,7 +200,8 @@ export class RegistrationService {
       createdAt: new Date().toISOString(),
       readAt: null,
       deliveryStatus: 'DELIVERED',
-      activityId: activity.id
+      activityId: activity.id,
+      simulationLabel: 'Simulated in app'
     };
     this.store.setNotifications([...this.store.notificationsSnapshot, newNotif]);
 
@@ -274,7 +275,8 @@ export class RegistrationService {
       createdAt: new Date().toISOString(),
       readAt: null,
       deliveryStatus: 'DELIVERED',
-      activityId: reg.activityId
+      activityId: reg.activityId,
+      simulationLabel: 'Simulated in app'
     };
     this.store.setNotifications([...this.store.notificationsSnapshot, cancelNotif]);
 
@@ -404,11 +406,12 @@ export class RegistrationService {
       recipientUserId: oldReg.employeeId,
       title: 'Registration Transfer Confirmed',
       message: `Your Service Day participation was transferred from '${oldActivity?.title || 'previous activity'}' to '${destActivity.title}'. 1 spot reserved.`,
-      type: 'REGISTRATION',
+      type: 'TRANSFER',
       createdAt: new Date().toISOString(),
       readAt: null,
       deliveryStatus: 'DELIVERED',
-      activityId: destActivity.id
+      activityId: destActivity.id,
+      simulationLabel: 'Simulated in app'
     };
     this.store.setNotifications([...this.store.notificationsSnapshot, transferNotif]);
 

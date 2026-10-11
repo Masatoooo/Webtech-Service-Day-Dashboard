@@ -45,9 +45,15 @@
     </div>
 
     <div class="metric-card">
-      <div class="metric-label">Broadcast Bulletins</div>
+      <div class="metric-label">Reminders</div>
+      <div class="metric-val" id="metric-notif-reminders">{{ reminderCount }}</div>
+      <div class="metric-meta text-muted">Upcoming activity preparation</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Broadcasts & Updates</div>
       <div class="metric-val" id="metric-notif-broadcast">{{ broadcastCount }}</div>
-      <div class="metric-meta text-muted">Company-wide Service Day updates</div>
+      <div class="metric-meta text-muted">Company-wide & session bulletins</div>
     </div>
   </div>
 
@@ -82,8 +88,19 @@
       (click)="setTab('REGISTRATION')"
       id="tab-notif-registration"
     >
-      <span>Registrations</span>
+      <span>Registrations & Transfers</span>
       <span class="notif-tab-badge">{{ registrationCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="notif-tab-btn"
+      [class.active]="activeTab === 'REMINDER'"
+      (click)="setTab('REMINDER')"
+      id="tab-notif-reminders"
+    >
+      <span>Reminders</span>
+      <span class="notif-tab-badge">{{ reminderCount }}</span>
     </button>
 
     <button
@@ -112,9 +129,11 @@
         class="notif-icon-avatar"
         [ngClass]="{
           'notif-avatar-registration': notif.type === 'REGISTRATION',
-          'notif-avatar-broadcast': notif.type === 'BROADCAST',
+          'notif-avatar-transfer': notif.type === 'TRANSFER',
+          'notif-avatar-cancellation': notif.type === 'CANCELLATION',
           'notif-avatar-reminder': notif.type === 'REMINDER',
-          'notif-avatar-cancellation': notif.type === 'CANCELLATION'
+          'notif-avatar-broadcast': notif.type === 'BROADCAST',
+          'notif-avatar-update': notif.type === 'ACTIVITY_UPDATE'
         }"
       >
         <!-- Registration Icon -->
@@ -122,9 +141,14 @@
           <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
         </svg>
 
-        <!-- Broadcast Icon -->
-        <svg *ngIf="notif.type === 'BROADCAST'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
-          <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v.114A4.369 4.369 0 005 5a4 4 0 00-4 4 4 4 0 004 4c.348 0 .684-.044 1-.127V15a1 1 0 00.804.98l10 2A1 1 0 0018 17V3zM6 11a2 2 0 110-4 2 2 0 010 4z" />
+        <!-- Transfer Icon -->
+        <svg *ngIf="notif.type === 'TRANSFER'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.047a1 1 0 011.885-.666A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.608-1.286z" clip-rule="evenodd" />
+        </svg>
+
+        <!-- Cancellation Icon -->
+        <svg *ngIf="notif.type === 'CANCELLATION'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
         </svg>
 
         <!-- Reminder Icon -->
@@ -132,9 +156,14 @@
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
         </svg>
 
-        <!-- Cancellation Icon -->
-        <svg *ngIf="notif.type === 'CANCELLATION'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        <!-- Broadcast Icon -->
+        <svg *ngIf="notif.type === 'BROADCAST'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v.114A4.369 4.369 0 005 5a4 4 0 00-4 4 4 4 0 004 4c.348 0 .684-.044 1-.127V15a1 1 0 00.804.98l10 2A1 1 0 0018 17V3zM6 11a2 2 0 110-4 2 2 0 010 4z" />
+        </svg>
+
+        <!-- Activity Update Icon -->
+        <svg *ngIf="notif.type === 'ACTIVITY_UPDATE'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
         </svg>
       </div>
 
@@ -151,12 +180,21 @@
               class="notif-badge"
               [ngClass]="{
                 'notif-badge-registration': notif.type === 'REGISTRATION',
-                'notif-badge-broadcast': notif.type === 'BROADCAST',
+                'notif-badge-transfer': notif.type === 'TRANSFER',
+                'notif-badge-cancellation': notif.type === 'CANCELLATION',
                 'notif-badge-reminder': notif.type === 'REMINDER',
-                'notif-badge-cancellation': notif.type === 'CANCELLATION'
+                'notif-badge-broadcast': notif.type === 'BROADCAST',
+                'notif-badge-update': notif.type === 'ACTIVITY_UPDATE'
               }"
             >
               {{ notif.type }}
+            </span>
+
+            <span class="notif-sim-tag" title="In-App Simulation">
+              <svg viewBox="0 0 16 16" fill="currentColor" width="10" height="10" aria-hidden="true">
+                <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
+              </svg>
+              {{ notif.simulationLabel || 'Simulated in app' }}
             </span>
 
             <span>{{ notif.createdAt | date:'mediumDate' }} • {{ notif.createdAt | date:'shortTime' }}</span>
