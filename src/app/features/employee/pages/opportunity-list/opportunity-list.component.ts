@@ -1,15 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Optional } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, combineLatest } from 'rxjs';
+import { Subject, combineLatest, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityService } from '../../../../core/services/activity.service';
 import { DataStoreService } from '../../../../core/services/data-store.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { RegistrationService } from '../../../../core/services/registration.service';
 import {
   Activity,
   NGO,
   ActivitySlotSummary,
   ActivityAvailabilityStatus,
-  ServiceType
+  ServiceType,
+  User
 } from '../../../../models';
 
 export interface OpportunityItem {
@@ -45,23 +48,51 @@ export class OpportunityListComponent implements OnInit, OnDestroy {
   totalAvailable: number = 0;
   totalAlmostFull: number = 0;
 
-  // Task 06 clean registration contract modal state
+  // Logged in user & active enrollments
+  currentUser: User | null = null;
+  registeredActivityIds = new Set<string>();
+
+  // Task 07 Active Registration Modal State
+  registerModalItem: OpportunityItem | null = null;
+  overlappingActivities: Activity[] = [];
+  isSubmittingRegistration: boolean = false;
+  registrationModalError: string | null = null;
+
+  // Legacy/Contract modal item compatibility
   contractModalItem: OpportunityItem | null = null;
+
+  // Toast / Feedback banner
+  feedbackBanner: { type: 'success' | 'error'; message: string } | null = null;
 
   constructor(
     private readonly activityService: ActivityService,
     private readonly dataStore: DataStoreService,
-    private readonly router: Router
+    private readonly router: Router,
+    @Optional() private readonly authService?: AuthService,
+    @Optional() private readonly registrationService?: RegistrationService
   ) {}
 
   ngOnInit(): void {
+    const user$ = this.authService ? this.authService.currentUser$ : of(null);
+
     combineLatest([
       this.activityService.getEmployeeActivities(),
       this.dataStore.ngos$,
-      this.dataStore.registrations$
+      this.dataStore.registrations$,
+      user$
     ])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([activities, ngos, registrations]) => {
+      .subscribe(([activities, ngos, registrations, user]) => {
+        this.currentUser = user;
+
+        const activeIds = new Set<string>();
+        if (user) {
+          registrations
+            .filter((r) => r.employeeId === user.id && r.status === 'ACTIVE')
+            .forEach((r) => activeIds.add(r.activityId));
+        }
+        this.registeredActivityIds = activeIds;
+
         const ngoMap = new Map<string, NGO>(ngos.map((n) => [n.id, n]));
 
         this.allOpportunities = activities.map((activity) => {
@@ -153,16 +184,102 @@ export class OpportunityListComponent implements OnInit, OnDestroy {
     );
   }
 
-  openRegistrationContract(item: OpportunityItem): void {
-    this.contractModalItem = item;
+  isRegistered(activityId: string): boolean {
+    return this.registeredActivityIds.has(activityId);
   }
 
-  closeRegistrationContract(): void {
+  openRegistrationModal(item: OpportunityItem): void {
+    this.feedbackBanner = null;
+    this.registrationModalError = null;
+    this.contractModalItem = item;
+
+    if (!this.currentUser) {
+      this.feedbackBanner = {
+        type: 'error',
+        message: 'Please log in as an employee to register for this activity.'
+      };
+      return;
+    }
+
+    if (this.isRegistered(item.activity.id)) {
+      this.feedbackBanner = {
+        type: 'error',
+        message: `You already have an active registration for "${item.activity.title}".`
+      };
+      return;
+    }
+
+    if (this.registrationService) {
+      const check = this.registrationService.canRegister(this.currentUser.id, item.activity.id);
+      if (!check.allowed) {
+        this.feedbackBanner = {
+          type: 'error',
+          message: check.reason || 'This activity cannot accept registrations.'
+        };
+        return;
+      }
+      this.overlappingActivities = check.overlappingActivities || [];
+    } else {
+      this.overlappingActivities = [];
+    }
+
+    this.registerModalItem = item;
+  }
+
+  confirmRegistration(): void {
+    if (!this.registerModalItem || !this.currentUser) return;
+
+    if (!this.registrationService) {
+      this.closeRegistrationModal();
+      return;
+    }
+
+    this.isSubmittingRegistration = true;
+    this.registrationModalError = null;
+
+    try {
+      this.registrationService.register(this.currentUser.id, this.registerModalItem.activity.id).subscribe({
+        next: (reg) => {
+          const title = this.registerModalItem?.activity.title || 'the activity';
+          this.feedbackBanner = {
+            type: 'success',
+            message: `Successfully registered for "${title}"! 1 volunteer spot reserved.`
+          };
+          this.isSubmittingRegistration = false;
+          this.closeRegistrationModal();
+        },
+        error: (err) => {
+          this.isSubmittingRegistration = false;
+          this.registrationModalError = err?.message || 'Registration failed. Please try again.';
+        }
+      });
+    } catch (err: any) {
+      this.isSubmittingRegistration = false;
+      this.registrationModalError = err?.message || 'Registration failed.';
+    }
+  }
+
+  closeRegistrationModal(): void {
+    this.registerModalItem = null;
+    this.overlappingActivities = [];
+    this.registrationModalError = null;
     this.contractModalItem = null;
   }
 
+  openRegistrationContract(item: OpportunityItem): void {
+    this.openRegistrationModal(item);
+  }
+
+  closeRegistrationContract(): void {
+    this.closeRegistrationModal();
+  }
+
+  dismissFeedbackBanner(): void {
+    this.feedbackBanner = null;
+  }
+
   navigateToDetails(activityId: string): void {
-    this.closeRegistrationContract();
+    this.closeRegistrationModal();
     this.router.navigate(['/employee/activities', activityId]);
   }
 

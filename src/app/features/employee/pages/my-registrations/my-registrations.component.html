@@ -3,98 +3,484 @@
   <header class="page-header mb-6">
     <div class="flex justify-between items-center header-row">
       <div>
-        <div class="role-pretitle">Staff Space</div>
+        <div class="role-pretitle">Staff Participation Hub</div>
         <h1 class="page-title">My Registrations</h1>
         <p class="header-desc text-muted">
-          View your enrolled Service Day initiatives and participation status.
+          Manage your enrolled Service Day initiatives. Modify your volunteer schedule, transfer between partner programs, or process timely cancellations.
         </p>
       </div>
       <div class="header-badge-wrap">
-        <app-status-badge variant="forest" label="Registrations"></app-status-badge>
+        <app-status-badge variant="forest" label="Staff Registrations"></app-status-badge>
       </div>
     </div>
   </header>
 
-  <!-- Contract Banner -->
-  <div class="verification-banner mb-6">
-    <div class="verification-icon-wrap">
-      <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+  <!-- Feedback Banner (Success / Error Alert) -->
+  <div
+    *ngIf="feedbackBanner"
+    class="alert mb-6"
+    [ngClass]="feedbackBanner.type === 'success' ? 'alert-success' : 'alert-error'"
+    id="reg-feedback-banner"
+    style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;"
+  >
+    <div class="flex items-center gap-2">
+      <svg *ngIf="feedbackBanner.type === 'success'" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
       </svg>
+      <svg *ngIf="feedbackBanner.type === 'error'" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      <span>{{ feedbackBanner.message }}</span>
     </div>
-    <div class="verification-info flex-1">
-      <div class="verification-title">Task 07 Registration Management Contract</div>
-      <div class="verification-desc text-muted">
-        Full self-service registration mutations, transfer workflows, and cut-off cancellation rules will be implemented in <strong>Task 07 (Use Case 3)</strong>. Read-only registration records for your demo user are rendered below.
+    <button
+      type="button"
+      class="btn-icon"
+      (click)="dismissFeedbackBanner()"
+      aria-label="Dismiss alert"
+      style="background: transparent; border: none; cursor: pointer; color: inherit; padding: 2px;"
+    >
+      ✕
+    </button>
+  </div>
+
+  <!-- Registration Tabs Navigation -->
+  <div class="reg-nav-tabs" role="tablist">
+    <button
+      type="button"
+      class="reg-tab-btn"
+      [class.active]="activeTab === 'UPCOMING'"
+      (click)="setTab('UPCOMING')"
+      id="tab-upcoming"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'UPCOMING'"
+    >
+      <span>Upcoming Initiatives</span>
+      <span class="reg-tab-badge" id="badge-upcoming-count">{{ upcomingCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="reg-tab-btn"
+      [class.active]="activeTab === 'PAST'"
+      (click)="setTab('PAST')"
+      id="tab-past"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'PAST'"
+    >
+      <span>Past & Completed</span>
+      <span class="reg-tab-badge" id="badge-past-count">{{ pastCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="reg-tab-btn"
+      [class.active]="activeTab === 'CANCELLED'"
+      (click)="setTab('CANCELLED')"
+      id="tab-cancelled"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'CANCELLED'"
+    >
+      <span>Withdrawn / Cancelled</span>
+      <span class="reg-tab-badge" id="badge-cancelled-count">{{ cancelledCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="reg-tab-btn"
+      [class.active]="activeTab === 'ALL'"
+      (click)="setTab('ALL')"
+      id="tab-all"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'ALL'"
+    >
+      <span>All Records</span>
+      <span class="reg-tab-badge" id="badge-all-count">{{ allCount }}</span>
+    </button>
+  </div>
+
+  <!-- Registrations List Container -->
+  <div *ngIf="filteredItems.length > 0; else noRegistrationsTemplate">
+    <div class="opp-list">
+      <div
+        *ngFor="let item of filteredItems"
+        class="opp-card"
+        [id]="'my-reg-card-' + item.registration.id"
+        [style.border-left-color]="
+          item.registration.status === 'CANCELLED' ? '#CAD2D6' :
+          item.activity?.serviceType === 'ENVIRONMENT' ? '#356859' :
+          item.activity?.serviceType === 'EDUCATION' ? '#1B5299' :
+          item.activity?.serviceType === 'FOOD_SECURITY' ? '#C9A66B' :
+          item.activity?.serviceType === 'COMMUNITY' ? '#692A8E' : '#202C3B'
+        "
+      >
+        <!-- Card Main Info -->
+        <div class="opp-main-info">
+          <!-- Top Row Tags -->
+          <div class="opp-header-row">
+            <!-- Focus Area Tag -->
+            <span
+              *ngIf="item.activity"
+              class="badge-category"
+              [ngClass]="'category-' + item.activity.serviceType.toLowerCase()"
+            >
+              {{ getCategoryLabel(item.activity.serviceType) }}
+            </span>
+
+            <!-- Status Pill Badge -->
+            <span
+              *ngIf="item.registration.status === 'ACTIVE'"
+              class="badge badge-forest"
+              [id]="'badge-status-' + item.registration.id"
+            >
+              Active Enrollment
+            </span>
+            <span
+              *ngIf="item.registration.status === 'CANCELLED'"
+              class="badge"
+              style="background: #EEF2F4; color: #5F6B76; border: 1px solid #D1DADC;"
+              [id]="'badge-status-' + item.registration.id"
+            >
+              Withdrawn / Cancelled
+            </span>
+
+            <!-- Partner NGO -->
+            <span class="opp-ngo-name flex items-center gap-1" *ngIf="item.ngo">
+              <svg viewBox="0 0 20 20" fill="#356859" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              {{ item.ngo.name }}
+            </span>
+
+            <!-- Locked Cut-off Badge if applicable -->
+            <span *ngIf="item.registration.status === 'ACTIVE' && item.isCutoffPassed" class="reg-cutoff-lock" title="Rosters locked. No edits or cancellations allowed.">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+              </svg>
+              Cut-off Passed (Locked)
+            </span>
+          </div>
+
+          <!-- Activity Title Link -->
+          <h2 class="opp-title">
+            <a
+              *ngIf="item.activity"
+              [routerLink]="['/employee/activities', item.activity.id]"
+              class="opp-title-link"
+              [id]="'title-link-' + item.registration.id"
+            >
+              {{ item.activity.title }}
+            </a>
+            <span *ngIf="!item.activity">Unassigned Activity ({{ item.registration.activityId }})</span>
+          </h2>
+
+          <!-- Activity Description -->
+          <p class="opp-desc" *ngIf="item.activity">
+            {{ item.activity.description }}
+          </p>
+
+          <!-- Metadata Summary Row -->
+          <div class="opp-meta-row" *ngIf="item.activity">
+            <!-- Schedule -->
+            <span class="opp-meta-item">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+              </svg>
+              <strong>{{ item.activity.startDateTime | date:'mediumDate' }}</strong>
+              <span>({{ item.activity.startDateTime | date:'shortTime' }} – {{ item.activity.endDateTime | date:'shortTime' }})</span>
+            </span>
+
+            <!-- Location -->
+            <span class="opp-meta-item">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ item.activity.location }}</span>
+            </span>
+
+            <!-- Registered Date -->
+            <span class="opp-meta-item">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+              </svg>
+              <span>Enrolled: {{ item.registration.registeredAt | date:'mediumDate' }}</span>
+            </span>
+          </div>
+
+          <!-- Cancellation Details Box if Cancelled -->
+          <div
+            *ngIf="item.registration.status === 'CANCELLED'"
+            class="p-3 mt-2"
+            style="background: #F8F9FA; border-radius: 8px; border: 1px solid #E4E8EB; font-size: 0.8rem; color: #5F6B76;"
+            [id]="'cancellation-note-' + item.registration.id"
+          >
+            <strong>Withdrawn Record:</strong>
+            {{ item.registration.cancellationReason || 'User requested withdrawal' }}
+            <span *ngIf="item.registration.updatedAt" class="text-muted">
+              (Processed: {{ item.registration.updatedAt | date:'mediumDate' }})
+            </span>
+          </div>
+        </div>
+
+        <!-- Card Actions Block -->
+        <div class="opp-action-block">
+          <!-- View Details -->
+          <a
+            *ngIf="item.activity"
+            [routerLink]="['/employee/activities', item.activity.id]"
+            class="btn btn-sm btn-secondary"
+            [id]="'btn-view-' + item.registration.id"
+          >
+            View Details
+          </a>
+
+          <!-- Active Registration Mutation Actions -->
+          <ng-container *ngIf="item.registration.status === 'ACTIVE'">
+            <!-- Transfer Activity Button -->
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              [disabled]="!item.canTransfer"
+              (click)="openTransferModal(item)"
+              [id]="'btn-transfer-' + item.registration.id"
+              [title]="!item.canTransfer ? (item.transferBlockReason || 'Cannot transfer') : 'Transfer to another approved initiative'"
+            >
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+              </svg>
+              Transfer
+            </button>
+
+            <!-- Cancel / Withdraw Button -->
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              style="color: #A52C22; border-color: #F3C6C1;"
+              [disabled]="!item.canCancel"
+              (click)="openCancelModal(item)"
+              [id]="'btn-cancel-' + item.registration.id"
+              [title]="!item.canCancel ? (item.cancelBlockReason || 'Cannot cancel') : 'Withdraw registration and release place'"
+            >
+              Withdraw
+            </button>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Registrations List -->
-  <div *ngIf="myRegistrations$ | async as items">
-    <div *ngIf="items.length > 0; else noRegistrations">
-      <div class="opp-list">
-        <div *ngFor="let item of items" class="opp-card">
-          <div class="opp-main-info">
-            <div class="opp-header-row">
-              <span class="badge badge-forest">
-                {{ item.registration.status }}
-              </span>
-              <span class="text-muted" style="font-size: 0.8rem;">
-                Registered: {{ item.registration.registeredAt | date:'mediumDate' }}
-              </span>
-            </div>
-            <h2 class="opp-title">
-              <a
-                *ngIf="item.activity"
-                [routerLink]="['/employee/activities', item.activity.id]"
-                class="opp-title-link"
-              >
-                {{ item.activity.title }}
-              </a>
-              <span *ngIf="!item.activity">Activity Reference ({{ item.registration.activityId }})</span>
-            </h2>
-            <p class="opp-desc" *ngIf="item.activity">
-              {{ item.activity.description }}
-            </p>
-            <div class="opp-meta-row" *ngIf="item.activity">
-              <span class="opp-meta-item">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                </svg>
-                <span>{{ item.activity.startDateTime | date:'mediumDate' }}</span>
-              </span>
-              <span class="opp-meta-item">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                </svg>
-                <span>{{ item.activity.location }}</span>
-              </span>
-            </div>
-          </div>
-          <div class="opp-action-block">
-            <a
-              *ngIf="item.activity"
-              [routerLink]="['/employee/activities', item.activity.id]"
-              class="btn btn-sm btn-secondary"
-            >
-              View Activity
-            </a>
-          </div>
+  <!-- Empty Tab Results Template -->
+  <ng-template #noRegistrationsTemplate>
+    <div class="opp-empty-card" id="empty-registrations-card">
+      <div class="opp-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h3 class="opp-empty-title">
+        {{
+          activeTab === 'UPCOMING' ? 'No Upcoming Enrollments' :
+          activeTab === 'PAST' ? 'No Completed Service Records' :
+          activeTab === 'CANCELLED' ? 'No Withdrawn Registrations' :
+          'No Participation Records Found'
+        }}
+      </h3>
+      <p class="opp-empty-desc">
+        {{
+          activeTab === 'UPCOMING'
+            ? 'You have no active registrations scheduled. Browse verified community opportunities to get started.'
+            : 'There are no records in this view matching your participation history.'
+        }}
+      </p>
+      <a routerLink="/employee/activities" class="btn btn-primary mt-2" id="btn-browse-opportunities">
+        Browse Opportunities
+      </a>
+    </div>
+  </ng-template>
+
+  <!-- Cancel / Withdraw Confirmation Modal (BR-09, FR-18) -->
+  <div
+    class="contract-modal-backdrop"
+    *ngIf="cancelModalItem"
+    (click)="closeCancelModal()"
+    id="cancel-modal"
+  >
+    <div class="contract-modal-card" (click)="$event.stopPropagation()">
+      <div class="contract-badge" style="background: #FDF0EE; color: #A52C22;">Withdraw Participation</div>
+      <h3 class="contract-modal-title" id="cancel-modal-title">Withdraw Registration</h3>
+      <p class="contract-modal-body">
+        Are you sure you want to withdraw from <strong>{{ cancelModalItem.activity?.title }}</strong>?
+        Your reserved place will be released back to the capacity pool so another colleague can participate.
+      </p>
+
+      <div class="contract-detail-box" *ngIf="cancelModalItem.activity">
+        <div class="contract-detail-item">
+          <span class="text-muted">Activity Date</span>
+          <strong>{{ cancelModalItem.activity.startDateTime | date:'mediumDate' }}</strong>
+        </div>
+        <div class="contract-detail-item">
+          <span class="text-muted">Cut-off Deadline</span>
+          <strong>{{ cancelModalItem.activity.registrationCutoff | date:'mediumDate' }}</strong>
         </div>
       </div>
-    </div>
 
-    <ng-template #noRegistrations>
-      <div class="opp-empty-card">
-        <h3 class="opp-empty-title">No Active Registrations</h3>
-        <p class="opp-empty-desc">
-          You have not enrolled in any Service Day activities yet. Browse open initiatives on the Opportunity Board.
-        </p>
-        <a routerLink="/employee/activities" class="btn btn-primary mt-2">
-          Browse Opportunities
-        </a>
+      <!-- Optional Cancellation Reason -->
+      <div class="mb-4">
+        <label for="cancel-reason-input" class="filter-label mb-1 block">Reason for Withdrawal (Optional)</label>
+        <textarea
+          id="cancel-reason-input"
+          class="filter-input"
+          style="width: 100%; height: 75px; resize: vertical; padding: 0.5rem 0.75rem;"
+          placeholder="e.g. Schedule conflict, client milestone, personal emergency..."
+          [(ngModel)]="cancelReason"
+        ></textarea>
       </div>
-    </ng-template>
+
+      <!-- Error in Cancel Modal -->
+      <div *ngIf="cancelError" class="alert alert-error mb-4" id="cancel-modal-error" style="font-size: 0.825rem;">
+        {{ cancelError }}
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeCancelModal()"
+          [disabled]="isCancelling"
+          id="btn-cancel-modal-abort"
+        >
+          Keep Registration
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="background: #A52C22; border-color: #8D251D;"
+          (click)="confirmCancel()"
+          [disabled]="isCancelling"
+          id="btn-confirm-cancel-registration"
+        >
+          {{ isCancelling ? 'Withdrawing...' : 'Confirm Withdrawal' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transfer Activity Modal (BR-10, FR-19 Atomic Transfer) -->
+  <div
+    class="contract-modal-backdrop"
+    *ngIf="transferModalItem"
+    (click)="closeTransferModal()"
+    id="transfer-modal"
+  >
+    <div class="contract-modal-card" style="max-width: 540px;" (click)="$event.stopPropagation()">
+      <div class="contract-badge">Activity Transfer (Atomic)</div>
+      <h3 class="contract-modal-title" id="transfer-modal-title">Transfer Registration</h3>
+      <p class="contract-modal-body">
+        Select a new approved initiative to transfer your participation from <strong>{{ transferModalItem.activity?.title }}</strong>.
+        Your existing place is protected: it will only be released after your new selection passes all capacity and deadline checks.
+      </p>
+
+      <!-- Destination Activities Selector -->
+      <div class="mb-4">
+        <label class="filter-label mb-2 block">Choose Destination Activity</label>
+
+        <div *ngIf="eligibleTransferActivities.length > 0; else noEligibleTargets">
+          <div style="max-height: 220px; overflow-y: auto; padding-right: 4px;">
+            <div
+              *ngFor="let option of eligibleTransferActivities"
+              class="transfer-option-item"
+              [class.selected]="selectedTargetActivityId === option.activity.id"
+              (click)="onSelectTargetActivity(option.activity.id)"
+              [id]="'transfer-opt-' + option.activity.id"
+            >
+              <input
+                type="radio"
+                name="targetActivityRadio"
+                [value]="option.activity.id"
+                [checked]="selectedTargetActivityId === option.activity.id"
+                class="transfer-option-radio"
+              />
+              <div class="flex-1">
+                <div class="font-bold text-sm" style="color: var(--color-deep-slate);">
+                  {{ option.activity.title }}
+                </div>
+                <div class="text-xs text-muted mt-1">
+                  {{ option.activity.startDateTime | date:'mediumDate' }} ({{ option.activity.startDateTime | date:'shortTime' }}–{{ option.activity.endDateTime | date:'shortTime' }}) •
+                  <strong>{{ option.slotSummary.remainingSlots }} spots left</strong>
+                </div>
+                <div class="text-xs" style="color: var(--color-forest);" *ngIf="option.ngo">
+                  {{ option.ngo.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noEligibleTargets>
+          <div class="p-4 text-center" style="background: #F8F9FA; border-radius: 8px; border: 1px solid #E1E8E4; font-size: 0.85rem; color: #5F6B76;">
+            No alternative initiatives currently available for transfer (all other activities have reached full capacity, closed cut-offs, or you are already registered).
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Schedule Overlap Warning for Selected Target (BR-11) -->
+      <div
+        *ngIf="transferOverlappingActivities.length > 0"
+        class="alert alert-warning mb-4"
+        id="transfer-overlap-warning"
+        style="font-size: 0.825rem; line-height: 1.45;"
+      >
+        <div class="font-bold flex items-center gap-1 mb-1">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+          Schedule Overlap Detected
+        </div>
+        <span>
+          Selected activity overlaps with another active registration ('{{ transferOverlappingActivities[0].title }}').
+          Transfer is permitted, but please ensure your availability allows attendance.
+        </span>
+      </div>
+
+      <!-- Optional Transfer Note -->
+      <div class="mb-4">
+        <label for="transfer-reason-input" class="filter-label mb-1 block">Reason / Note for Transfer (Optional)</label>
+        <input
+          id="transfer-reason-input"
+          type="text"
+          class="filter-input"
+          placeholder="e.g. Schedule adjustment, interest in youth education..."
+          [(ngModel)]="transferReason"
+          style="width: 100%;"
+        />
+      </div>
+
+      <!-- Error Display in Transfer Modal -->
+      <div *ngIf="transferError" class="alert alert-error mb-4" id="transfer-modal-error" style="font-size: 0.825rem;">
+        {{ transferError }}
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeTransferModal()"
+          [disabled]="isTransferring"
+          id="btn-transfer-abort"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="confirmTransfer()"
+          [disabled]="isTransferring || !selectedTargetActivityId"
+          id="btn-confirm-transfer"
+        >
+          {{ isTransferring ? 'Transferring...' : 'Confirm Transfer' }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>

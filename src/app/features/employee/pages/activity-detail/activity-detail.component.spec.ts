@@ -5,6 +5,8 @@ import { of, BehaviorSubject } from 'rxjs';
 import { ActivityDetailComponent } from './activity-detail.component';
 import { ActivityService } from '../../../../core/services/activity.service';
 import { DataStoreService } from '../../../../core/services/data-store.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { RegistrationService } from '../../../../core/services/registration.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Activity, NGO, Registration } from '../../../../models';
 
@@ -65,6 +67,21 @@ describe('ActivityDetailComponent (Task 06: Use Case 2)', () => {
       navigate: () => Promise.resolve(true)
     };
 
+    const mockAuthService = {
+      currentUser$: of({
+        id: 'usr-alice',
+        name: 'Alice',
+        email: 'alice@corp.example.com',
+        role: 'EMPLOYEE'
+      })
+    };
+
+    const mockRegistrationService = {
+      canRegister: vi.fn().mockReturnValue({ allowed: true, overlappingActivities: [] }),
+      register: vi.fn().mockReturnValue(of({ id: 'reg-new', employeeId: 'usr-alice', activityId: 'act-1', status: 'ACTIVE' })),
+      getOverlappingActivities: vi.fn().mockReturnValue([])
+    };
+
     await TestBed.configureTestingModule({
       declarations: [ActivityDetailComponent, StatusBadgeComponent],
       imports: [RouterTestingModule],
@@ -75,7 +92,9 @@ describe('ActivityDetailComponent (Task 06: Use Case 2)', () => {
         },
         { provide: Router, useValue: mockRouter },
         { provide: ActivityService, useValue: mockActivityService },
-        { provide: DataStoreService, useValue: mockDataStore }
+        { provide: DataStoreService, useValue: mockDataStore },
+        { provide: AuthService, useValue: mockAuthService },
+        { provide: RegistrationService, useValue: mockRegistrationService }
       ]
     }).compileComponents();
 
@@ -120,5 +139,24 @@ describe('ActivityDetailComponent (Task 06: Use Case 2)', () => {
 
     expect(component.notFound).toBe(true);
     expect(component.activity).toBeNull();
+  });
+
+  it('should open registration modal and register successfully with feedback banner', () => {
+    component.openRegistrationModal();
+    expect(component.showRegistrationModal).toBe(true);
+
+    component.confirmRegistration();
+    expect(component.showRegistrationModal).toBe(false);
+    expect(component.feedbackBanner?.type).toBe('success');
+    expect(component.feedbackBanner?.message).toContain('Successfully registered');
+  });
+
+  it('should prevent registration if user is already registered for this activity', () => {
+    component.isUserRegistered = true;
+    component.openRegistrationModal();
+
+    expect(component.showRegistrationModal).toBe(false);
+    expect(component.feedbackBanner?.type).toBe('error');
+    expect(component.feedbackBanner?.message).toContain('already have an active registration');
   });
 });

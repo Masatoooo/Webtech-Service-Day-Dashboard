@@ -166,20 +166,284 @@ describe('Domain Services & Data Relationship Consistency', () => {
     });
   });
 
-  describe('Registration Rules (BR-08, BR-09, FR-15)', () => {
+  describe('Registration Rules & Business Workflows (Task 07: BR-01, BR-08, BR-09, BR-10, BR-11, FR-15, FR-18, FR-19)', () => {
     it('should prevent duplicate active registration for the same employee and activity', () => {
       expect(() => {
         registrationService.register('usr-emp-1', 'act-1');
       }).toThrowError(/already has an active registration/);
     });
 
-    it('should cancel registration and update timestamp and reason', async () => {
-      const reg = await firstValueFrom(
-        registrationService.cancelRegistration('reg-1', 'Personal emergency')
+    it('should successfully register employee, reduce remaining slots, and generate a notification', async () => {
+      // Act-3 capacity is 15, let's see initial slots
+      const initialSummary = activityService.computeSlotSummary(
+        store.activitiesSnapshot.find((a) => a.id === 'act-3')!,
+        store.registrationsSnapshot
       );
-      expect(reg.status).toBe('CANCELLED');
-      expect(reg.cancellationReason).toBe('Personal emergency');
-      expect(reg.updatedAt).toBeTruthy();
+      const initialRemaining = initialSummary.remainingSlots;
+
+      // Register a user not currently registered for act-3
+      const reg = await firstValueFrom(registrationService.register('usr-emp-1', 'act-3'));
+      expect(reg.id).toBeTruthy();
+      expect(reg.status).toBe('ACTIVE');
+      expect(reg.employeeId).toBe('usr-emp-1');
+      expect(reg.activityId).toBe('act-3');
+
+      // Verify slot deduction
+      const updatedSummary = activityService.computeSlotSummary(
+        store.activitiesSnapshot.find((a) => a.id === 'act-3')!,
+        store.registrationsSnapshot
+      );
+      expect(updatedSummary.remainingSlots).toBe(initialRemaining - 1);
+      expect(updatedSummary.filledSlots).toBe(initialSummary.filledSlots + 1);
+
+      // Verify notification generated
+      const notifs = store.notificationsSnapshot;
+      const regNotif = notifs.find((n) => n.recipientUserId === 'usr-emp-1' && n.activityId === 'act-3' && n.type === 'REGISTRATION');
+      expect(regNotif).toBeTruthy();
+    });
+
+    it('should reject registration when activity capacity is full', () => {
+      // Create test activity with capacity 1 and 1 active registration
+      const fullAct: Activity = {
+        id: 'act-full-test',
+        ngoId: 'ngo-1',
+        title: 'Full Initiative',
+        description: 'Test',
+        serviceType: 'ENVIRONMENT',
+        location: 'Jakarta',
+        startDateTime: '2026-11-20T08:00:00',
+        endDateTime: '2026-11-20T12:00:00',
+        registrationCutoff: '2026-11-18T23:59:59',
+        capacity: 1,
+        publicationStatus: 'PUBLISHED'
+      };
+      const fullReg: Registration = {
+        id: 'reg-full-1',
+        employeeId: 'usr-emp-2',
+        activityId: 'act-full-test',
+        status: 'ACTIVE',
+        registeredAt: '2026-10-01T00:00:00'
+      };
+      store.setActivities([...store.activitiesSnapshot, fullAct]);
+      store.setRegistrations([...store.registrationsSnapshot, fullReg]);
+
+      const check = registrationService.canRegister('usr-emp-1', 'act-full-test');
+      expect(check.allowed).toBe(false);
+      expect(check.reason).toContain('maximum capacity');
+
+      expect(() => {
+        registrationService.register('usr-emp-1', 'act-full-test');
+      }).toThrowError(/maximum capacity/);
+    });
+
+    it('should reject registration when activity cut-off has passed', () => {
+      const pastAct: Activity = {
+        id: 'act-past-test',
+        ngoId: 'ngo-1',
+        title: 'Expired Initiative',
+        description: 'Test',
+        serviceType: 'ENVIRONMENT',
+        location: 'Jakarta',
+        startDateTime: '2026-10-01T08:00:00',
+        endDateTime: '2026-10-01T12:00:00',
+        registrationCutoff: '2026-09-25T23:59:59',
+        capacity: 10,
+        publicationStatus: 'PUBLISHED'
+      };
+      store.setActivities([...store.activitiesSnapshot, pastAct]);
+
+      const check = registrationService.canRegister('usr-emp-1', 'act-past-test');
+      expect(check.allowed).toBe(false);
+      expect(check.reason).toContain('cut-off date');
+
+      expect(() => {
+        registrationService.register('usr-emp-1', 'act-past-test');
+      }).toThrowError(/cut-off date/);
+    });
+
+    it('should reject registration when partner NGO is unapproved or activity not published', () => {
+      // act-9 is unapproved NGO
+      const check = registrationService.canRegister('usr-emp-1', 'act-9');
+      expect(check.allowed).toBe(false);
+      expect(check.reason).toContain('not approved');
+
+      // act-8 is DRAFT
+      const checkDraft = registrationService.canRegister('usr-emp-1', 'act-8');
+      expect(checkDraft.allowed).toBe(false);
+      expect(checkDraft.reason).toContain('draft');
+
+      // act-7 is CANCELLED
+      const checkCancelled = registrationService.canRegister('usr-emp-1', 'act-7');
+      expect(checkCancelled.allowed).toBe(false);
+      expect(checkCancelled.reason).toContain('cancelled');
+    });
+
+    it('should detect schedule overlap without blocking registration (BR-11)', () => {
+      // Find active registration for user
+      const userActive = store.registrationsSnapshot.find((r) => r.employeeId === 'usr-emp-1' && r.status === 'ACTIVE')!;
+      const existingAct = store.activitiesSnapshot.find((a) => a.id === userActive.activityId)!;
+
+      // Create overlapping activity on the exact same date & time
+      const overlapAct: Activity = {
+        id: 'act-overlap-test',
+        ngoId: 'ngo-1',
+        title: 'Simultaneous Initiative',
+        description: 'Overlapping',
+        serviceType: 'COMMUNITY',
+        location: 'Jakarta',
+        startDateTime: existingAct.startDateTime,
+        endDateTime: existingAct.endDateTime,
+        registrationCutoff: '2026-11-20T23:59:59',
+        capacity: 15,
+        publicationStatus: 'PUBLISHED'
+      };
+      store.setActivities([...store.activitiesSnapshot, overlapAct]);
+
+      const check = registrationService.canRegister('usr-emp-1', 'act-overlap-test');
+      expect(check.allowed).toBe(true);
+      expect(check.overlappingActivities?.length).toBeGreaterThan(0);
+      expect(check.overlappingActivities?.[0].id).toBe(existingAct.id);
+    });
+
+    it('should cancel registration before cut-off and restore activity available capacity', async () => {
+      // Get an active registration
+      const reg = store.registrationsSnapshot.find((r) => r.id === 'reg-1')!;
+      const act = store.activitiesSnapshot.find((a) => a.id === reg.activityId)!;
+
+      const beforeSummary = activityService.computeSlotSummary(act, store.registrationsSnapshot);
+      const initialRemaining = beforeSummary.remainingSlots;
+
+      const cancelled = await firstValueFrom(
+        registrationService.cancelRegistration('reg-1', 'Personal schedule conflict')
+      );
+      expect(cancelled.status).toBe('CANCELLED');
+      expect(cancelled.cancellationReason).toBe('Personal schedule conflict');
+
+      // Verify slot is restored
+      const afterSummary = activityService.computeSlotSummary(act, store.registrationsSnapshot);
+      expect(afterSummary.remainingSlots).toBe(initialRemaining + 1);
+
+      // Verify cancellation notification
+      const cancelNotif = store.notificationsSnapshot.find(
+        (n) => n.recipientUserId === reg.employeeId && n.type === 'CANCELLATION'
+      );
+      expect(cancelNotif).toBeTruthy();
+    });
+
+    it('should reject cancellation when cut-off has passed', () => {
+      const expiredAct: Activity = {
+        id: 'act-cutoff-past',
+        ngoId: 'ngo-1',
+        title: 'Locked Initiative',
+        description: 'Test',
+        serviceType: 'ENVIRONMENT',
+        location: 'Jakarta',
+        startDateTime: '2026-10-01T08:00:00',
+        endDateTime: '2026-10-01T12:00:00',
+        registrationCutoff: '2026-09-25T23:59:59', // Past cutoff
+        capacity: 10,
+        publicationStatus: 'PUBLISHED'
+      };
+      const reg: Registration = {
+        id: 'reg-locked-test',
+        employeeId: 'usr-emp-1',
+        activityId: 'act-cutoff-past',
+        status: 'ACTIVE',
+        registeredAt: '2026-09-20T00:00:00'
+      };
+      store.setActivities([...store.activitiesSnapshot, expiredAct]);
+      store.setRegistrations([...store.registrationsSnapshot, reg]);
+
+      const check = registrationService.canCancelRegistration('reg-locked-test');
+      expect(check.allowed).toBe(false);
+      expect(check.reason).toContain('cut-off deadline');
+
+      expect(() => {
+        registrationService.cancelRegistration('reg-locked-test');
+      }).toThrowError(/cut-off deadline/);
+    });
+
+    it('should perform atomic transfer: destination validated first, old registration cancelled, new registration created', async () => {
+      // Find an active registration for usr-emp-2
+      const reg = store.registrationsSnapshot.find((r) => r.employeeId === 'usr-emp-2' && r.status === 'ACTIVE')!;
+      const oldActId = reg.activityId;
+      // Transfer to act-4
+      const targetActId = 'act-4';
+
+      const result = await firstValueFrom(
+        registrationService.transferRegistration(reg.id, targetActId, 'Switched focus area')
+      );
+
+      expect(result.oldRegistration.status).toBe('CANCELLED');
+      expect(result.oldRegistration.cancellationReason).toBe('Switched focus area');
+      expect(result.newRegistration.status).toBe('ACTIVE');
+      expect(result.newRegistration.activityId).toBe(targetActId);
+      expect(result.newRegistration.employeeId).toBe('usr-emp-2');
+
+      // Verify transfer notification generated
+      const transferNotif = store.notificationsSnapshot.find(
+        (n) => n.recipientUserId === 'usr-emp-2' && n.activityId === targetActId && n.title.includes('Transfer')
+      );
+      expect(transferNotif).toBeTruthy();
+    });
+
+    it('should preserve original registration when destination activity check fails (atomic transfer rule)', () => {
+      // Create destination that is FULL
+      const fullDest: Activity = {
+        id: 'act-dest-full',
+        ngoId: 'ngo-1',
+        title: 'Full Destination',
+        description: 'Test',
+        serviceType: 'EDUCATION',
+        location: 'Jakarta',
+        startDateTime: '2026-11-20T08:00:00',
+        endDateTime: '2026-11-20T12:00:00',
+        registrationCutoff: '2026-11-18T23:59:59',
+        capacity: 1,
+        publicationStatus: 'PUBLISHED'
+      };
+      const existingRegInDest: Registration = {
+        id: 'reg-dest-1',
+        employeeId: 'usr-emp-9',
+        activityId: 'act-dest-full',
+        status: 'ACTIVE',
+        registeredAt: '2026-10-01T00:00:00'
+      };
+      // Active source registration for usr-emp-3
+      const sourceReg: Registration = {
+        id: 'reg-source-test',
+        employeeId: 'usr-emp-3',
+        activityId: 'act-1',
+        status: 'ACTIVE',
+        registeredAt: '2026-10-01T00:00:00'
+      };
+
+      store.setActivities([...store.activitiesSnapshot, fullDest]);
+      store.setRegistrations([...store.registrationsSnapshot, fullDest as any, existingRegInDest, sourceReg]);
+
+      // Attempt transfer to full destination
+      expect(() => {
+        registrationService.transferRegistration('reg-source-test', 'act-dest-full');
+      }).toThrowError(/full capacity/);
+
+      // Verify source registration is completely PRESERVED and untouched
+      const sourceAfter = store.registrationsSnapshot.find((r) => r.id === 'reg-source-test');
+      expect(sourceAfter?.status).toBe('ACTIVE');
+    });
+
+    it('should reject transfer when destination is identical to source activity', () => {
+      const sourceReg: Registration = {
+        id: 'reg-identical-test',
+        employeeId: 'usr-emp-1',
+        activityId: 'act-1',
+        status: 'ACTIVE',
+        registeredAt: '2026-10-01T00:00:00'
+      };
+      store.setRegistrations([...store.registrationsSnapshot, sourceReg]);
+
+      const check = registrationService.canTransferRegistration('reg-identical-test', 'act-1');
+      expect(check.allowed).toBe(false);
+      expect(check.reason).toContain('identical');
     });
   });
 

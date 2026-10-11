@@ -5,6 +5,8 @@ import { of } from 'rxjs';
 import { OpportunityListComponent } from './opportunity-list.component';
 import { ActivityService } from '../../../../core/services/activity.service';
 import { DataStoreService } from '../../../../core/services/data-store.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { RegistrationService } from '../../../../core/services/registration.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { FormsModule } from '@angular/forms';
 import { Activity, NGO, Registration } from '../../../../models';
@@ -112,12 +114,29 @@ describe('OpportunityListComponent (Task 06: Use Case 2)', () => {
       registrations$: of(mockRegistrations)
     };
 
+    const mockAuthService = {
+      currentUser$: of({
+        id: 'usr-alice',
+        name: 'Alice',
+        email: 'alice@corp.example.com',
+        role: 'EMPLOYEE'
+      })
+    };
+
+    const mockRegistrationService = {
+      canRegister: vi.fn().mockReturnValue({ allowed: true, overlappingActivities: [] }),
+      register: vi.fn().mockReturnValue(of({ id: 'reg-new', employeeId: 'usr-alice', activityId: 'act-1', status: 'ACTIVE' })),
+      getOverlappingActivities: vi.fn().mockReturnValue([])
+    };
+
     await TestBed.configureTestingModule({
       declarations: [OpportunityListComponent, StatusBadgeComponent],
       imports: [FormsModule, RouterTestingModule],
       providers: [
         { provide: ActivityService, useValue: mockActivityService },
-        { provide: DataStoreService, useValue: mockDataStore }
+        { provide: DataStoreService, useValue: mockDataStore },
+        { provide: AuthService, useValue: mockAuthService },
+        { provide: RegistrationService, useValue: mockRegistrationService }
       ]
     }).compileComponents();
 
@@ -194,5 +213,42 @@ describe('OpportunityListComponent (Task 06: Use Case 2)', () => {
 
     component.closeRegistrationContract();
     expect(component.contractModalItem).toBeNull();
+  });
+
+  it('should open registration modal and execute registration successfully with feedback banner', () => {
+    const item = component.allOpportunities[0];
+    component.openRegistrationModal(item);
+    expect(component.registerModalItem).toBe(item);
+
+    component.confirmRegistration();
+    expect(component.registerModalItem).toBeNull();
+    expect(component.feedbackBanner?.type).toBe('success');
+    expect(component.feedbackBanner?.message).toContain('Successfully registered');
+  });
+
+  it('should detect and display schedule overlap warning when registering', () => {
+    const regService = TestBed.inject(RegistrationService) as any;
+    vi.spyOn(regService, 'canRegister').mockReturnValue({
+      allowed: true,
+      overlappingActivities: [component.allOpportunities[1].activity]
+    });
+
+    const item = component.allOpportunities[0];
+    component.openRegistrationModal(item);
+
+    expect(component.overlappingActivities.length).toBe(1);
+    expect(component.overlappingActivities[0].id).toBe('act-2');
+  });
+
+  it('should prevent registration if employee is already enrolled in the activity', () => {
+    // Simulate user already registered for act-1
+    component.registeredActivityIds.add('act-1');
+
+    const item = component.allOpportunities[0];
+    component.openRegistrationModal(item);
+
+    expect(component.registerModalItem).toBeNull();
+    expect(component.feedbackBanner?.type).toBe('error');
+    expect(component.feedbackBanner?.message).toContain('already have an active registration');
   });
 });

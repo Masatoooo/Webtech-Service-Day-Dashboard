@@ -113,6 +113,14 @@ export class ActivityService {
     return of(true);
   }
 
+  parseCutoff(cutoffStr: string): Date {
+    if (!cutoffStr) return new Date();
+    if (cutoffStr.length === 10 && !cutoffStr.includes('T')) {
+      return new Date(`${cutoffStr}T23:59:59`);
+    }
+    return new Date(cutoffStr);
+  }
+
   /**
    * BR-02 / BR-03 / FR-22: Slot calculations derived from active registrations.
    * Slot terisi = jumlah pendaftaran aktif.
@@ -132,7 +140,7 @@ export class ActivityService {
 
     let availabilityStatus: ActivityAvailabilityStatus = 'AVAILABLE';
     const now = new Date();
-    const cutoffDate = new Date(activity.registrationCutoff);
+    const cutoffDate = this.parseCutoff(activity.registrationCutoff);
 
     if (activity.publicationStatus === 'CANCELLED') {
       availabilityStatus = 'CANCELLED';
@@ -174,6 +182,6 @@ export class ActivityService {
   }
 
   isCutoffPassed(activity: Activity): boolean {
-    return new Date() > new Date(activity.registrationCutoff);
+    return new Date() > this.parseCutoff(activity.registrationCutoff);
   }
 }

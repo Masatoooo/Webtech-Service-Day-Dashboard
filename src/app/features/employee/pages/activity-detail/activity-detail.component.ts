@@ -1,15 +1,19 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, combineLatest } from 'rxjs';
+import { Subject, combineLatest, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityService } from '../../../../core/services/activity.service';
 import { DataStoreService } from '../../../../core/services/data-store.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { RegistrationService } from '../../../../core/services/registration.service';
 import {
   Activity,
   NGO,
   ActivitySlotSummary,
   ActivityAvailabilityStatus,
-  ServiceType
+  ServiceType,
+  User,
+  Registration
 } from '../../../../models';
 
 export interface VolunteerExpectation {
@@ -34,7 +38,21 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   notFound: boolean = false;
 
-  // Task 06 clean registration contract feedback banner
+  // Logged in user & enrollment state
+  currentUser: User | null = null;
+  isUserRegistered: boolean = false;
+  userRegistration: Registration | null = null;
+
+  // Task 07 Active Registration Modal State
+  showRegistrationModal: boolean = false;
+  overlappingActivities: Activity[] = [];
+  isSubmittingRegistration: boolean = false;
+  registrationModalError: string | null = null;
+
+  // Toast / Feedback banner
+  feedbackBanner: { type: 'success' | 'error'; message: string } | null = null;
+
+  // Legacy/Contract notice compatibility
   showContractNotice: boolean = false;
 
   constructor(
@@ -42,7 +60,9 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly activityService: ActivityService,
     private readonly dataStore: DataStoreService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    @Optional() private readonly authService?: AuthService,
+    @Optional() private readonly registrationService?: RegistrationService
   ) {}
 
   ngOnInit(): void {
@@ -64,14 +84,19 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
 
   private loadActivityDetails(): void {
     this.isLoading = true;
+    const user$ = this.authService ? this.authService.currentUser$ : of(null);
+
     combineLatest([
       this.activityService.getActivityById(this.activityId),
       this.dataStore.ngos$,
-      this.dataStore.registrations$
+      this.dataStore.registrations$,
+      user$
     ])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([act, ngos, registrations]) => {
+      .subscribe(([act, ngos, registrations, user]) => {
         this.isLoading = false;
+        this.currentUser = user;
+
         if (!act) {
           this.notFound = true;
           this.activity = null;
@@ -83,6 +108,18 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
         this.notFound = false;
         this.ngo = ngos.find((n) => n.id === act.ngoId) || null;
         this.slotSummary = this.activityService.computeSlotSummary(act, registrations);
+
+        if (user) {
+          const reg = registrations.find(
+            (r) => r.employeeId === user.id && r.activityId === act.id && r.status === 'ACTIVE'
+          );
+          this.isUserRegistered = !!reg;
+          this.userRegistration = reg || null;
+        } else {
+          this.isUserRegistered = false;
+          this.userRegistration = null;
+        }
+
         this.cdr.markForCheck();
       });
   }
@@ -212,8 +249,91 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
     return status === 'AVAILABLE' || status === 'ALMOST_FULL';
   }
 
+  openRegistrationModal(): void {
+    this.feedbackBanner = null;
+    this.registrationModalError = null;
+
+    if (!this.currentUser) {
+      this.feedbackBanner = {
+        type: 'error',
+        message: 'Please sign in to register for activities.'
+      };
+      return;
+    }
+
+    if (this.isUserRegistered) {
+      this.feedbackBanner = {
+        type: 'error',
+        message: 'You already have an active registration for this initiative.'
+      };
+      return;
+    }
+
+    if (!this.activity) return;
+
+    if (this.registrationService) {
+      const check = this.registrationService.canRegister(this.currentUser.id, this.activity.id);
+      if (!check.allowed) {
+        this.feedbackBanner = {
+          type: 'error',
+          message: check.reason || 'This activity cannot accept registrations.'
+        };
+        return;
+      }
+      this.overlappingActivities = check.overlappingActivities || [];
+    } else {
+      this.overlappingActivities = [];
+    }
+
+    this.showRegistrationModal = true;
+    this.cdr.markForCheck();
+  }
+
+  confirmRegistration(): void {
+    if (!this.activity || !this.currentUser) return;
+
+    if (!this.registrationService) {
+      this.closeRegistrationModal();
+      return;
+    }
+
+    this.isSubmittingRegistration = true;
+    this.registrationModalError = null;
+
+    try {
+      this.registrationService.register(this.currentUser.id, this.activity.id).subscribe({
+        next: (reg) => {
+          this.feedbackBanner = {
+            type: 'success',
+            message: `Successfully registered for "${this.activity?.title}"! 1 spot reserved.`
+          };
+          this.isSubmittingRegistration = false;
+          this.showRegistrationModal = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isSubmittingRegistration = false;
+          this.registrationModalError = err?.message || 'Registration failed.';
+          this.cdr.markForCheck();
+        }
+      });
+    } catch (err: any) {
+      this.isSubmittingRegistration = false;
+      this.registrationModalError = err?.message || 'Registration failed.';
+      this.cdr.markForCheck();
+    }
+  }
+
+  closeRegistrationModal(): void {
+    this.showRegistrationModal = false;
+    this.overlappingActivities = [];
+    this.registrationModalError = null;
+    this.cdr.markForCheck();
+  }
+
   triggerRegistrationContract(): void {
     this.showContractNotice = true;
+    this.openRegistrationModal();
     if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
       try {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -224,6 +344,10 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
 
   dismissContractNotice(): void {
     this.showContractNotice = false;
+  }
+
+  dismissFeedbackBanner(): void {
+    this.feedbackBanner = null;
   }
 
   getCategoryLabel(type?: ServiceType): string {
