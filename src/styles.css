@@ -2576,3 +2576,199 @@ hr,
   accent-color: var(--color-forest);
 }
 
+/* ==========================================================================
+   ADMINISTRATOR DASHBOARD & PARTICIPATION MONITORING (Task 08)
+   ========================================================================== */
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-kpi-card {
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(32, 44, 59, 0.04);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-kpi-card:hover {
+  border-color: #CAD2D6;
+  box-shadow: 0 3px 8px rgba(32, 44, 59, 0.06);
+}
+
+.kpi-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-secondary-text);
+  margin-bottom: 0.35rem;
+}
+
+.kpi-num {
+  font-family: var(--font-interface);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-deep-slate);
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+}
+
+.kpi-sub {
+  font-size: 0.775rem;
+  color: var(--color-secondary-text);
+  line-height: 1.35;
+}
+
+.kpi-progress-bar {
+  height: 5px;
+  background: #E8ECEE;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.kpi-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--color-forest);
+  transition: width 0.3s ease;
+}
+
+/* Needs Attention / Operational Triage Radar */
+.attention-card {
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(32, 44, 59, 0.03);
+  margin-bottom: 1.5rem;
+}
+
+.attention-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.attention-item {
+  border: 1px solid var(--color-border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: #FAFBFB;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.attention-item:hover {
+  background: var(--color-surface-white);
+  box-shadow: 0 2px 6px rgba(32, 44, 59, 0.05);
+}
+
+.attention-item.severity-high {
+  border-left-color: #A52C22;
+  background: #FDF9F8;
+}
+
+.attention-item.severity-medium {
+  border-left-color: #845D16;
+  background: #FDFBF7;
+}
+
+.attention-item.severity-info {
+  border-left-color: #1F486B;
+  background: #F8FAFC;
+}
+
+.attention-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0.35rem;
+}
+
+.badge-high {
+  background: #FCE8E6;
+  color: #A52C22;
+}
+
+.badge-medium {
+  background: #FBF0D9;
+  color: #845D16;
+}
+
+.badge-info {
+  background: #E5EFF7;
+  color: #1F486B;
+}
+
+.attention-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-deep-slate);
+  margin-bottom: 0.25rem;
+}
+
+.attention-detail {
+  font-size: 0.775rem;
+  color: var(--color-secondary-text);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* Operational Tables & Rosters */
+.dash-table-wrap {
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(32, 44, 59, 0.04);
+}
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.825rem;
+}
+
+.dash-table th {
+  background: #F4F6F5;
+  color: var(--color-deep-slate);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.dash-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #EDF2EF;
+  color: var(--color-deep-slate);
+  vertical-align: middle;
+}
+
+.dash-table tbody tr:hover {
+  background: #FAFBFB;
+}
+
+.dash-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+

@@ -1,5 +1,5 @@
 <div class="dashboard-viewport">
-  <!-- Top Greeting & Header Bar (Matching Reference Screenshot) -->
+  <!-- Top Greeting & Header Bar -->
   <header class="dash-top-bar flex justify-between items-center mb-6">
     <div class="dash-greeting-block">
       <h1 class="dash-greeting-title">
@@ -9,194 +9,604 @@
     </div>
 
     <div class="dash-top-actions flex items-center gap-3">
-      <!-- Quick Search Trigger -->
-      <a routerLink="/admin/activities" class="dash-search-btn" title="Search activities">
-        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
-          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-        </svg>
-      </a>
-
-      <!-- Primary Action: New Activity (Matching "Add New Project" button) -->
+      <!-- Activity Management CTA -->
       <a
         routerLink="/admin/activities"
         class="btn-dash-action"
-        id="btn-add-activity"
+        id="btn-admin-manage-activities"
       >
         <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
           <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
-        <span>Manage Activities</span>
+        <span>Activity Management</span>
       </a>
     </div>
   </header>
 
-  <!-- 3 Top Colorful Highlight Cards (Matching 3 Rounded Cards in Reference Screenshot) -->
-  <section class="dash-cards-row grid grid-cols-3 gap-4 mb-6" *ngIf="metrics$ | async as m">
-    <!-- Card 1: Deep Slate / Purple -->
-    <div class="dash-stat-card card-slate" routerLink="/admin/activities">
-      <div class="stat-card-header flex justify-between items-center">
-        <span class="stat-pill pill-slate">+{{ m.totalActivities }} Total</span>
-        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
-      </div>
-      <div class="stat-card-body">
-        <h2 class="stat-card-title">Managed Activities</h2>
-        <div class="stat-card-meta flex justify-between items-center">
-          <span>{{ m.publishedActivities }} published</span>
-          <span>{{ m.publishedPct }}%</span>
+  <!-- Scope 1 & 2: Executive KPI Totals Overview (Reconciled with Business Rules) -->
+  <section class="mb-6" *ngIf="totals$ | async as m">
+    <div class="admin-kpi-grid">
+      <!-- Total Activities -->
+      <div class="admin-kpi-card" id="kpi-total-activities">
+        <div class="kpi-label">Total Activities</div>
+        <div class="kpi-num" id="kpi-val-activities">{{ m.totalActivities }}</div>
+        <div class="kpi-sub">
+          <strong>{{ m.publishedActivities }}</strong> published initiatives
         </div>
-        <div class="stat-progress-track">
-          <div class="stat-progress-bar" [style.width.%]="m.publishedPct"></div>
+      </div>
+
+      <!-- Total Offered Places -->
+      <div class="admin-kpi-card" id="kpi-total-capacity">
+        <div class="kpi-label">Offered Places</div>
+        <div class="kpi-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</div>
+        <div class="kpi-sub">
+          Max capacity across programs
+        </div>
+      </div>
+
+      <!-- Places Taken (Active Registrations) -->
+      <div class="admin-kpi-card" id="kpi-places-taken">
+        <div class="kpi-label">Places Taken</div>
+        <div class="kpi-num" style="color: var(--color-forest);" id="kpi-val-taken">{{ m.placesTaken }}</div>
+        <div class="kpi-sub">
+          <strong>{{ m.activeRegistrations }}</strong> confirmed volunteer spots
+        </div>
+      </div>
+
+      <!-- Places Remaining -->
+      <div class="admin-kpi-card" id="kpi-places-remaining">
+        <div class="kpi-label">Places Remaining</div>
+        <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#845D16' : '#202C3B'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
+        <div class="kpi-sub">
+          Open capacity for staff sign-up
+        </div>
+      </div>
+
+      <!-- Capacity Utilisation -->
+      <div class="admin-kpi-card" id="kpi-utilisation">
+        <div class="kpi-label">Capacity Utilisation</div>
+        <div class="kpi-num" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</div>
+        <div class="kpi-sub">
+          {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
+        </div>
+        <div class="kpi-progress-bar">
+          <div
+            class="kpi-progress-fill"
+            [style.width.%]="m.capacityUtilisationPct"
+            [style.background]="m.capacityUtilisationPct >= 90 ? '#A52C22' : m.capacityUtilisationPct >= 70 ? '#845D16' : '#356859'"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Partner NGOs & Enrollment Ratio -->
+      <div class="admin-kpi-card" id="kpi-ngos-ratio">
+        <div class="kpi-label">Partner NGOs & History</div>
+        <div class="kpi-num" id="kpi-val-ngos">{{ m.totalNgos }}</div>
+        <div class="kpi-sub">
+          {{ m.approvedNgos }} approved • {{ m.cancelledRegistrations }} withdrawn
         </div>
       </div>
     </div>
 
-    <!-- Card 2: Forest Teal / Cyan -->
-    <div class="dash-stat-card card-teal" routerLink="/admin/activities">
-      <div class="stat-card-header flex justify-between items-center">
-        <span class="stat-pill pill-teal">+{{ m.totalNgos }} NGOs</span>
-        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
+    <div class="text-xs text-muted" style="margin-top: -0.5rem; margin-bottom: 1.5rem; font-style: italic;">
+      * Figures derived dynamically from central observables (demo session data store). Slot counts reconcile: Total Offered = Taken + Remaining.
+    </div>
+  </section>
+
+  <!-- Scope 4: Operational Triage & "Needs Attention" Radar -->
+  <section class="attention-card mb-6" id="section-needs-attention">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="dash-section-title" style="margin: 0;">Operational Attention Radar</h2>
+        <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
+          Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
+        </p>
       </div>
-      <div class="stat-card-body">
-        <h2 class="stat-card-title">Partner NGOs</h2>
-        <div class="stat-card-meta flex justify-between items-center">
-          <span>{{ m.approvedNgos }} approved</span>
-          <span>100% active</span>
+      <span class="stat-pill pill-slate" id="badge-attention-count">
+        {{ needsAttentionItems.length }} alert(s)
+      </span>
+    </div>
+
+    <div class="attention-grid" *ngIf="needsAttentionItems.length > 0; else noAttentionTemplate">
+      <div
+        *ngFor="let item of needsAttentionItems"
+        class="attention-item"
+        [ngClass]="'severity-' + item.severity"
+        [id]="'attention-item-' + item.activity.id"
+      >
+        <div>
+          <span
+            class="attention-badge"
+            [ngClass]="item.severity === 'high' ? 'badge-high' : item.severity === 'medium' ? 'badge-medium' : 'badge-info'"
+          >
+            {{
+              item.type === 'CAPACITY_FULL' ? 'Capacity Full' :
+              item.type === 'ALMOST_FULL' ? 'Almost Full' :
+              item.type === 'APPROACHING_CUTOFF' ? 'Cut-off Closed' :
+              'Low Sign-up'
+            }}
+          </span>
+          <div class="attention-title">{{ item.activity.title }}</div>
+          <div class="attention-detail">{{ item.detail }}</div>
         </div>
-        <div class="stat-progress-track">
-          <div class="stat-progress-bar" style="width: 100%;"></div>
+
+        <div class="flex justify-between items-center mt-2 pt-2" style="border-top: 1px solid rgba(0,0,0,0.06);">
+          <span class="text-xs text-muted">{{ item.ngoName }}</span>
+          <div class="flex gap-1">
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              style="padding: 0.2rem 0.5rem; font-size: 0.725rem;"
+              (click)="filterRosterByActivity(item.activity.id)"
+              title="Inspect participant roster"
+            >
+              Roster
+            </button>
+            <a
+              routerLink="/admin/activities"
+              class="btn btn-sm btn-primary"
+              style="padding: 0.2rem 0.5rem; font-size: 0.725rem;"
+              title="Open in activity management"
+            >
+              Manage
+            </a>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Card 3: Warm Brass / Coral -->
-    <div class="dash-stat-card card-brass" routerLink="/admin/activities">
-      <div class="stat-card-header flex justify-between items-center">
-        <span class="stat-pill pill-brass">+{{ m.totalCapacity }} Slots</span>
-        <div class="stat-icon-wrap" aria-hidden="true">&bull;&bull;&bull;</div>
+    <ng-template #noAttentionTemplate>
+      <div class="p-4 text-center text-muted text-sm mt-3" style="background: #FAFBFB; border-radius: 8px; border: 1px solid #E1E8E4;">
+        ✓ All active initiatives are operating smoothly within nominal capacity thresholds and cut-off deadlines.
       </div>
-      <div class="stat-card-body">
-        <h2 class="stat-card-title">Volunteer Capacity</h2>
-        <div class="stat-card-meta flex justify-between items-center">
-          <span>{{ m.enrolledSlots }} enrolled</span>
-          <span>{{ m.utilisationPct }}%</span>
+    </ng-template>
+  </section>
+
+  <!-- Scope 3 & 6: Activity-by-Activity Operational Table -->
+  <section class="mb-8" id="section-operational-activities">
+    <div class="flex justify-between items-center mb-3">
+      <div>
+        <h2 class="dash-section-title" style="margin: 0;">Activity Operational Monitoring</h2>
+        <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
+          Real-time reconciliation of capacity, filled places, and cut-off statuses across corporate initiatives.
+        </p>
+      </div>
+    </div>
+
+    <!-- Search & Filter Card -->
+    <div class="opp-filter-card mb-4">
+      <div class="opp-filter-grid">
+        <!-- Search Input -->
+        <div class="filter-field">
+          <label for="admin-act-search" class="filter-label">Search Activities & NGOs</label>
+          <div class="filter-input-wrap">
+            <svg class="filter-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+            <input
+              id="admin-act-search"
+              type="text"
+              class="filter-input"
+              placeholder="Search by title, NGO, or location..."
+              [(ngModel)]="activitySearchTerm"
+            />
+          </div>
         </div>
-        <div class="stat-progress-track">
-          <div class="stat-progress-bar" [style.width.%]="m.utilisationPct"></div>
+
+        <!-- Focus Area Filter -->
+        <div class="filter-field">
+          <label for="admin-filter-category" class="filter-label">Focus Area</label>
+          <select
+            id="admin-filter-category"
+            class="filter-select"
+            [(ngModel)]="selectedCategory"
+          >
+            <option value="ALL">All Categories</option>
+            <option value="ENVIRONMENT">Environment & Nature</option>
+            <option value="EDUCATION">Education & Youth</option>
+            <option value="FOOD_SECURITY">Food Security</option>
+            <option value="COMMUNITY">Community Support</option>
+            <option value="HEALTH">Public Health</option>
+          </select>
         </div>
+
+        <!-- Availability Status Filter -->
+        <div class="filter-field">
+          <label for="admin-filter-status" class="filter-label">Operational Status</label>
+          <select
+            id="admin-filter-status"
+            class="filter-select"
+            [(ngModel)]="selectedStatus"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="AVAILABLE">Available</option>
+            <option value="ALMOST_FULL">Almost Full</option>
+            <option value="FULL">Capacity Full</option>
+            <option value="REGISTRATION_CLOSED">Registration Closed</option>
+            <option value="CANCELLED">Cancelled</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="filter-field">
+          <label class="filter-label" style="opacity: 0;">Reset</label>
+          <button
+            type="button"
+            class="btn btn-secondary flex items-center justify-center gap-1"
+            (click)="resetActivityFilters()"
+            id="btn-reset-operational-filters"
+            style="height: 40px; font-size: 0.825rem; font-weight: 600;"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="dash-table-wrap">
+      <div style="overflow-x: auto;">
+        <table class="dash-table" aria-label="Activity Operational Monitoring Table">
+          <thead>
+            <tr>
+              <th scope="col" style="min-width: 220px;">Activity & Category</th>
+              <th scope="col" style="min-width: 150px;">Partner NGO</th>
+              <th scope="col" style="min-width: 130px;">Schedule</th>
+              <th scope="col" style="min-width: 90px; text-align: center;">Capacity</th>
+              <th scope="col" style="min-width: 90px; text-align: center;">Filled</th>
+              <th scope="col" style="min-width: 100px; text-align: center;">Remaining</th>
+              <th scope="col" style="min-width: 120px;">Utilisation</th>
+              <th scope="col" style="min-width: 120px;">Cut-off</th>
+              <th scope="col" style="min-width: 130px;">Status</th>
+              <th scope="col" style="min-width: 140px; text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let row of filteredOperationalRows"
+              [id]="'row-act-' + row.activity.id"
+            >
+              <!-- Activity & Category -->
+              <td>
+                <div class="font-bold" style="color: var(--color-deep-slate);">
+                  {{ row.activity.title }}
+                </div>
+                <div class="flex items-center gap-2 mt-1">
+                  <span
+                    class="badge-category"
+                    style="font-size: 0.675rem; padding: 2px 6px;"
+                    [ngClass]="'category-' + row.activity.serviceType.toLowerCase()"
+                  >
+                    {{ getCategoryLabel(row.activity.serviceType) }}
+                  </span>
+                  <span class="text-xs text-muted">#{{ row.activity.id }}</span>
+                </div>
+              </td>
+
+              <!-- Partner NGO -->
+              <td>
+                <div class="font-medium" *ngIf="row.ngo">
+                  {{ row.ngo.name }}
+                </div>
+                <div class="text-xs text-muted" *ngIf="!row.ngo">Vetted NGO</div>
+              </td>
+
+              <!-- Schedule -->
+              <td>
+                <div class="font-medium">
+                  {{ row.activity.startDateTime | date:'mediumDate' }}
+                </div>
+                <div class="text-xs text-muted">
+                  {{ row.activity.startDateTime | date:'shortTime' }} – {{ row.activity.endDateTime | date:'shortTime' }}
+                </div>
+              </td>
+
+              <!-- Offered Capacity -->
+              <td style="text-align: center;" class="font-bold">
+                {{ row.activity.capacity }}
+              </td>
+
+              <!-- Filled Places -->
+              <td style="text-align: center;" class="font-bold" style="color: var(--color-forest);">
+                {{ row.slotSummary.filledSlots }}
+              </td>
+
+              <!-- Remaining Places (Clamped at 0) -->
+              <td style="text-align: center;">
+                <span
+                  class="font-bold"
+                  [style.color]="row.slotSummary.remainingSlots <= 3 ? '#845D16' : '#235C49'"
+                >
+                  {{ row.slotSummary.remainingSlots }}
+                </span>
+              </td>
+
+              <!-- Utilisation -->
+              <td>
+                <div class="flex justify-between text-xs mb-1 font-medium">
+                  <span>{{ row.slotSummary.utilisationPercentage }}%</span>
+                </div>
+                <div style="height: 5px; background: #E8ECEE; border-radius: 3px; overflow: hidden; width: 100%;">
+                  <div
+                    [style.width.%]="row.slotSummary.utilisationPercentage"
+                    [style.background]="
+                      row.slotSummary.availabilityStatus === 'FULL' ? '#A52C22' :
+                      row.slotSummary.availabilityStatus === 'ALMOST_FULL' ? '#845D16' : '#356859'
+                    "
+                    style="height: 100%;"
+                  ></div>
+                </div>
+              </td>
+
+              <!-- Cut-off Deadline -->
+              <td>
+                <div [style.color]="row.isCutoffPassed ? '#A52C22' : 'inherit'">
+                  {{ row.activity.registrationCutoff | date:'mediumDate' }}
+                </div>
+                <div *ngIf="row.isCutoffPassed" class="text-xs" style="color: #A52C22; font-weight: 600;">
+                  Locked
+                </div>
+              </td>
+
+              <!-- Status Badge -->
+              <td>
+                <div [ngSwitch]="row.slotSummary.availabilityStatus">
+                  <span *ngSwitchCase="'AVAILABLE'" class="avail-pill avail-pill-available" style="padding: 2px 8px; font-size: 0.725rem;">
+                    Available
+                  </span>
+                  <span *ngSwitchCase="'ALMOST_FULL'" class="avail-pill avail-pill-almost" style="padding: 2px 8px; font-size: 0.725rem;">
+                    Almost Full
+                  </span>
+                  <span *ngSwitchCase="'FULL'" class="avail-pill avail-pill-full" style="padding: 2px 8px; font-size: 0.725rem;">
+                    Full
+                  </span>
+                  <span *ngSwitchCase="'REGISTRATION_CLOSED'" class="avail-pill avail-pill-closed" style="padding: 2px 8px; font-size: 0.725rem;">
+                    Closed
+                  </span>
+                  <span *ngSwitchCase="'CANCELLED'" class="avail-pill avail-pill-cancelled" style="padding: 2px 8px; font-size: 0.725rem;">
+                    Cancelled
+                  </span>
+                  <span *ngSwitchCase="'COMPLETED'" class="avail-pill avail-pill-completed" style="padding: 2px 8px; font-size: 0.725rem;">
+                    Completed
+                  </span>
+                </div>
+              </td>
+
+              <!-- Actions -->
+              <td style="text-align: right;">
+                <div class="flex justify-end gap-1">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary"
+                    (click)="filterRosterByActivity(row.activity.id)"
+                    [id]="'btn-roster-' + row.activity.id"
+                    title="View registered staff roster"
+                  >
+                    Roster
+                  </button>
+                  <a
+                    routerLink="/admin/activities"
+                    class="btn btn-sm btn-secondary"
+                    title="Edit activity"
+                  >
+                    Edit
+                  </a>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="filteredOperationalRows.length === 0">
+              <td colspan="10" class="text-center p-6 text-muted">
+                No CSR activities matched your current search and filters.
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
-  <!-- Lower Section: 2 Columns (Main Tasks + Statistics/Spotlight) & Right Calendar Column -->
-  <div class="dash-main-split">
-    <!-- Center-Left Content Area (Tasks + Stats) -->
-    <div class="dash-center-col">
-      <!-- Section: Tasks for Today / Active Initiatives (Matching Reference Screenshot) -->
-      <section class="mb-6">
-        <div class="flex justify-between items-center mb-3">
-          <h2 class="dash-section-title">Active CSR Initiatives</h2>
-          <a routerLink="/admin/activities" class="dash-view-all-link">View all &rarr;</a>
-        </div>
-
-        <div class="dash-tasks-list">
-          <div
-            *ngFor="let item of featuredActivities$ | async"
-            class="dash-task-item"
-            [style.border-left-color]="item.accentColor"
-            routerLink="/admin/activities"
-          >
-            <div class="task-info">
-              <h3 class="task-title">{{ item.activity.title }}</h3>
-              <p class="task-sub text-secondary">
-                {{ item.ngoName }} &bull; {{ item.activity.location }}
-              </p>
-            </div>
-            <div class="task-meta flex items-center gap-3">
-              <span class="task-slots-badge">
-                {{ item.slotSummary.filledSlots }} / {{ item.activity.capacity }} slots
-              </span>
-              <div class="task-status-indicator" [class.status-ready]="item.activity.publicationStatus === 'PUBLISHED'">
-                <svg *ngIf="item.activity.publicationStatus === 'PUBLISHED'" viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section: Statistics Widgets & CSR Spotlight (Matching Reference Screenshot) -->
-      <section class="dash-stats-spotlight-row grid grid-cols-2 gap-4">
-        <!-- Quick Metric Chips -->
-        <div class="dash-sub-stats" *ngIf="metrics$ | async as m">
-          <h2 class="dash-section-title mb-3">Participation Stats</h2>
-          <div class="grid grid-cols-2 gap-3 mb-3">
-            <div class="sub-stat-box">
-              <span class="sub-stat-num" id="admin-metric-registrations">{{ m.enrolledSlots }}</span>
-              <span class="sub-stat-lbl">Staff Enrolled</span>
-            </div>
-            <div class="sub-stat-box">
-              <span class="sub-stat-num" id="admin-metric-ngos">{{ m.totalNgos }}</span>
-              <span class="sub-stat-lbl">Partner NGOs</span>
-            </div>
-          </div>
-          <div class="sub-stat-box flex justify-between items-center">
-            <div>
-              <span class="sub-stat-num" id="admin-metric-activities">{{ m.totalActivities }}</span>
-              <span class="sub-stat-lbl">Total Initiatives</span>
-            </div>
-            <a routerLink="/admin/activities" class="btn btn-sm btn-secondary">
-              Open List
-            </a>
-          </div>
-        </div>
-
-        <!-- Impact Spotlight Banner Card (Matching Pro Plan card in reference) -->
-        <div class="dash-spotlight-card">
-          <div class="spotlight-content">
-            <span class="spotlight-tag">CSR IMPACT PLATFORM</span>
-            <h3 class="spotlight-title">Corporate Social Responsibility</h3>
-            <p class="spotlight-desc">
-              Empower employees to contribute time towards marine conservation, food security, and digital literacy.
-            </p>
-            <a routerLink="/admin/activities" class="spotlight-btn">
-              Explore Activities &rarr;
-            </a>
-          </div>
-          <div class="spotlight-graphic" aria-hidden="true">
-            <svg viewBox="0 0 80 80" fill="none" width="70" height="70">
-              <circle cx="40" cy="40" r="36" fill="rgba(255,255,255,0.08)" />
-              <path d="M26 44C22 44 18 40 18 36C18 32 22 28 26 28C30 28 34 32 34 36C34 40 38 44 42 44C46 44 50 40 50 36C50 32 54 28 58 28C62 28 66 32 66 36" stroke="#C9A66B" stroke-width="3" stroke-linecap="round" />
-            </svg>
-          </div>
-        </div>
-      </section>
+  <!-- Scope 5: Participant Monitoring & Attendance Roster (Grouped by Activity) -->
+  <section class="mb-8" id="participant-roster-section">
+    <div class="flex justify-between items-center mb-3">
+      <div>
+        <h2 class="dash-section-title" style="margin: 0;">Participant Roster & Attendance Monitoring</h2>
+        <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
+          Operational participant oversight. Administrative monitoring is read-only; employee withdrawals and transfers are managed via employee space.
+        </p>
+      </div>
     </div>
 
-    <!-- Right Column: Calendar & Upcoming Service Days (Matching Reference Screenshot) -->
-    <aside class="dash-calendar-col">
-      <div class="calendar-panel-header flex justify-between items-center mb-4">
-        <h2 class="dash-section-title">Schedule Calendar</h2>
-        <div class="calendar-bell-icon" title="Notifications">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
-            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-          </svg>
-        </div>
-      </div>
+    <!-- Governance Notice Alert -->
+    <div class="alert alert-info mb-4" style="font-size: 0.8rem; line-height: 1.45;">
+      <strong>Read-Only Governance Policy:</strong> This screen monitors active enrollments and session check-in states across company staff. To preserve data integrity and employee autonomy, registration cancellations and transfers are initiated exclusively by staff participants before deadline cut-offs.
+    </div>
 
-      <div class="calendar-timeline">
-        <div *ngFor="let ev of calendarEvents$ | async" class="timeline-entry">
-          <div class="timeline-date-header">{{ ev.dateHeader }}</div>
-          <div class="timeline-event-card">
-            <div class="timeline-time">{{ ev.timeRange }}</div>
-            <div class="timeline-bar" aria-hidden="true"></div>
-            <div class="timeline-details">
-              <span class="timeline-title">{{ ev.title }}</span>
-              <span class="timeline-location text-secondary">{{ ev.location }}</span>
-            </div>
+    <!-- Roster Filter Controls -->
+    <div class="opp-filter-card mb-4">
+      <div class="opp-filter-grid">
+        <!-- Search Participant -->
+        <div class="filter-field">
+          <label for="roster-search" class="filter-label">Search Participant / Email</label>
+          <div class="filter-input-wrap">
+            <svg class="filter-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+            <input
+              id="roster-search"
+              type="text"
+              class="filter-input"
+              placeholder="Search by staff name, department, or email..."
+              [(ngModel)]="participantSearchTerm"
+            />
           </div>
         </div>
+
+        <!-- Activity Selector Filter -->
+        <div class="filter-field">
+          <label for="roster-filter-activity" class="filter-label">Filter by Activity</label>
+          <select
+            id="roster-filter-activity"
+            class="filter-select"
+            [(ngModel)]="selectedRosterActivityId"
+          >
+            <option value="ALL">All Initiatives ({{ allRosterRows.length }} total records)</option>
+            <option *ngFor="let act of availableActivitiesList" [value]="act.id">
+              {{ act.title }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Registration Status Filter -->
+        <div class="filter-field">
+          <label for="roster-filter-status" class="filter-label">Registration State</label>
+          <select
+            id="roster-filter-status"
+            class="filter-select"
+            [(ngModel)]="selectedRegistrationStatus"
+          >
+            <option value="ALL">All States</option>
+            <option value="ACTIVE">Active Enrollments</option>
+            <option value="CANCELLED">Withdrawn / Cancelled</option>
+          </select>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="filter-field">
+          <label class="filter-label" style="opacity: 0;">Reset</label>
+          <button
+            type="button"
+            class="btn btn-secondary flex items-center justify-center gap-1"
+            (click)="resetRosterFilters()"
+            id="btn-reset-roster-filters"
+            style="height: 40px; font-size: 0.825rem; font-weight: 600;"
+          >
+            Reset
+          </button>
+        </div>
       </div>
-    </aside>
-  </div>
+    </div>
+
+    <!-- Participant Roster Table -->
+    <div class="dash-table-wrap">
+      <div style="overflow-x: auto;">
+        <table class="dash-table" aria-label="Staff Participant Roster Table">
+          <thead>
+            <tr>
+              <th scope="col" style="min-width: 180px;">Participant Staff</th>
+              <th scope="col" style="min-width: 180px;">Corporate Email & Dept</th>
+              <th scope="col" style="min-width: 200px;">Enrolled Initiative</th>
+              <th scope="col" style="min-width: 120px;">Registration State</th>
+              <th scope="col" style="min-width: 130px;">Enrolled Timestamp</th>
+              <th scope="col" style="min-width: 150px;">Attendance Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let row of filteredRosterRows"
+              [id]="'roster-row-' + row.registration.id"
+            >
+              <!-- Participant Name & ID -->
+              <td>
+                <div class="font-bold" style="color: var(--color-deep-slate);">
+                  {{ row.user?.name || 'Staff Member' }}
+                </div>
+                <div class="text-xs text-muted">ID: {{ row.registration.employeeId }}</div>
+              </td>
+
+              <!-- Corporate Email & Department -->
+              <td>
+                <div class="font-medium text-xs">
+                  {{ row.user?.email || 'N/A' }}
+                </div>
+                <div class="text-xs text-muted">
+                  {{ row.user?.department || 'General Staff' }}
+                </div>
+              </td>
+
+              <!-- Activity Enrolled -->
+              <td>
+                <div class="font-bold text-xs" style="color: var(--color-deep-slate);">
+                  {{ row.activity?.title || 'Activity #' + row.registration.activityId }}
+                </div>
+                <div class="text-xs text-muted" *ngIf="row.activity">
+                  {{ row.activity.startDateTime | date:'mediumDate' }}
+                </div>
+              </td>
+
+              <!-- Registration State -->
+              <td>
+                <span
+                  *ngIf="row.registration.status === 'ACTIVE'"
+                  class="badge badge-forest"
+                  style="font-size: 0.725rem; padding: 2px 7px;"
+                  [id]="'roster-status-' + row.registration.id"
+                >
+                  Active
+                </span>
+                <span
+                  *ngIf="row.registration.status === 'CANCELLED'"
+                  class="badge"
+                  style="background: #EEF2F4; color: #5F6B76; border: 1px solid #D1DADC; font-size: 0.725rem; padding: 2px 7px;"
+                  [id]="'roster-status-' + row.registration.id"
+                >
+                  Withdrawn
+                </span>
+                <div
+                  *ngIf="row.registration.cancellationReason"
+                  class="text-xs text-muted mt-1"
+                  style="font-style: italic; max-width: 180px;"
+                >
+                  "{{ row.registration.cancellationReason }}"
+                </div>
+              </td>
+
+              <!-- Enrolled Date -->
+              <td>
+                <div class="text-xs font-medium">
+                  {{ row.registration.registeredAt | date:'mediumDate' }}
+                </div>
+                <div class="text-xs text-muted">
+                  {{ row.registration.registeredAt | date:'shortTime' }}
+                </div>
+              </td>
+
+              <!-- Attendance State (Task 10 Readiness) -->
+              <td>
+                <span
+                  *ngIf="row.attendance?.status === 'CHECKED_IN' || row.attendance?.status === 'PRESENT'"
+                  class="badge badge-forest"
+                  style="font-size: 0.725rem; padding: 2px 7px;"
+                  id="roster-attendance-checked-in"
+                >
+                  ✓ Checked In ({{ row.attendance?.checkedInAt | date:'shortTime' }})
+                </span>
+                <span
+                  *ngIf="!row.attendance && row.registration.status === 'ACTIVE'"
+                  class="badge"
+                  style="background: #EEF3F7; color: #1F486B; border: 1px solid #C7D9E6; font-size: 0.725rem; padding: 2px 7px;"
+                  id="roster-attendance-pending"
+                >
+                  Awaiting Check-in
+                </span>
+                <span
+                  *ngIf="row.registration.status === 'CANCELLED'"
+                  class="text-xs text-muted"
+                >
+                  —
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="filteredRosterRows.length === 0">
+              <td colspan="6" class="text-center p-6 text-muted">
+                No participant registrations matched your search criteria.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 </div>
