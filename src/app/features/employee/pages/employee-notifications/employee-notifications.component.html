@@ -1,63 +1,226 @@
 <div class="employee-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row">
+    <div class="flex justify-between items-center header-row flex-wrap gap-3">
       <div>
-        <div class="role-pretitle">Communications</div>
+        <div class="role-pretitle">Communications & Alerts</div>
         <h1 class="page-title">Notifications & Announcements</h1>
         <p class="header-desc text-muted">
-          Staff announcements, reminder notices, and registration updates.
+          Real-time updates on activity registrations, capacity changes, and corporate service broadcasts.
         </p>
       </div>
-      <div class="header-badge-wrap">
+
+      <div class="header-badge-wrap flex items-center gap-2">
+        <button
+          *ngIf="unreadCount > 0"
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="markAllAsRead()"
+          id="btn-mark-all-read"
+          title="Mark all notifications as read"
+        >
+          Mark all as read
+        </button>
         <app-status-badge variant="forest" label="In-App Updates"></app-status-badge>
       </div>
     </div>
   </header>
 
-  <!-- Contract Notice -->
-  <div class="verification-banner mb-6">
-    <div class="verification-icon-wrap">
-      <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-      </svg>
+  <!-- Metric Summary Row -->
+  <div class="metrics-grid mb-6">
+    <div class="metric-card">
+      <div class="metric-label">Total Notifications</div>
+      <div class="metric-val" id="metric-notif-total">{{ totalCount }}</div>
+      <div class="metric-meta text-muted">All activity & broadcast items</div>
     </div>
-    <div class="verification-info flex-1">
-      <div class="verification-title">Task 06 Navigation Contract</div>
-      <div class="verification-desc text-muted">
-        In-app notifications and scheduled reminders will be fully integrated with registration triggers in <strong>Task 07</strong> and automated broadcasts in <strong>Task 09</strong>.
+
+    <div class="metric-card">
+      <div class="metric-label">Unread Messages</div>
+      <div class="metric-val" [style.color]="unreadCount > 0 ? '#845D16' : '#202C3B'" id="metric-notif-unread">
+        {{ unreadCount }}
       </div>
+      <div class="metric-meta text-muted">
+        {{ unreadCount > 0 ? 'Requires your attention' : 'All caught up' }}
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Broadcast Bulletins</div>
+      <div class="metric-val" id="metric-notif-broadcast">{{ broadcastCount }}</div>
+      <div class="metric-meta text-muted">Company-wide Service Day updates</div>
     </div>
   </div>
 
-  <!-- Notifications List -->
-  <div *ngIf="notifications$ | async as notifs">
-    <div *ngIf="notifs.length > 0; else noNotifs" class="opp-list">
-      <div *ngFor="let n of notifs" class="card p-4">
-        <div class="flex justify-between items-start mb-2">
-          <div class="font-bold text-base" style="color: var(--color-deep-slate);">
-            {{ n.title }}
+  <!-- Interactive Filter Tabs -->
+  <div class="notif-nav-tabs" role="tablist">
+    <button
+      type="button"
+      class="notif-tab-btn"
+      [class.active]="activeTab === 'ALL'"
+      (click)="setTab('ALL')"
+      id="tab-notif-all"
+    >
+      <span>All Updates</span>
+      <span class="notif-tab-badge">{{ totalCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="notif-tab-btn"
+      [class.active]="activeTab === 'UNREAD'"
+      (click)="setTab('UNREAD')"
+      id="tab-notif-unread"
+    >
+      <span>Unread</span>
+      <span class="notif-tab-badge">{{ unreadCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="notif-tab-btn"
+      [class.active]="activeTab === 'REGISTRATION'"
+      (click)="setTab('REGISTRATION')"
+      id="tab-notif-registration"
+    >
+      <span>Registrations</span>
+      <span class="notif-tab-badge">{{ registrationCount }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="notif-tab-btn"
+      [class.active]="activeTab === 'BROADCAST'"
+      (click)="setTab('BROADCAST')"
+      id="tab-notif-broadcast"
+    >
+      <span>Broadcasts</span>
+      <span class="notif-tab-badge">{{ broadcastCount }}</span>
+    </button>
+  </div>
+
+  <!-- Notifications Feed -->
+  <div class="notif-list" *ngIf="filteredNotifications.length > 0; else emptyNotificationsTemplate">
+    <div
+      *ngFor="let notif of filteredNotifications"
+      class="notif-card"
+      [class.unread]="!notif.readAt"
+      [class.read]="!!notif.readAt"
+      [id]="'notif-card-' + notif.id"
+    >
+      <!-- Type Avatar Icon -->
+      <div
+        class="notif-icon-avatar"
+        [ngClass]="{
+          'notif-avatar-registration': notif.type === 'REGISTRATION',
+          'notif-avatar-broadcast': notif.type === 'BROADCAST',
+          'notif-avatar-reminder': notif.type === 'REMINDER',
+          'notif-avatar-cancellation': notif.type === 'CANCELLATION'
+        }"
+      >
+        <!-- Registration Icon -->
+        <svg *ngIf="notif.type === 'REGISTRATION'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+
+        <!-- Broadcast Icon -->
+        <svg *ngIf="notif.type === 'BROADCAST'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v.114A4.369 4.369 0 005 5a4 4 0 00-4 4 4 4 0 004 4c.348 0 .684-.044 1-.127V15a1 1 0 00.804.98l10 2A1 1 0 0018 17V3zM6 11a2 2 0 110-4 2 2 0 010 4z" />
+        </svg>
+
+        <!-- Reminder Icon -->
+        <svg *ngIf="notif.type === 'REMINDER'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+        </svg>
+
+        <!-- Cancellation Icon -->
+        <svg *ngIf="notif.type === 'CANCELLATION'" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+
+      <!-- Main Notification Body -->
+      <div class="notif-body">
+        <div class="notif-header-row">
+          <div class="notif-title-group">
+            <span class="notif-unread-dot" *ngIf="!notif.readAt" title="Unread notification"></span>
+            <h3 class="notif-title">{{ notif.title }}</h3>
           </div>
-          <span class="badge badge-warm" style="font-size: 0.75rem;">
-            {{ n.type }}
-          </span>
+
+          <div class="notif-meta-group">
+            <span
+              class="notif-badge"
+              [ngClass]="{
+                'notif-badge-registration': notif.type === 'REGISTRATION',
+                'notif-badge-broadcast': notif.type === 'BROADCAST',
+                'notif-badge-reminder': notif.type === 'REMINDER',
+                'notif-badge-cancellation': notif.type === 'CANCELLATION'
+              }"
+            >
+              {{ notif.type }}
+            </span>
+
+            <span>{{ notif.createdAt | date:'mediumDate' }} • {{ notif.createdAt | date:'shortTime' }}</span>
+          </div>
         </div>
-        <p class="text-secondary text-sm mb-2" style="line-height: 1.5;">
-          {{ n.message }}
+
+        <p class="notif-message">
+          {{ notif.message }}
         </p>
-        <div class="text-muted text-xs">
-          {{ n.createdAt | date:'medium' }}
+
+        <!-- Action Row -->
+        <div class="notif-actions-row">
+          <a
+            *ngIf="notif.activityId"
+            [routerLink]="['/employee/activities', notif.activityId]"
+            class="notif-link-btn"
+            id="link-notif-activity"
+          >
+            <span>View Activity Details</span>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+
+          <span *ngIf="!notif.activityId"></span>
+
+          <button
+            type="button"
+            class="notif-toggle-btn"
+            (click)="toggleReadStatus(notif)"
+            [id]="'btn-toggle-read-' + notif.id"
+          >
+            {{ notif.readAt ? 'Mark as unread' : 'Mark as read' }}
+          </button>
         </div>
       </div>
     </div>
-
-    <ng-template #noNotifs>
-      <div class="opp-empty-card">
-        <h3 class="opp-empty-title">No notifications yet</h3>
-        <p class="opp-empty-desc">
-          You are all caught up! System broadcasts and reminders will appear here.
-        </p>
-      </div>
-    </ng-template>
   </div>
+
+  <!-- Empty Feed Template -->
+  <ng-template #emptyNotificationsTemplate>
+    <div class="opp-empty-card" id="notif-empty-state">
+      <div class="opp-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </div>
+      <h3 class="opp-empty-title">
+        {{ activeTab === 'UNREAD' ? 'No unread notifications' : 'No notifications in this view' }}
+      </h3>
+      <p class="opp-empty-desc">
+        {{ activeTab === 'UNREAD'
+          ? 'You have reviewed all incoming updates. Check the "All Updates" tab to browse your notification history.'
+          : 'You are completely caught up with all Service Day announcements and schedule notifications.' }}
+      </p>
+      <button
+        *ngIf="activeTab !== 'ALL'"
+        type="button"
+        class="btn btn-primary mt-2"
+        (click)="setTab('ALL')"
+      >
+        View All Updates
+      </button>
+    </div>
+  </ng-template>
 </div>
