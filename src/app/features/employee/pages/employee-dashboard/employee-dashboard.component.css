@@ -88,56 +88,96 @@
   gap: var(--space-4);
 }
 
-.metric-card {
-  background-color: var(--color-surface-white);
+/* Upcoming Hero Card — Swiss Precision */
+.upcoming-hero-card {
+  background: var(--color-surface-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-subtle);
-  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   transition: border-color var(--transition-fast);
 }
 
+.upcoming-hero-card:hover {
+  border-color: #CBD5E1;
+}
+
+.discover-hero-card {
+  background: var(--color-surface-white);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+
+.shortcuts-card {
+  border-radius: var(--radius-lg);
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.85rem 1rem;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-subtle);
+}
+
+.shortcut-item:hover {
+  border-color: var(--color-forest);
+  background: #F9FAFB;
+  transform: translateY(-1px);
+}
+
+.shortcut-icon-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--color-soft-sage);
+  color: var(--color-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #D2DFD8;
+}
+
+.metric-card {
+  background-color: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem 1.4rem;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
 .metric-card:hover {
-  border-color: #CAD2D6;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
 }
 
 .metric-label {
-  font-size: var(--font-size-xs);
+  font-size: 0.675rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  font-weight: 700;
+  color: var(--color-secondary-text);
+  font-weight: 600;
 }
 
 .metric-val {
   font-family: var(--font-interface);
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
   color: var(--color-deep-slate);
-  line-height: 1.2;
+  line-height: 1.15;
   margin: var(--space-2) 0 var(--space-1);
 }
 
 .metric-meta {
-  font-size: var(--font-size-xs);
-}
-
-.module-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.module-item {
-  font-size: var(--font-size-sm);
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--color-soft-canvas);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  color: var(--text-primary);
-}
-
-.module-item strong {
-  color: var(--color-deep-slate);
+  font-size: 0.75rem;
+  color: var(--color-secondary-text);
 }

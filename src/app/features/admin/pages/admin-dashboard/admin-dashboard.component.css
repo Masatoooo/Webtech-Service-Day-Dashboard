@@ -5,83 +5,98 @@
 
 .dash-greeting-title {
   font-family: var(--font-interface);
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.625rem;
+  font-weight: 600;
   color: var(--color-deep-slate);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   line-height: 1.2;
 }
 
 .dash-greeting-date {
-  font-size: var(--font-size-xs);
+  font-size: 0.8rem;
   color: var(--color-secondary-text);
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .dash-search-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: var(--color-surface-white);
   border: 1px solid var(--color-border);
-  border-radius: 50%;
+  border-radius: 6px;
   color: var(--color-secondary-text);
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition: all 0.15s ease;
 }
 
 .dash-search-btn:hover {
-  background: #F4F6F4;
+  background: #F9FAFB;
   color: var(--color-deep-slate);
-  border-color: var(--color-deep-slate);
+  border-color: #CBD5E1;
 }
 
 .btn-dash-action {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: var(--color-deep-slate);
-  color: #FFFFFF;
-  padding: 0.6rem 1.15rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  gap: 0.45rem;
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 6px rgba(32, 44, 59, 0.12);
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-subtle);
 }
 
 .btn-dash-action:hover {
-  background: #151D27;
+  background: #F9FAFB;
+  border-color: #9CA3AF;
+  color: #111827;
+}
+
+/* Primary Action Accent for the first CTA (Activity Management) */
+#btn-admin-manage-activities.btn-dash-action {
+  background: var(--color-forest);
+  border-color: var(--color-forest);
   color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(32, 44, 59, 0.18);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+#btn-admin-manage-activities.btn-dash-action:hover {
+  background: var(--color-forest-hover);
+  border-color: var(--color-forest-hover);
+  color: #FFFFFF;
 }
 
 .btn-dash-action:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 .dash-main-split {
   display: grid;
   grid-template-columns: 1fr 310px;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .dash-section-title {
   font-family: var(--font-interface);
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--color-deep-slate);
+  letter-spacing: -0.01em;
 }
 
 .dash-view-all-link {
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-forest);
   text-decoration: none;
 }
@@ -90,11 +105,47 @@
   text-decoration: underline;
 }
 
+.kpi-formula-footnote {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Swiss action buttons inside Attention radar items */
+.attention-item .btn-secondary {
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.725rem;
+  font-weight: 500;
+}
+
+.attention-item .btn-secondary:hover {
+  background: #F9FAFB;
+  border-color: #9CA3AF;
+  color: #111827;
+}
+
+.attention-item .btn-primary {
+  background: #1F2937;
+  border-color: #1F2937;
+  color: #FFFFFF;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.725rem;
+  font-weight: 500;
+}
+
+.attention-item .btn-primary:hover {
+  background: #111827;
+  border-color: #111827;
+}
+
 @media (max-width: 1100px) {
   .dash-main-split {
-    grid-template-columns: 1fr;
-  }
-  .dash-cards-row {
     grid-template-columns: 1fr;
   }
 }
@@ -115,7 +166,7 @@
     flex: 1 1 calc(50% - 0.5rem);
     min-width: 130px;
     justify-content: center;
-    padding: 0.55rem 0.85rem;
+    padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
   }
 }
