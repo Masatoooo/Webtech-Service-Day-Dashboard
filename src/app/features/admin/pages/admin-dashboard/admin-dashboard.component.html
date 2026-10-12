@@ -3,9 +3,9 @@
   <header class="dash-top-bar flex justify-between items-center mb-6">
     <div class="dash-greeting-block">
       <h1 class="dash-greeting-title">
-        Hello, {{ (currentUser$ | async)?.name?.split(' ')?.[0] || 'Marcus' }}
+        Hello, {{ (currentUser$ | async)?.name?.split(' ')?.[0] || 'Marcus' }} 👋
       </h1>
-      <p class="dash-greeting-date text-secondary">{{ todayFormatted }}</p>
+      <p class="dash-greeting-date text-secondary">📅 {{ todayFormatted }} • CSR Executive Command Center</p>
     </div>
 
     <div class="dash-top-actions flex items-center gap-3">
@@ -18,7 +18,7 @@
         <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
           <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
-        <span>Activity Management</span>
+        <span>Activity Management 🚀</span>
       </a>
 
       <!-- Reminders & Broadcasts CTA -->
@@ -30,7 +30,7 @@
         <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
           <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
         </svg>
-        <span>Reminders & Alerts</span>
+        <span>Reminders & Alerts 🔔</span>
       </a>
 
       <!-- QR & Attendance CTA -->
@@ -43,7 +43,7 @@
           <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd" />
           <path d="M11 12a1 1 0 011-1h1v1h-1v1h2v-1h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v-1h-1v1h-2a1 1 0 01-1-1v-4z" />
         </svg>
-        <span>QR Check-In Codes</span>
+        <span>QR Check-In Codes ⚡</span>
       </a>
     </div>
   </header>
@@ -53,7 +53,7 @@
     <div class="admin-kpi-grid">
       <!-- Total Activities -->
       <div class="admin-kpi-card" id="kpi-total-activities">
-        <div class="kpi-label">Total Activities</div>
+        <div class="kpi-label">🎯 Total Activities</div>
         <div class="kpi-num" id="kpi-val-activities">{{ m.totalActivities }}</div>
         <div class="kpi-sub">
           <strong>{{ m.publishedActivities }}</strong> published initiatives
@@ -62,7 +62,7 @@
 
       <!-- Total Offered Places -->
       <div class="admin-kpi-card" id="kpi-total-capacity">
-        <div class="kpi-label">Offered Places</div>
+        <div class="kpi-label">👥 Offered Places</div>
         <div class="kpi-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</div>
         <div class="kpi-sub">
           Max capacity across programs
@@ -71,8 +71,8 @@
 
       <!-- Places Taken (Active Registrations) -->
       <div class="admin-kpi-card" id="kpi-places-taken">
-        <div class="kpi-label">Places Taken</div>
-        <div class="kpi-num" style="color: var(--color-forest);" id="kpi-val-taken">{{ m.placesTaken }}</div>
+        <div class="kpi-label">✨ Places Taken</div>
+        <div class="kpi-num" style="color: var(--color-primary-blue);" id="kpi-val-taken">{{ m.placesTaken }}</div>
         <div class="kpi-sub">
           <strong>{{ m.activeRegistrations }}</strong> confirmed volunteer spots
         </div>
@@ -80,8 +80,8 @@
 
       <!-- Places Remaining -->
       <div class="admin-kpi-card" id="kpi-places-remaining">
-        <div class="kpi-label">Places Remaining</div>
-        <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#845D16' : '#202C3B'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
+        <div class="kpi-label">⏳ Places Remaining</div>
+        <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#92400E' : 'var(--color-deep-slate)'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
         <div class="kpi-sub">
           Open capacity for staff sign-up
         </div>
@@ -89,7 +89,7 @@
 
       <!-- Capacity Utilisation -->
       <div class="admin-kpi-card" id="kpi-utilisation">
-        <div class="kpi-label">Capacity Utilisation</div>
+        <div class="kpi-label">📈 Capacity Utilisation</div>
         <div class="kpi-num" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</div>
         <div class="kpi-sub">
           {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
@@ -98,14 +98,14 @@
           <div
             class="kpi-progress-fill"
             [style.width.%]="m.capacityUtilisationPct"
-            [style.background]="m.capacityUtilisationPct >= 90 ? '#A52C22' : m.capacityUtilisationPct >= 70 ? '#845D16' : '#356859'"
+            [style.background]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : 'var(--color-sky-gradient)'"
           ></div>
         </div>
       </div>
 
       <!-- Partner NGOs & Enrollment Ratio -->
       <div class="admin-kpi-card" id="kpi-ngos-ratio">
-        <div class="kpi-label">Partner NGOs & History</div>
+        <div class="kpi-label">🏢 Partner NGOs & History</div>
         <div class="kpi-num" id="kpi-val-ngos">{{ m.totalNgos }}</div>
         <div class="kpi-sub">
           {{ m.approvedNgos }} approved • {{ m.cancelledRegistrations }} withdrawn
@@ -122,7 +122,7 @@
   <section class="attention-card mb-6" id="section-needs-attention">
     <div class="flex justify-between items-center">
       <div>
-        <h2 class="dash-section-title" style="margin: 0;">Operational Attention Radar</h2>
+        <h2 class="dash-section-title" style="margin: 0;">⚡ Operational Attention Radar</h2>
         <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
           Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
         </p>
@@ -191,7 +191,7 @@
   <section class="mb-8" id="section-operational-activities">
     <div class="flex justify-between items-center mb-3">
       <div>
-        <h2 class="dash-section-title" style="margin: 0;">Activity Operational Monitoring</h2>
+        <h2 class="dash-section-title" style="margin: 0;">📊 Activity Operational Monitoring</h2>
         <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
           Real-time reconciliation of capacity, filled places, and cut-off statuses across corporate initiatives.
         </p>
@@ -539,7 +539,7 @@
   <section class="mb-8" id="participant-roster-section">
     <div class="flex justify-between items-center mb-3">
       <div>
-        <h2 class="dash-section-title" style="margin: 0;">Participant Roster & Attendance Monitoring</h2>
+        <h2 class="dash-section-title" style="margin: 0;">👥 Participant Roster & Attendance Monitoring</h2>
         <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
           Operational participant oversight. Administrative monitoring is read-only; employee withdrawals and transfers are managed via employee space.
         </p>

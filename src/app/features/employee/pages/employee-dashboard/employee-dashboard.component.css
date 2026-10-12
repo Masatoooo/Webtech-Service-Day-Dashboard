@@ -91,14 +91,16 @@
 .metric-card {
   background-color: var(--color-surface-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   padding: var(--space-5) var(--space-6);
-  transition: border-color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .metric-card:hover {
-  border-color: #CAD2D6;
+  border-color: #CBD5E1;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
 .metric-label {

@@ -4,25 +4,25 @@
     <div class="flex justify-between items-center header-row">
       <div>
         <div class="role-pretitle">Staff Contributions</div>
-        <h1 class="page-title">Volunteer Portal</h1>
+        <h1 class="page-title">Volunteer Portal 🌟</h1>
         <p class="header-desc text-muted">
           Welcome back<span *ngIf="currentUser$ | async as user">, <strong>{{ user.name }}</strong> ({{ user.department }})</span>. Explore community initiatives, track registrations, and record event attendance.
         </p>
       </div>
       <div class="header-badge-wrap flex items-center gap-2">
-        <app-status-badge variant="forest" label="Volunteer Active"></app-status-badge>
+        <app-status-badge variant="forest" label="Volunteer Active ✨"></app-status-badge>
       </div>
     </div>
   </header>
 
-  <!-- Quick Action & Upcoming Registration Hero -->
+  <!-- Quick Action & Upcoming Registration Hero (Moneza-Style Gradient Banner) -->
   <section class="mb-6">
     <ng-container *ngIf="upcomingEnrolled$ | async as enrolled; else discoverBanner">
-      <div class="card p-5" style="background: linear-gradient(135deg, #FAFDFB 0%, #FFFFFF 100%); border: 1.5px solid #CFE2D8; border-left: 6px solid var(--color-forest); border-radius: 14px; box-shadow: 0 4px 14px rgba(32, 44, 59, 0.04);">
-        <div class="flex justify-between items-start flex-wrap gap-3">
+      <div class="card p-6" style="background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%); border: 1.5px solid #BFDBFE; border-left: 6px solid #2563EB; border-radius: var(--radius-xl); box-shadow: var(--shadow-card);">
+        <div class="flex justify-between items-start flex-wrap gap-4">
           <div>
-            <span class="text-xs font-bold text-forest uppercase tracking-wider block mb-1">Your Next Scheduled Initiative</span>
-            <h2 class="text-xl font-bold text-deep-slate mb-1">{{ enrolled.activity.title }}</h2>
+            <span class="text-xs font-bold uppercase tracking-wider block mb-1" style="color: #2563EB;">🎯 Your Next Scheduled Initiative</span>
+            <h2 class="text-xl font-bold mb-1" style="color: var(--color-deep-slate);">{{ enrolled.activity.title }}</h2>
             <p class="text-sm text-muted mb-3" *ngIf="enrolled.ngo">Partner NGO: <strong>{{ enrolled.ngo.name }}</strong></p>
             <div class="flex items-center gap-4 text-xs text-muted flex-wrap">
               <span class="flex items-center gap-1">
@@ -53,7 +53,7 @@
               class="btn btn-sm btn-primary"
               id="hero-btn-checkin"
             >
-              Event Check-In
+              Event Check-In ⚡
             </a>
             <a
               [routerLink]="['/employee/activities', enrolled.activity.id]"
@@ -67,7 +67,7 @@
               class="btn btn-sm btn-secondary"
               id="hero-btn-manage"
             >
-              Manage Registration
+              Manage Records
             </a>
           </div>
         </div>
@@ -75,14 +75,23 @@
     </ng-container>
 
     <ng-template #discoverBanner>
-      <div class="card p-5 text-center" style="background: linear-gradient(135deg, #FAFBFB 0%, #F5F9F6 100%); border: 1px solid var(--color-border); border-radius: 14px;">
-        <h2 class="text-lg font-bold text-deep-slate mb-1">Make Your Corporate Volunteer Hours Count</h2>
-        <p class="text-sm text-muted mb-4 max-w-xl mx-auto">
-          You currently have no active registrations scheduled. Discover vetted partner NGO initiatives across environment, education, and community support.
-        </p>
-        <a routerLink="/employee/activities" class="btn btn-primary" id="hero-btn-browse-open">
-          Browse Open Opportunities
-        </a>
+      <div class="card p-6" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #38BDF8 100%); border: none; border-radius: var(--radius-xl); color: #FFFFFF; box-shadow: 0 10px 28px -4px rgba(37, 99, 235, 0.35);">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div style="max-width: 600px;">
+            <span style="display: inline-block; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+              ✨ Service Day 2026 Initiative
+            </span>
+            <h2 class="text-xl font-bold mb-1" style="color: #FFFFFF; font-size: 1.35rem; letter-spacing: -0.02em;">
+              Make Your Corporate Volunteer Hours Count 🏆
+            </h2>
+            <p style="color: rgba(255, 255, 255, 0.88); font-size: 0.875rem; margin-bottom: 0;">
+              You currently have no active registrations scheduled. Discover vetted partner NGO initiatives across environment, education, and community support.
+            </p>
+          </div>
+          <a routerLink="/employee/activities" class="btn btn-secondary" id="hero-btn-browse-open" style="background: #FFFFFF; color: #1D4ED8; font-weight: 700; border: none; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15); padding: 0.7rem 1.5rem;">
+            Browse Open Opportunities 🚀
+          </a>
+        </div>
       </div>
     </ng-template>
   </section>
@@ -91,7 +100,7 @@
   <div class="metrics-grid mb-6">
     <!-- 1. Approved Opportunities -->
     <div class="metric-card" id="card-metric-opportunities">
-      <div class="metric-label">Approved Opportunities</div>
+      <div class="metric-label">🎯 Approved Opportunities</div>
       <div class="metric-val" id="emp-metric-available">
         {{ (availableActivities$ | async)?.length || 0 }}
       </div>
@@ -103,7 +112,7 @@
 
     <!-- 2. My Registrations -->
     <div class="metric-card" id="card-metric-registrations">
-      <div class="metric-label">My Registrations</div>
+      <div class="metric-label">📋 My Registrations</div>
       <div class="metric-val" id="emp-metric-registrations">
         {{ (myRegistrations$ | async)?.length || 0 }}
       </div>
@@ -115,8 +124,8 @@
 
     <!-- 3. Event Day Check-In -->
     <div class="metric-card" id="card-metric-checkin">
-      <div class="metric-label">On-Site Check-In</div>
-      <div class="metric-val text-forest" id="emp-metric-checkin">
+      <div class="metric-label">⚡ On-Site Check-In</div>
+      <div class="metric-val" style="color: #2563EB;" id="emp-metric-checkin">
         Active
       </div>
       <div class="metric-meta text-muted mb-3">QR scanner & arrival attendance</div>
@@ -127,7 +136,7 @@
 
     <!-- 4. Notifications Inbox -->
     <div class="metric-card" id="card-metric-notifications">
-      <div class="metric-label">In-App Notifications</div>
+      <div class="metric-label">🔔 In-App Notifications</div>
       <div class="metric-val" id="emp-metric-unread">
         {{ (unreadCount$ | async) || 0 }}
       </div>
@@ -139,8 +148,8 @@
   </div>
 
   <!-- Quick Access Navigation Grid -->
-  <section class="card p-5" style="border-radius: 14px;">
-    <h2 class="text-base font-bold text-deep-slate mb-3">Volunteer Service Hub Shortcuts</h2>
+  <section class="card p-6" style="border-radius: var(--radius-xl);">
+    <h2 class="text-base font-bold text-deep-slate mb-4">🚀 Volunteer Service Hub Shortcuts</h2>
     <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
       <a routerLink="/employee/activities" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
         <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white border text-forest font-bold" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;">
