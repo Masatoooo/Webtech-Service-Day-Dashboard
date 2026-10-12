@@ -82,37 +82,495 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-.dash-main-split {
-  display: grid;
-  grid-template-columns: 1fr 310px;
-  gap: 1.5rem;
+/* ==========================================================================
+   NEXUS-INSPIRED ADMIN CARD LAYOUT (Top 4 KPIs + Split Radar & Gauges)
+   ========================================================================== */
+
+/* Top 4 Primary Metric Cards */
+.nexus-kpi-card {
+  background: var(--color-surface-white);
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 1.35rem 1.4rem 0.9rem 1.4rem;
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dash-section-title {
-  font-family: var(--font-interface);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--color-deep-slate);
+.nexus-kpi-card:hover {
+  transform: translateY(-3px);
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 28px -4px rgba(15, 23, 42, 0.08);
 }
 
-.dash-view-all-link {
+.nexus-kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.nexus-kpi-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.nexus-kpi-card:hover .nexus-kpi-icon-box {
+  transform: scale(1.06);
+}
+
+.icon-purple {
+  background: #F3E8FF;
+  color: #7C3AED;
+}
+
+.icon-blue {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.icon-emerald {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.icon-amber {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.nexus-kpi-card .kpi-label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-forest);
+  color: #64748B;
+  text-transform: capitalize;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.nexus-kpi-card .kpi-num {
+  font-family: var(--font-interface);
+  font-size: 2.15rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.35rem;
+}
+
+.nexus-kpi-card .kpi-sub {
+  font-size: 0.785rem;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.nexus-trend-tag {
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nexus-trend-tag.positive {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.nexus-kpi-sparkline-wrap {
+  width: calc(100% + 2.8rem);
+  margin-left: -1.4rem;
+  margin-right: -1.4rem;
+  margin-bottom: -0.9rem;
+  height: 38px;
+  margin-top: auto;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.nexus-kpi-card:hover .nexus-kpi-sparkline-wrap {
+  opacity: 1;
+}
+
+.nexus-kpi-sparkline-wrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+}
+
+/* Two-column Split: Operational Attention Radar vs Capacity Utilisation */
+.dash-nexus-split-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+}
+
+@media (max-width: 1140px) {
+  .dash-nexus-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nexus-main-col {
+  min-width: 0;
+  width: 100%;
+}
+
+.nexus-side-col {
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nexus-card {
+  background: var(--color-surface-white);
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 1.35rem 1.4rem;
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04);
+}
+
+.nexus-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Radar Items in Left Column (Balanced 2x2 Grid) */
+.nexus-radar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .nexus-radar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nexus-radar-item {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  position: relative;
+}
+
+.nexus-radar-item:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
+}
+
+.nexus-radar-item.severity-high {
+  background: #FFFBFB;
+  border-color: #FECDCD;
+}
+
+.nexus-radar-item.severity-medium {
+  background: #FFFDF7;
+  border-color: #FED7AA;
+}
+
+.nexus-radar-item.severity-info {
+  background: #F8FAFD;
+  border-color: #BFDBFE;
+}
+
+.radar-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.radar-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.badge-high {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
+.badge-high .radar-badge-dot {
+  background: #DC2626;
+}
+
+.badge-medium {
+  background: #FEF3C7;
+  color: #B45309;
+}
+.badge-medium .radar-badge-dot {
+  background: #F59E0B;
+}
+
+.badge-info {
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+.badge-info .radar-badge-dot {
+  background: #2563EB;
+}
+
+.radar-title {
+  font-weight: 700;
+  font-size: 0.925rem;
+  color: #0F172A;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.35;
+}
+
+.radar-detail {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin: 0 0 0.85rem 0;
+  line-height: 1.45;
+}
+
+.radar-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+  gap: 0.5rem;
+}
+
+.radar-ngo-tag {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.radar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.btn-radar-pill {
+  padding: 0.3rem 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
   text-decoration: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dash-view-all-link:hover {
-  text-decoration: underline;
+.btn-radar-ghost {
+  background: #F1F5F9 !important;
+  color: #334155 !important;
+  border: 1px solid transparent !important;
 }
 
-@media (max-width: 1100px) {
-  .dash-main-split {
-    grid-template-columns: 1fr;
-  }
-  .dash-cards-row {
-    grid-template-columns: 1fr;
-  }
+.btn-radar-ghost:hover {
+  background: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+.btn-radar-primary {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  border: 1px solid #2563EB !important;
+}
+
+.btn-radar-primary:hover {
+  background: #1D4ED8 !important;
+  border-color: #1D4ED8 !important;
+}
+
+.nexus-empty-radar {
+  border-radius: 16px;
+  background: #F8FAFD;
+  border: 1px dashed #CBD5E1;
+}
+
+/* Donut Progress Meter on Right Column */
+.nexus-gauge-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.nexus-donut-box {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  flex-shrink: 0;
+}
+
+.nexus-donut-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.nexus-donut-fg {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}
+
+.nexus-donut-center {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.nexus-donut-val {
+  font-family: var(--font-interface);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1;
+}
+
+.nexus-donut-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748B;
+  margin-top: 3px;
+}
+
+.nexus-gauge-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  font-size: 0.775rem;
+  gap: 0.45rem;
+}
+
+.legend-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-blue {
+  background: #2563EB;
+}
+
+.dot-amber {
+  background: #F59E0B;
+}
+
+.dot-slate {
+  background: #94A3B8;
+}
+
+.legend-name {
+  color: #64748B;
+  flex: 1;
+}
+
+.legend-value {
+  color: #0F172A;
+}
+
+/* NGO Meter Bar in Right Column */
+.ngo-meter-bar {
+  height: 6px;
+  background: #F1F5F9;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.ngo-meter-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease;
+}
+
+.fill-emerald {
+  background: #10B981;
+}
+
+.fill-slate {
+  background: #94A3B8;
 }
 
 @media (max-width: 768px) {
