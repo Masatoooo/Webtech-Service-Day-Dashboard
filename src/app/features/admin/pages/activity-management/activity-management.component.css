@@ -1,11 +1,6 @@
-/* Activity Management Page - Modernized Warm Editorial Styles */
-.activity-mgmt-page {
-  animation: fadeIn 200ms ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+:host {
+  display: block;
+  width: 100%;
 }
 
 .page-title {
