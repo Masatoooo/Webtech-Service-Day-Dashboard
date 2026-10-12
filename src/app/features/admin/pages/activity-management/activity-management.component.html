@@ -51,34 +51,117 @@
     <button type="button" class="btn-dismiss" (click)="dismissToast()" aria-label="Dismiss message">&times;</button>
   </div>
 
-  <!-- Operational Summary Strip (Modernized Cards) -->
+  <!-- Operational Summary Strip (NEXUS Modernized KPI Cards) -->
   <div class="metrics-strip mb-6">
-    <div class="metric-col" id="metric-card-total">
-      <span class="metric-col-label">Total Activities</span>
-      <span class="metric-col-val" id="metric-total-activities">{{ metrics.total }}</span>
-      <span class="metric-col-sub">All managed initiatives</span>
+    <!-- 1. Total Activities -->
+    <div class="nexus-kpi-card" id="metric-card-total">
+      <div class="nexus-kpi-header">
+        <div class="nexus-kpi-icon-box bg-blue-light text-blue" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <span class="nexus-kpi-label">Total Activities</span>
+      </div>
+      <div class="nexus-kpi-value-wrap">
+        <span class="nexus-kpi-value" id="metric-total-activities">{{ metrics.total }}</span>
+      </div>
+      <div class="nexus-kpi-footer">
+        <span class="nexus-kpi-sub">All managed initiatives</span>
+      </div>
+      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 25 Q 25 15, 50 18 T 100 8 L 100 30 L 0 30 Z" fill="rgba(37, 99, 235, 0.08)"></path>
+        <path d="M0 25 Q 25 15, 50 18 T 100 8" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
     </div>
-    <div class="metric-col" id="metric-card-published">
-      <span class="metric-col-label">Published / Open</span>
-      <span class="metric-col-val text-forest" id="metric-published-activities">{{ metrics.published }}</span>
-      <span class="metric-col-sub">Discoverable by employees</span>
+
+    <!-- 2. Published / Open -->
+    <div class="nexus-kpi-card" id="metric-card-published">
+      <div class="nexus-kpi-header">
+        <div class="nexus-kpi-icon-box bg-emerald-light text-emerald" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <span class="nexus-kpi-label">Published / Open</span>
+      </div>
+      <div class="nexus-kpi-value-wrap">
+        <span class="nexus-kpi-value text-emerald" id="metric-published-activities">{{ metrics.published }}</span>
+      </div>
+      <div class="nexus-kpi-footer">
+        <span class="nexus-kpi-sub">Discoverable by employees</span>
+      </div>
+      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 26 Q 30 18, 55 12 T 100 6 L 100 30 L 0 30 Z" fill="rgba(5, 150, 105, 0.08)"></path>
+        <path d="M0 26 Q 30 18, 55 12 T 100 6" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
     </div>
-    <div class="metric-col" id="metric-card-draft">
-      <span class="metric-col-label">Draft / In Review</span>
-      <span class="metric-col-val text-brass" id="metric-draft-activities">{{ metrics.draft }}</span>
-      <span class="metric-col-sub">Admin-only staging</span>
+
+    <!-- 3. Draft / In Review -->
+    <div class="nexus-kpi-card" id="metric-card-draft">
+      <div class="nexus-kpi-header">
+        <div class="nexus-kpi-icon-box bg-amber-light text-amber" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </div>
+        <span class="nexus-kpi-label">Draft / Review</span>
+      </div>
+      <div class="nexus-kpi-value-wrap">
+        <span class="nexus-kpi-value text-amber" id="metric-draft-activities">{{ metrics.draft }}</span>
+      </div>
+      <div class="nexus-kpi-footer">
+        <span class="nexus-kpi-sub">Admin-only staging</span>
+      </div>
+      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 24 Q 25 22, 60 16 T 100 12 L 100 30 L 0 30 Z" fill="rgba(217, 119, 6, 0.08)"></path>
+        <path d="M0 24 Q 25 22, 60 16 T 100 12" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
     </div>
-    <div class="metric-col" id="metric-card-cancelled">
-      <span class="metric-col-label">Cancelled / Inactive</span>
-      <span class="metric-col-val text-secondary" id="metric-cancelled-activities">{{ metrics.cancelled }}</span>
-      <span class="metric-col-sub">Records preserved</span>
+
+    <!-- 4. Cancelled / Inactive -->
+    <div class="nexus-kpi-card" id="metric-card-cancelled">
+      <div class="nexus-kpi-header">
+        <div class="nexus-kpi-icon-box bg-slate-light text-slate" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+        </div>
+        <span class="nexus-kpi-label">Cancelled</span>
+      </div>
+      <div class="nexus-kpi-value-wrap">
+        <span class="nexus-kpi-value text-secondary" id="metric-cancelled-activities">{{ metrics.cancelled }}</span>
+      </div>
+      <div class="nexus-kpi-footer">
+        <span class="nexus-kpi-sub">Preserved in audit</span>
+      </div>
+      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 22 Q 40 24, 70 20 T 100 22 L 100 30 L 0 30 Z" fill="rgba(100, 116, 139, 0.08)"></path>
+        <path d="M0 22 Q 40 24, 70 20 T 100 22" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
     </div>
-    <div class="metric-col metric-col-fill" id="metric-card-utilisation">
-      <span class="metric-col-label">Slot Utilisation</span>
-      <span class="metric-col-val" id="metric-utilisation-rate">{{ metrics.utilisationRate }}%</span>
-      <span class="metric-col-sub">{{ metrics.totalRegistered }} of {{ metrics.totalCapacity }} volunteers enrolled</span>
-      <div class="metric-col-progress" aria-hidden="true">
-        <div class="metric-col-progress-fill" [style.width.%]="metrics.utilisationRate"></div>
+
+    <!-- 5. Slot Utilisation -->
+    <div class="nexus-kpi-card" id="metric-card-utilisation">
+      <div class="nexus-kpi-header">
+        <div class="nexus-kpi-icon-box bg-purple-light text-purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <span class="nexus-kpi-label">Slot Utilisation</span>
+      </div>
+      <div class="nexus-kpi-value-wrap">
+        <span class="nexus-kpi-value text-purple" id="metric-utilisation-rate">{{ metrics.utilisationRate }}%</span>
+      </div>
+      <div class="nexus-kpi-footer">
+        <span class="nexus-kpi-sub">{{ metrics.totalRegistered }} of {{ metrics.totalCapacity }} volunteers enrolled</span>
+        <div class="metric-col-progress" aria-hidden="true">
+          <div class="metric-col-progress-fill" [style.width.%]="metrics.utilisationRate"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -156,12 +239,15 @@
         <label class="filter-label filter-label-spacer">Reset</label>
         <button
           type="button"
-          class="btn btn-secondary flex items-center justify-center gap-1"
+          class="btn btn-secondary flex items-center justify-center gap-2"
           (click)="resetFilters()"
           id="btn-reset-filters"
           title="Reset search and filters"
-          style="height: 42px; font-weight: 600; width: 100%; border-radius: 10px;"
+          style="height: 42px; font-weight: 600; width: 100%; border-radius: var(--radius-full);"
         >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+          </svg>
           Reset Filters
         </button>
       </div>
