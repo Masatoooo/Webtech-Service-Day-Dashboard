@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -50,7 +50,9 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly attendanceService: AttendanceService,
     private readonly dataStore: DataStoreService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -106,56 +108,75 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
     this.checkInError = '';
     this.checkInSuccess = null;
     this.scannerState = 'STARTING';
+    this.cdr.detectChanges();
 
     try {
       if (!this.html5QrCode) {
-        this.html5QrCode = new Html5Qrcode('qr-scanner-viewfinder');
+        this.html5QrCode = new Html5Qrcode('qr-scanner-viewfinder', false);
       }
 
       await this.html5QrCode.start(
         { facingMode: 'environment' },
         {
           fps: 10,
-          qrbox: { width: 250, height: 250 }
+          qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
+            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            const edgeSize = Math.max(Math.floor(minEdge * 0.72), 160);
+            return { width: edgeSize, height: edgeSize };
+          }
         },
         (decodedText: string) => {
-          this.onQrScanned(decodedText);
+          this.ngZone.run(() => {
+            this.onQrScanned(decodedText);
+          });
         },
         () => {
           // Frame decode pass errors are expected when no QR in view; ignore
         }
       );
 
-      this.scannerState = 'SCANNING';
+      this.ngZone.run(() => {
+        this.scannerState = 'SCANNING';
+        this.cdr.detectChanges();
+      });
     } catch (err: any) {
-      const errStr = err?.toString?.() || '';
-      if (
-        errStr.includes('NotAllowedError') ||
-        errStr.includes('Permission') ||
-        errStr.includes('denied')
-      ) {
-        this.scannerState = 'PERMISSION_DENIED';
-        this.checkInError = 'Camera access was denied. Please allow camera permissions in your browser or switch to the Manual Fallback code below.';
-      } else {
-        this.scannerState = 'UNAVAILABLE';
-        this.checkInError = 'Camera scanner is unavailable on this device or environment. Please use the Manual Demo Fallback.';
-      }
+      this.ngZone.run(() => {
+        const errStr = err?.toString?.() || '';
+        if (
+          errStr.includes('NotAllowedError') ||
+          errStr.includes('Permission') ||
+          errStr.includes('denied')
+        ) {
+          this.scannerState = 'PERMISSION_DENIED';
+          this.checkInError = 'Camera access was denied. Please allow camera permissions in your browser or switch to the Manual Fallback code below.';
+        } else {
+          this.scannerState = 'UNAVAILABLE';
+          this.checkInError = 'Camera scanner is unavailable on this device or environment. Please use the Manual Demo Fallback.';
+        }
+        this.cdr.detectChanges();
+      });
     }
   }
 
   async stopScanner(): Promise<void> {
     await this.stopScannerCleanly();
-    this.scannerState = 'STOPPED';
+    this.ngZone.run(() => {
+      this.scannerState = 'STOPPED';
+      this.cdr.detectChanges();
+    });
   }
 
   private async stopScannerCleanly(): Promise<void> {
     try {
-      if (this.html5QrCode && this.html5QrCode.isScanning) {
-        await this.html5QrCode.stop();
+      if (this.html5QrCode) {
+        if (this.html5QrCode.isScanning) {
+          await this.html5QrCode.stop();
+        }
         this.html5QrCode.clear();
+        this.html5QrCode = null;
       }
     } catch {
-      // Ignore cleanup error if already stopped
+      this.html5QrCode = null;
     }
   }
 
@@ -163,6 +184,7 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
     // Stop camera immediately upon detection to freeze frame
     this.stopScanner();
     this.performCheckIn(decodedText, 'QR_SCAN');
+    this.cdr.detectChanges();
   }
 
   // =========================================================================
@@ -172,6 +194,7 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
   submitManualCheckIn(): void {
     if (!this.manualTokenInput.trim()) {
       this.checkInError = 'Please enter a valid activity check-in token or code.';
+      this.cdr.detectChanges();
       return;
     }
     this.performCheckIn(this.manualTokenInput.trim(), 'MANUAL_FALLBACK');
@@ -180,6 +203,7 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
   selectDemoActivityToken(activityId: string): void {
     this.manualTokenInput = this.attendanceService.generateActivityToken(activityId);
     this.checkInError = '';
+    this.cdr.detectChanges();
   }
 
   // =========================================================================
@@ -189,12 +213,14 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
   private performCheckIn(tokenInput: string, method: CheckInMethod): void {
     if (!this.currentUser) {
       this.checkInError = 'You must be signed in to check in to an activity.';
+      this.cdr.detectChanges();
       return;
     }
 
     this.checkInError = '';
     this.checkInSuccess = null;
     this.isCheckingIn = true;
+    this.cdr.detectChanges();
 
     this.attendanceService
       .executeCheckIn({
@@ -204,13 +230,19 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (result) => {
-          this.isCheckingIn = false;
-          this.checkInSuccess = result;
-          this.manualTokenInput = '';
+          this.ngZone.run(() => {
+            this.isCheckingIn = false;
+            this.checkInSuccess = result;
+            this.manualTokenInput = '';
+            this.cdr.detectChanges();
+          });
         },
         error: (err) => {
-          this.isCheckingIn = false;
-          this.checkInError = err?.message || 'Check-in validation failed.';
+          this.ngZone.run(() => {
+            this.isCheckingIn = false;
+            this.checkInError = err?.message || 'Check-in validation failed.';
+            this.cdr.detectChanges();
+          });
         }
       });
   }
@@ -221,6 +253,7 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
     if (mode === 'MANUAL') {
       this.stopScanner();
     }
+    this.cdr.detectChanges();
   }
 
   resetCheckIn(): void {
@@ -228,5 +261,6 @@ export class EmployeeCheckinComponent implements OnInit, OnDestroy {
     this.checkInError = '';
     this.manualTokenInput = '';
     this.scannerState = 'IDLE';
+    this.cdr.detectChanges();
   }
 }
