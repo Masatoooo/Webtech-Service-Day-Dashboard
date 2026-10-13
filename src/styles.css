@@ -857,6 +857,30 @@ hr,
   display: block;
 }
 
+.auth-white-logo-wrap,
+.hero-white-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.auth-white-logo-img,
+.hero-white-logo-img {
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(15, 23, 42, 0.22));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-white-logo-img:hover,
+.hero-white-logo-img:hover {
+  transform: scale(1.04);
+}
+
 .auth-emblem-wrap:hover,
 .hero-emblem-wrap:hover {
   transform: scale(1.08) rotate(4deg);

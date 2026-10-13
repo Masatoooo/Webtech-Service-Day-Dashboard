@@ -174,6 +174,7 @@ for (let y = 0; y < fullH; y++) {
 }
 
 fs.writeFileSync('src/assets/images/service-day-logo.png', encodePNG(fullW, fullH, fullBuffer));
+fs.writeFileSync('public/assets/images/service-day-logo.png', encodePNG(fullW, fullH, fullBuffer));
 console.log('Saved transparent full logo:', fullW, 'x', fullH);
 
 // 2. Process circular swirl icon (square 1:1, perfectly centered)
@@ -222,4 +223,31 @@ for (let y = 0; y < iH; y++) {
 }
 
 fs.writeFileSync('src/assets/images/service-day-icon.png', encodePNG(size, size, iconBuffer));
+fs.writeFileSync('public/assets/images/service-day-icon.png', encodePNG(size, size, iconBuffer));
 console.log('Saved transparent icon mark:', size, 'x', size);
+
+// Generate pure white transparent versions for dark / blue backgrounds
+const whiteLogoBuf = Buffer.alloc(fullW * fullH * 4);
+for (let i = 0; i < fullW * fullH * 4; i += 4) {
+  whiteLogoBuf[i] = 255;
+  whiteLogoBuf[i + 1] = 255;
+  whiteLogoBuf[i + 2] = 255;
+  whiteLogoBuf[i + 3] = fullBuffer[i + 3];
+}
+const encodedWhiteLogo = encodePNG(fullW, fullH, whiteLogoBuf);
+fs.writeFileSync('src/assets/images/service-day-logo-white.png', encodedWhiteLogo);
+fs.writeFileSync('public/assets/images/service-day-logo-white.png', encodedWhiteLogo);
+console.log('Saved white full logo:', fullW, 'x', fullH);
+
+const whiteIconBuf = Buffer.alloc(size * size * 4);
+for (let i = 0; i < size * size * 4; i += 4) {
+  whiteIconBuf[i] = 255;
+  whiteIconBuf[i + 1] = 255;
+  whiteIconBuf[i + 2] = 255;
+  whiteIconBuf[i + 3] = iconBuffer[i + 3];
+}
+const encodedWhiteIcon = encodePNG(size, size, whiteIconBuf);
+fs.writeFileSync('src/assets/images/service-day-icon-white.png', encodedWhiteIcon);
+fs.writeFileSync('public/assets/images/service-day-icon-white.png', encodedWhiteIcon);
+console.log('Saved white icon mark:', size, 'x', size);
+
