@@ -159,16 +159,16 @@
     <!-- Left Column: Operational Attention Radar (approx 65%) -->
     <div class="nexus-main-col">
       <section class="nexus-card attention-card" id="section-needs-attention">
-        <div class="nexus-card-header flex justify-between items-center mb-4">
-          <div>
+        <div class="nexus-card-header mb-4">
+          <div class="radar-header-top flex justify-between items-center gap-2 mb-1">
             <h2 class="dash-section-title" style="margin: 0;">Operational Attention Radar</h2>
-            <p class="text-xs text-muted" style="margin: 0.25rem 0 0 0;">
-              Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
-            </p>
+            <span class="radar-count-label text-xs text-muted font-medium" id="badge-attention-count">
+              {{ needsAttentionItems.length }} alert(s)
+            </span>
           </div>
-          <span class="text-xs text-muted font-medium" id="badge-attention-count">
-            {{ needsAttentionItems.length }} alert(s)
-          </span>
+          <p class="text-xs text-muted" style="margin: 0;">
+            Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
+          </p>
         </div>
 
         <div class="nexus-radar-list" *ngIf="needsAttentionItems.length > 0; else noAttentionTemplate">
