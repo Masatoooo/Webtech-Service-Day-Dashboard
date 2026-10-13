@@ -277,145 +277,152 @@
 }
 
 /* Radar Items in Left Column (Balanced 2x2 Grid) */
-.nexus-radar-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+/* Revamped Operational Attention Radar (Executive Triage Feed) */
+.nexus-radar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
   margin-top: 1rem;
 }
 
-@media (max-width: 768px) {
-  .nexus-radar-grid {
-    grid-template-columns: 1fr;
-  }
+.nexus-radar-row {
+  background: #FFFFFF !important;
+  border: 1px solid #F1F5F9 !important;
+  border-radius: 14px !important;
+  padding: 0.85rem 1.15rem !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  text-align: left !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
 }
 
-.nexus-radar-item {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 1.15rem 1.25rem;
+.nexus-radar-row:hover {
+  background: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.05) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Micro-Icon Box */
+.radar-row-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
-  position: relative;
-}
-
-.nexus-radar-item:hover {
-  transform: translateY(-2px);
-  border-color: #CBD5E1;
-  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
-}
-
-.nexus-radar-item.severity-high {
-  background: #FFFBFB;
-  border-color: #FECDCD;
-}
-
-.nexus-radar-item.severity-medium {
-  background: #FFFDF7;
-  border-color: #FED7AA;
-}
-
-.nexus-radar-item.severity-info {
-  background: #F8FAFD;
-  border-color: #BFDBFE;
-}
-
-.radar-badge {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.6rem;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.radar-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  display: inline-block;
+.radar-row-icon.icon-high {
+  background: #FEF2F2;
+  color: #DC2626;
 }
 
-.badge-high {
-  background: #FEE2E2;
-  color: #B91C1C;
-}
-.badge-high .radar-badge-dot {
-  background: #DC2626;
+.radar-row-icon.icon-medium {
+  background: #FFFBEB;
+  color: #D97706;
 }
 
-.badge-medium {
-  background: #FEF3C7;
-  color: #B45309;
-}
-.badge-medium .radar-badge-dot {
-  background: #F59E0B;
-}
-
-.badge-info {
+.radar-row-icon.icon-info {
   background: #EFF6FF;
-  color: #1D4ED8;
-}
-.badge-info .radar-badge-dot {
-  background: #2563EB;
+  color: #2563EB;
 }
 
-.radar-title {
+/* Main Content */
+.radar-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.radar-row-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.radar-row-header .radar-title {
+  font-size: 0.885rem;
   font-weight: 700;
-  font-size: 0.925rem;
   color: #0F172A;
-  margin: 0 0 0.35rem 0;
+  margin: 0;
   line-height: 1.35;
 }
 
-.radar-detail {
-  font-size: 0.8rem;
+/* Discreet, Sophisticated Status Tag */
+.radar-tag {
+  font-size: 0.685rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.01em;
+}
+
+.radar-tag.tag-high {
+  background: #FEF2F2;
+  color: #DC2626;
+}
+
+.radar-tag.tag-medium {
+  background: #FFFBEB;
+  color: #D97706;
+}
+
+.radar-tag.tag-info {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+/* Meta Details Row */
+.radar-row-meta {
+  margin-top: 0.2rem;
+  font-size: 0.785rem;
   color: #64748B;
-  margin: 0 0 0.85rem 0;
-  line-height: 1.45;
-}
-
-.radar-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-top: 0.75rem;
-  border-top: 1px solid #F1F5F9;
-  gap: 0.5rem;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  line-height: 1.4;
 }
 
-.radar-ngo-tag {
-  font-size: 0.76rem;
-  font-weight: 500;
+.radar-row-meta .radar-detail {
+  color: #64748B;
+  margin: 0;
+}
+
+.meta-separator {
+  color: #CBD5E1;
+  font-size: 0.75rem;
+}
+
+.radar-ngo-name {
   color: #475569;
-  display: flex;
+  font-weight: 500;
+  display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 180px;
 }
 
-.radar-actions {
+/* Actions */
+.radar-row-actions {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   flex-shrink: 0;
 }
 
 .btn-radar-pill {
-  padding: 0.3rem 0.75rem !important;
-  font-size: 0.75rem !important;
+  font-family: var(--font-interface);
+  font-size: 0.76rem !important;
   font-weight: 600 !important;
+  padding: 0.32rem 0.8rem !important;
   border-radius: 9999px !important;
   text-decoration: none;
   cursor: pointer;
@@ -423,28 +430,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
 
-.btn-radar-ghost {
+.btn-radar-subtle {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+.btn-radar-subtle:hover {
   background: #F1F5F9 !important;
-  color: #334155 !important;
-  border: 1px solid transparent !important;
-}
-
-.btn-radar-ghost:hover {
-  background: #E2E8F0 !important;
+  border-color: #CBD5E1 !important;
   color: #0F172A !important;
 }
 
-.btn-radar-primary {
-  background: #2563EB !important;
-  color: #FFFFFF !important;
-  border: 1px solid #2563EB !important;
+.btn-radar-action {
+  background: #EFF6FF !important;
+  border: 1px solid #DBEAFE !important;
+  color: #2563EB !important;
 }
 
-.btn-radar-primary:hover {
-  background: #1D4ED8 !important;
-  border-color: #1D4ED8 !important;
+.btn-radar-action:hover {
+  background: #2563EB !important;
+  border-color: #2563EB !important;
+  color: #FFFFFF !important;
+}
+
+@media (max-width: 680px) {
+  .nexus-radar-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .radar-row-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 
 .nexus-empty-radar {

@@ -3129,37 +3129,26 @@ hr,
 }
 
 .attention-item {
-  border: 1px solid #E2E8F0;
+  border: 1px solid #F1F5F9;
   border-radius: var(--radius-lg);
-  padding: 1.15rem 1.25rem;
+  padding: 0.85rem 1.15rem;
   background: var(--color-surface-white);
   transition: all var(--transition-fast);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
 }
 
 .attention-item:hover {
   background: var(--color-surface-white);
-  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.05);
   border-color: #CBD5E1;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-.attention-item.severity-high {
-  background: #FFFBFB;
-  border-color: #FECDCD;
-}
-
-.attention-item.severity-medium {
-  background: #FFFDF7;
-  border-color: #FED7AA;
-}
-
+.attention-item.severity-high,
+.attention-item.severity-medium,
 .attention-item.severity-info {
-  background: #F8FAFD;
-  border-color: #BFDBFE;
+  background: var(--color-surface-white);
+  border-color: #F1F5F9;
 }
 
 .attention-badge {
