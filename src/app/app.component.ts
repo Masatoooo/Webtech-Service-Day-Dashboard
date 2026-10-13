@@ -19,6 +19,7 @@ export class App {
   readonly isLoginRoute$: Observable<boolean>;
 
   isMobileMenuOpen = false;
+  isDesktopSidebarCollapsed = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -28,6 +29,15 @@ export class App {
     this.currentUser$ = this.authService.currentUser$;
     this.isAuthenticated$ = this.authService.isAuthenticated$;
     this.userRole$ = this.authService.userRole$;
+
+    try {
+      const savedCollapsed = localStorage.getItem('sd_desktop_sidebar_collapsed');
+      if (savedCollapsed !== null) {
+        this.isDesktopSidebarCollapsed = savedCollapsed === 'true';
+      }
+    } catch {
+      // safe fallback for test/SSR environments
+    }
 
     const isAuthPath = (url: string) => url.startsWith('/login') || url.startsWith('/register');
 
@@ -40,6 +50,15 @@ export class App {
       }),
       startWith(this.router.url ? isAuthPath(this.router.url) : false)
     );
+  }
+
+  toggleDesktopSidebar(): void {
+    this.isDesktopSidebarCollapsed = !this.isDesktopSidebarCollapsed;
+    try {
+      localStorage.setItem('sd_desktop_sidebar_collapsed', String(this.isDesktopSidebarCollapsed));
+    } catch {
+      // safe fallback
+    }
   }
 
   toggleMobileMenu(): void {

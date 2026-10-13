@@ -32,4 +32,14 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.brand-title')?.textContent).toContain('Service Day');
   });
+
+  it('should toggle desktop sidebar collapsed state', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    expect(app.isDesktopSidebarCollapsed).toBe(false);
+    app.toggleDesktopSidebar();
+    expect(app.isDesktopSidebarCollapsed).toBe(true);
+    app.toggleDesktopSidebar();
+    expect(app.isDesktopSidebarCollapsed).toBe(false);
+  });
 });
