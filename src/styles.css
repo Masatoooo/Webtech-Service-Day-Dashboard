@@ -1086,8 +1086,10 @@ hr,
   .auth-card-container,
   .login-card-container {
     flex-direction: column;
-    max-width: 400px;
+    max-width: 100%;
+    width: 100%;
     min-height: auto;
+    border-radius: var(--radius-xl);
   }
   .auth-brand-side,
   .login-brand-side,
@@ -1101,7 +1103,12 @@ hr,
   .login-form-side {
     max-width: 100%;
     width: 100%;
-    padding: 2.25rem 1.5rem;
+    padding: 2rem 1.25rem;
+  }
+  .auth-content-inner,
+  .form-content-inner {
+    max-width: 100%;
+    width: 100%;
   }
 }
 

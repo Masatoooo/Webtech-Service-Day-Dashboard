@@ -77,22 +77,20 @@
     </ng-container>
 
     <ng-template #discoverBanner>
-      <div class="card p-6" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #38BDF8 100%); border: none; border-radius: var(--radius-xl); color: #FFFFFF; box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);">
-        <div class="flex justify-between items-center flex-wrap gap-4">
-          <div style="max-width: 600px;">
-            <div style="font-size: 0.725rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255, 255, 255, 0.9); margin-bottom: 0.5rem;">
-              Service Day 2026 Initiative
-            </div>
-            <h2 class="text-xl font-bold mb-1" style="color: #FFFFFF; font-size: 1.35rem; letter-spacing: -0.02em;">
-              Make Your Corporate Volunteer Hours Count
-            </h2>
-            <p style="color: rgba(255, 255, 255, 0.88); font-size: 0.875rem; margin-bottom: 0;">
+      <div class="card discover-hero-card" id="card-discover-banner">
+        <div class="discover-hero-body">
+          <div class="discover-hero-content">
+            <span class="discover-eyebrow">Service Day 2026 Initiative</span>
+            <h2 class="discover-title">Make Your Corporate Volunteer Hours Count</h2>
+            <p class="discover-desc">
               You currently have no active registrations scheduled. Discover vetted partner NGO initiatives across environment, education, and community support.
             </p>
           </div>
-          <a routerLink="/employee/activities" class="btn btn-secondary" id="hero-btn-browse-open" style="background: #FFFFFF; color: #1D4ED8; font-weight: 700; border: none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); padding: 0.7rem 1.5rem;">
-            Browse Open Opportunities
-          </a>
+          <div class="discover-hero-actions">
+            <a routerLink="/employee/activities" class="btn btn-browse-open" id="hero-btn-browse-open">
+              Browse Open Opportunities
+            </a>
+          </div>
         </div>
       </div>
     </ng-template>
