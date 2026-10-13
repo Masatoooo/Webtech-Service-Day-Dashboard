@@ -1,0 +1,92 @@
+.ngo-partners-page {
+  padding: 0 0 2rem;
+}
+
+.subnav-tabs-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.75rem;
+}
+
+.subnav-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.15s ease;
+}
+
+.subnav-tab-btn:hover {
+  color: var(--color-primary-blue);
+  background: var(--color-surface-hover);
+}
+
+.subnav-tab-btn.active {
+  color: var(--color-primary-blue);
+  background: #EEF2FF;
+}
+
+.description-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+
+.btn-row-action {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: #FFF;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-row-action:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-deep-slate);
+}
+
+.btn-approve {
+  border-color: #A7F3D0;
+  color: #065F46;
+}
+
+.btn-approve:hover {
+  background: #ECFDF5;
+}
+
+.btn-reject {
+  border-color: #FECACA;
+  color: #991B1B;
+}
+
+.btn-reject:hover {
+  background: #FEF2F2;
+}
+
+.btn-danger-action {
+  color: #DC2626;
+}
+
+.btn-danger-action:hover {
+  background: #FEF2F2;
+  border-color: #FCA5A5;
+}
+
+.modal-dialog-sm {
+  max-width: 440px;
+}

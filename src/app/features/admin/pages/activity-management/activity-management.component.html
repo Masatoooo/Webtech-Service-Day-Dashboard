@@ -29,6 +29,23 @@
     </div>
   </header>
 
+  <!-- Subnav Tabs connecting Activities and NGO Partners under one group -->
+  <nav class="subnav-tabs-strip mb-6" aria-label="Activities and NGOs Tabs">
+    <a routerLink="/admin/activities" class="subnav-tab-btn active" id="tab-nav-activities">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="16" height="16" aria-hidden="true">
+        <rect x="3" y="4" width="14" height="13" rx="2" />
+        <line x1="3" y1="8.5" x2="17" y2="8.5" />
+      </svg>
+      Activities
+    </a>
+    <a routerLink="/admin/ngos" class="subnav-tab-btn" id="tab-nav-ngos">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
+      </svg>
+      NGO Partners
+    </a>
+  </nav>
+
   <!-- In-Page Feedback Toast / Alert -->
   <div
     *ngIf="toastMessage"
@@ -419,6 +436,21 @@
             <!-- Row Actions -->
             <td class="td-actions text-right">
               <div class="row-actions flex items-center justify-end gap-1">
+                <!-- View Roster Action -->
+                <a
+                  [routerLink]="['/admin/participants']"
+                  [queryParams]="{ activityId: row.activity.id }"
+                  class="btn btn-sm btn-secondary btn-icon-text"
+                  [id]="'btn-roster-' + row.activity.id"
+                  title="View registered participant roster"
+                >
+                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14" aria-hidden="true">
+                    <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                    <path d="M2.5 17c0-2.8 2.2-5 5-5h1c2.8 0 5 2.2 5 5" />
+                  </svg>
+                  Roster
+                </a>
+
                 <!-- Edit Action -->
                 <button
                   type="button"
@@ -566,6 +598,14 @@
 
       <!-- Action Buttons Row -->
       <div class="flex flex-wrap justify-end gap-2 mt-3 pt-2" style="border-top: 1px solid #EEF2F0;">
+        <a
+          [routerLink]="['/admin/participants']"
+          [queryParams]="{ activityId: row.activity.id }"
+          class="btn btn-sm btn-secondary"
+        >
+          Roster
+        </a>
+
         <button
           type="button"
           class="btn btn-sm btn-secondary"

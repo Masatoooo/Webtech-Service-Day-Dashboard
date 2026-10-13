@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.participant-monitoring-page {
+  padding: 0 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .activity-context-card > .flex {
+    flex-direction: column !important;
+  }
+  .context-stats-grid {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+  }
+}

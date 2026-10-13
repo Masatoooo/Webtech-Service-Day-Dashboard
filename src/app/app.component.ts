@@ -20,6 +20,7 @@ export class App {
 
   isMobileMenuOpen = false;
   isDesktopSidebarCollapsed = false;
+  isActivitiesGroupOpen = true;
 
   constructor(
     private readonly authService: AuthService,
@@ -50,6 +51,19 @@ export class App {
       }),
       startWith(this.router.url ? isAuthPath(this.router.url) : false)
     );
+  }
+
+  get isActivitiesRouteActive(): boolean {
+    const url = this.router.url;
+    return url.startsWith('/admin/activities') || url.startsWith('/admin/ngos');
+  }
+
+  toggleActivitiesGroup(): void {
+    if (this.isDesktopSidebarCollapsed) {
+      this.router.navigate(['/admin/activities']);
+      return;
+    }
+    this.isActivitiesGroupOpen = !this.isActivitiesGroupOpen;
   }
 
   toggleDesktopSidebar(): void {
