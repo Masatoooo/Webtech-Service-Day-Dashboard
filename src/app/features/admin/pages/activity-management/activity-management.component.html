@@ -72,10 +72,18 @@
       <div class="nexus-kpi-footer">
         <span class="nexus-kpi-sub">All managed initiatives</span>
       </div>
-      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 25 Q 25 15, 50 18 T 100 8 L 100 30 L 0 30 Z" fill="rgba(37, 99, 235, 0.08)"></path>
-        <path d="M0 25 Q 25 15, 50 18 T 100 8" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
-      </svg>
+      <div class="nexus-kpi-sparkline-wrap">
+        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="spk-act-blue" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2563EB" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="#2563EB" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 30 C 30 30, 45 14, 75 18 C 105 22, 130 12, 160 16 C 180 20, 190 8, 200 10 L 200 44 L 0 44 Z" fill="url(#spk-act-blue)" />
+          <path d="M0 30 C 30 30, 45 14, 75 18 C 105 22, 130 12, 160 16 C 180 20, 190 8, 200 10" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        </svg>
+      </div>
     </div>
 
     <!-- 2. Published / Open -->
@@ -94,10 +102,18 @@
       <div class="nexus-kpi-footer">
         <span class="nexus-kpi-sub">Discoverable by employees</span>
       </div>
-      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 26 Q 30 18, 55 12 T 100 6 L 100 30 L 0 30 Z" fill="rgba(5, 150, 105, 0.08)"></path>
-        <path d="M0 26 Q 30 18, 55 12 T 100 6" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"></path>
-      </svg>
+      <div class="nexus-kpi-sparkline-wrap">
+        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="spk-act-emerald" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#10B981" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="#10B981" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8 L 200 44 L 0 44 Z" fill="url(#spk-act-emerald)" />
+          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        </svg>
+      </div>
     </div>
 
     <!-- 3. Draft / In Review -->
@@ -116,10 +132,18 @@
       <div class="nexus-kpi-footer">
         <span class="nexus-kpi-sub">Admin-only staging</span>
       </div>
-      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 24 Q 25 22, 60 16 T 100 12 L 100 30 L 0 30 Z" fill="rgba(217, 119, 6, 0.08)"></path>
-        <path d="M0 24 Q 25 22, 60 16 T 100 12" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"></path>
-      </svg>
+      <div class="nexus-kpi-sparkline-wrap">
+        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="spk-act-amber" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="#F59E0B" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 26 C 25 20, 50 28, 75 24 C 105 20, 130 32, 160 22 C 180 16, 195 18, 200 14 L 200 44 L 0 44 Z" fill="url(#spk-act-amber)" />
+          <path d="M0 26 C 25 20, 50 28, 75 24 C 105 20, 130 32, 160 22 C 180 16, 195 18, 200 14" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        </svg>
+      </div>
     </div>
 
     <!-- 4. Cancelled / Inactive -->
@@ -138,10 +162,18 @@
       <div class="nexus-kpi-footer">
         <span class="nexus-kpi-sub">Preserved in audit</span>
       </div>
-      <svg class="nexus-kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 22 Q 40 24, 70 20 T 100 22 L 100 30 L 0 30 Z" fill="rgba(100, 116, 139, 0.08)"></path>
-        <path d="M0 22 Q 40 24, 70 20 T 100 22" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"></path>
-      </svg>
+      <div class="nexus-kpi-sparkline-wrap">
+        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="spk-act-slate" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#64748B" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="#64748B" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 32 C 30 26, 60 30, 90 24 C 120 18, 150 28, 175 20 C 185 16, 195 18, 200 16 L 200 44 L 0 44 Z" fill="url(#spk-act-slate)" />
+          <path d="M0 32 C 30 26, 60 30, 90 24 C 120 18, 150 28, 175 20 C 185 16, 195 18, 200 16" stroke="#64748B" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        </svg>
+      </div>
     </div>
 
     <!-- 5. Slot Utilisation -->
@@ -159,9 +191,18 @@
       </div>
       <div class="nexus-kpi-footer">
         <span class="nexus-kpi-sub">{{ metrics.totalRegistered }} of {{ metrics.totalCapacity }} volunteers enrolled</span>
-        <div class="metric-col-progress" aria-hidden="true">
-          <div class="metric-col-progress-fill" [style.width.%]="metrics.utilisationRate"></div>
-        </div>
+      </div>
+      <div class="nexus-kpi-sparkline-wrap">
+        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="spk-act-purple" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 32 C 25 34, 50 18, 80 20 C 110 22, 135 10, 165 12 C 185 14, 195 4, 200 6 L 200 44 L 0 44 Z" fill="url(#spk-act-purple)" />
+          <path d="M0 32 C 25 34, 50 18, 80 20 C 110 22, 135 10, 165 12 C 185 14, 195 4, 200 6" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        </svg>
       </div>
     </div>
   </div>
