@@ -70,9 +70,9 @@
   --status-info-text:      #3446E4;
   --status-info-border:    #E8EBFC;
 
-  /* Typography Stacks (Poppins) */
-  --font-interface:  'Poppins', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-editorial:  'Poppins', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Typography Stacks (Plus Jakarta Sans) */
+  --font-interface:  'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-editorial:  'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
   /* Type Scale */
   --font-size-xs:    0.75rem;     /* 12px */

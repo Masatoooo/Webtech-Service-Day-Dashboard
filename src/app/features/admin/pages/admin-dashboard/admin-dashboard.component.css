@@ -294,57 +294,55 @@
 .nexus-radar-list {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .nexus-radar-row {
-  background: #FFFFFF !important;
-  border: 1px solid #F1F5F9 !important;
-  border-radius: 14px !important;
-  padding: 0.85rem 1.15rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #F1F5F9 !important;
+  border-radius: 12px !important;
+  padding: 0.9rem 0.75rem !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 1rem !important;
+  gap: 1.15rem !important;
   text-align: left !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
   position: relative !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
+  box-shadow: none !important;
+}
+
+.nexus-radar-row:last-child {
+  border-bottom: none !important;
 }
 
 .nexus-radar-row:hover {
-  background: #F8FAFC !important;
-  border-color: #E2E8F0 !important;
-  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.05) !important;
-  transform: translateY(-1px) !important;
+  background: #F8FAFD !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-/* Micro-Icon Box */
+/* Micro-Icon Box (Unified Neutral, No Bright Clashing Colors) */
 .radar-row-icon {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
+  background: #F8FAFD;
+  border: 1px solid #EEF2F6;
+  color: #64748B;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.radar-row-icon.icon-high {
-  background: #FEF2F2;
-  color: #DC2626;
-}
-
-.radar-row-icon.icon-medium {
-  background: #FFFBEB;
-  color: #D97706;
-}
-
-.radar-row-icon.icon-info {
-  background: #EFF6FF;
-  color: #2563EB;
+.nexus-radar-row:hover .radar-row-icon {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+  color: var(--color-primary-blue);
 }
 
 /* Main Content */
@@ -353,51 +351,25 @@
   min-width: 0;
 }
 
-.radar-row-header {
+.radar-row-title-wrap {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
-.radar-row-header .radar-title {
+.radar-row-main .radar-title {
+  font-family: var(--font-interface);
   font-size: 0.885rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0F172A;
   margin: 0;
   line-height: 1.35;
 }
 
-/* Discreet, Sophisticated Status Tag */
-.radar-tag {
-  font-size: 0.685rem;
-  font-weight: 600;
-  padding: 0.15rem 0.5rem;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  letter-spacing: 0.01em;
-}
-
-.radar-tag.tag-high {
-  background: #FEF2F2;
-  color: #DC2626;
-}
-
-.radar-tag.tag-medium {
-  background: #FFFBEB;
-  color: #D97706;
-}
-
-.radar-tag.tag-info {
-  background: #EFF6FF;
-  color: #2563EB;
-}
-
 /* Meta Details Row */
 .radar-row-meta {
-  margin-top: 0.2rem;
-  font-size: 0.785rem;
+  margin-top: 0.25rem;
+  font-size: 0.775rem;
   color: #64748B;
   display: flex;
   align-items: center;
@@ -417,7 +389,7 @@
 }
 
 .radar-ngo-name {
-  color: var(--color-ngo-teal);
+  color: #64748B;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
@@ -427,19 +399,61 @@
   color: var(--color-ngo-teal) !important;
 }
 
+/* Right Side: Status Tag & Actions */
+.radar-row-right {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* Discreet, Sophisticated Status Tag - Muted, Calm, Non-Clashing */
+.radar-tag {
+  font-family: var(--font-interface);
+  font-size: 0.725rem;
+  font-weight: 500;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* High severity: subtle muted rose text and border, calm not screeching */
+.radar-tag.tag-high {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FEE2E2;
+}
+
+/* Medium severity: subtle warm sand/amber text, gentle not neon */
+.radar-tag.tag-medium {
+  background: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FEF3C7;
+}
+
+/* Low enrollment / info: quiet slate capsule */
+.radar-tag.tag-info {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+
 /* Actions */
 .radar-row-actions {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
   flex-shrink: 0;
 }
 
 .btn-radar-pill {
   font-family: var(--font-interface);
-  font-size: 0.76rem !important;
+  font-size: 0.75rem !important;
   font-weight: 500 !important;
-  padding: 0.32rem 0.85rem !important;
+  padding: 0.28rem 0.75rem !important;
   border-radius: 9999px !important;
   text-decoration: none;
   cursor: pointer;
@@ -476,15 +490,15 @@
   box-shadow: 0 2px 8px rgba(67, 85, 249, 0.2) !important;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .nexus-radar-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
   }
-  .radar-row-actions {
-    width: 100%;
-    justify-content: flex-end;
+  .radar-row-right {
+    width: 100% !important;
+    justify-content: space-between !important;
   }
 }
 

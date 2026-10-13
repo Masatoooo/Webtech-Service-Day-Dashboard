@@ -185,22 +185,22 @@
             [ngClass]="'severity-' + item.severity"
             [id]="'attention-item-' + item.activity.id"
           >
-            <!-- Left: Micro Icon Badge based on type -->
-            <div class="radar-row-icon" [ngClass]="'icon-' + item.severity" aria-hidden="true">
+            <!-- Left: Micro Icon Badge (Unified Neutral Aesthetic) -->
+            <div class="radar-row-icon" aria-hidden="true">
               <!-- Capacity Full / Almost full: Users -->
-              <svg *ngIf="item.type === 'CAPACITY_FULL' || item.type === 'ALMOST_FULL'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg *ngIf="item.type === 'CAPACITY_FULL' || item.type === 'ALMOST_FULL'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
               <!-- Cut-off Closed: Clock / Calendar -->
-              <svg *ngIf="item.type === 'APPROACHING_CUTOFF'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg *ngIf="item.type === 'APPROACHING_CUTOFF'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
               <!-- Low sign-up: Alert / User -->
-              <svg *ngIf="item.type === 'LOW_ENROLLMENT'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg *ngIf="item.type === 'LOW_ENROLLMENT'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="8.5" cy="7" r="4"></circle>
                 <line x1="20" y1="8" x2="20" y2="14"></line>
@@ -210,21 +210,13 @@
 
             <!-- Middle: Main Information Block -->
             <div class="radar-row-main">
-              <div class="radar-row-header flex items-center gap-2">
+              <div class="radar-row-title-wrap">
                 <span class="attention-title radar-title">{{ item.activity.title }}</span>
-                <span class="radar-tag" [ngClass]="'tag-' + item.severity">
-                  {{
-                    item.type === 'CAPACITY_FULL' ? 'Capacity Full' :
-                    item.type === 'ALMOST_FULL' ? 'Almost Full' :
-                    item.type === 'APPROACHING_CUTOFF' ? 'Cut-off Closed' :
-                    'Low Sign-up'
-                  }}
-                </span>
               </div>
               <div class="radar-row-meta flex items-center gap-2 text-xs">
                 <span class="attention-detail radar-detail">{{ item.detail }}</span>
                 <span class="meta-separator">&bull;</span>
-                <span class="radar-ngo-name text-ngo">
+                <span class="radar-ngo-name">
                   <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="display: inline-block; vertical-align: -1px; margin-right: 3px;">
                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
                   </svg>
@@ -233,23 +225,34 @@
               </div>
             </div>
 
-            <!-- Right: Action Pills -->
-            <div class="radar-row-actions flex items-center gap-2">
-              <button
-                type="button"
-                class="btn-radar-pill btn-radar-subtle"
-                (click)="filterRosterByActivity(item.activity.id)"
-                title="Inspect participant roster"
-              >
-                Roster
-              </button>
-              <a
-                routerLink="/admin/activities"
-                class="btn-radar-pill btn-radar-action"
-                title="Open in activity management"
-              >
-                Manage &rarr;
-              </a>
+            <!-- Right: Status Badge & Actions -->
+            <div class="radar-row-right flex items-center gap-3">
+              <span class="radar-tag" [ngClass]="'tag-' + item.severity">
+                {{
+                  item.type === 'CAPACITY_FULL' ? 'Capacity Full' :
+                  item.type === 'ALMOST_FULL' ? 'Almost Full' :
+                  item.type === 'APPROACHING_CUTOFF' ? 'Cut-off Closed' :
+                  'Low Sign-up'
+                }}
+              </span>
+
+              <div class="radar-row-actions flex items-center gap-2">
+                <button
+                  type="button"
+                  class="btn-radar-pill btn-radar-subtle"
+                  (click)="filterRosterByActivity(item.activity.id)"
+                  title="Inspect participant roster"
+                >
+                  Roster
+                </button>
+                <a
+                  routerLink="/admin/activities"
+                  class="btn-radar-pill btn-radar-action"
+                  title="Open in activity management"
+                >
+                  Manage &rarr;
+                </a>
+              </div>
             </div>
           </div>
         </div>
