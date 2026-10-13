@@ -154,229 +154,224 @@
     </div>
   </section>
 
-  <!-- Middle Split Layout: Left = Operational Radar, Right = Capacity Utilisation & Partner NGOs (NEXUS Pattern) -->
-  <div class="dash-nexus-split-grid mb-6" *ngIf="totals$ | async as m">
-    <!-- Left Column: Operational Attention Radar (approx 65%) -->
-    <div class="nexus-main-col">
-      <section class="nexus-card attention-card" id="section-needs-attention">
-        <div class="radar-card-header mb-4">
-          <div class="radar-title-row">
-            <h2 class="dash-section-title">Operational Attention Radar</h2>
-            <span class="radar-count-tag text-xs text-muted font-medium" id="badge-attention-count">
-              {{ needsAttentionItems.length }} alert(s)
-            </span>
-          </div>
-          <p class="radar-subtitle text-xs text-muted">
-            Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
-          </p>
-        </div>
-
-        <div class="nexus-radar-list" *ngIf="needsAttentionItems.length > 0; else noAttentionTemplate">
-          <div
-            *ngFor="let item of needsAttentionItems"
-            class="nexus-radar-row attention-item"
-            [ngClass]="'severity-' + item.severity"
-            [id]="'attention-item-' + item.activity.id"
-          >
-            <!-- Left: Micro Icon Badge (Unified Neutral Aesthetic) -->
-            <div class="radar-row-icon" aria-hidden="true">
-              <!-- Capacity Full / Almost full: Users -->
-              <svg *ngIf="item.type === 'CAPACITY_FULL' || item.type === 'ALMOST_FULL'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              <!-- Cut-off Closed: Clock / Calendar -->
-              <svg *ngIf="item.type === 'APPROACHING_CUTOFF'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <!-- Low sign-up: Alert / User -->
-              <svg *ngIf="item.type === 'LOW_ENROLLMENT'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="8.5" cy="7" r="4"></circle>
-                <line x1="20" y1="8" x2="20" y2="14"></line>
-                <line x1="23" y1="11" x2="17" y2="11"></line>
-              </svg>
-            </div>
-
-            <!-- Middle: Main Information Block -->
-            <div class="radar-row-main">
-              <div class="radar-row-title-wrap">
-                <span class="attention-title radar-title">{{ item.activity.title }}</span>
-              </div>
-              <div class="radar-row-meta flex items-center gap-2 text-xs">
-                <span class="attention-detail radar-detail">{{ item.detail }}</span>
-                <span class="meta-separator" style="color: #CBD5E1;">/</span>
-                <span class="radar-ngo-name">
-                  <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="display: inline-block; vertical-align: -1px; margin-right: 3px;">
-                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
-                  </svg>
-                  {{ item.ngoName }}
-                </span>
-              </div>
-            </div>
-
-            <!-- Right: Status Badge & Actions -->
-            <div class="radar-row-right flex items-center gap-3">
-              <span class="radar-tag" [ngClass]="'tag-' + item.severity">
-                {{
-                  item.type === 'CAPACITY_FULL' ? 'Capacity Full' :
-                  item.type === 'ALMOST_FULL' ? 'Almost Full' :
-                  item.type === 'APPROACHING_CUTOFF' ? 'Cut-off Closed' :
-                  'Low Sign-up'
-                }}
-              </span>
-
-              <div class="radar-row-actions flex items-center gap-2">
-                <button
-                  type="button"
-                  class="btn-radar-pill btn-radar-subtle"
-                  (click)="filterRosterByActivity(item.activity.id)"
-                  title="Inspect participant roster"
-                >
-                  Roster
-                </button>
-                <a
-                  routerLink="/admin/activities"
-                  class="btn-radar-pill btn-radar-action"
-                  title="Open in activity management"
-                >
-                  Manage &rarr;
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <ng-template #noAttentionTemplate>
-          <div class="nexus-empty-radar p-4 text-center text-muted text-sm mt-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" style="color: #10B981; margin: 0 auto 0.5rem;" aria-hidden="true">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <div>All active initiatives are operating smoothly within nominal capacity thresholds and cut-off deadlines.</div>
-          </div>
-        </ng-template>
-      </section>
+  <!-- Operational Attention Radar (Full-Width Command Banner) -->
+  <section class="nexus-card attention-card mb-6" id="section-needs-attention">
+    <div class="radar-card-header mb-4">
+      <div class="radar-title-row">
+        <h2 class="dash-section-title">Operational Attention Radar</h2>
+        <span class="radar-count-tag text-xs text-muted font-medium" id="badge-attention-count">
+          {{ needsAttentionItems.length }} alert(s)
+        </span>
+      </div>
+      <p class="radar-subtitle text-xs text-muted">
+        Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
+      </p>
     </div>
 
-    <!-- Right Column: Capacity Utilisation & Partner NGOs (NEXUS Progress & Impact) -->
-    <div class="nexus-side-col">
-      <!-- Capacity Utilisation Card -->
-      <div class="nexus-card admin-kpi-card mb-4" id="kpi-utilisation">
-        <div class="nexus-card-header flex justify-between items-center mb-2">
-          <div>
-            <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Capacity Utilisation</div>
-            <span class="text-xs text-muted">CSR staff enrollment rate</span>
-          </div>
-          <span class="text-xs text-muted">Target: 80%</span>
+    <div class="nexus-radar-list" *ngIf="needsAttentionItems.length > 0; else noAttentionTemplate">
+      <div
+        *ngFor="let item of needsAttentionItems"
+        class="nexus-radar-row attention-item"
+        [ngClass]="'severity-' + item.severity"
+        [id]="'attention-item-' + item.activity.id"
+      >
+        <!-- Left: Micro Icon Badge (Unified Neutral Aesthetic) -->
+        <div class="radar-row-icon" aria-hidden="true">
+          <!-- Capacity Full / Almost full: Users -->
+          <svg *ngIf="item.type === 'CAPACITY_FULL' || item.type === 'ALMOST_FULL'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <!-- Cut-off Closed: Clock / Calendar -->
+          <svg *ngIf="item.type === 'APPROACHING_CUTOFF'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <!-- Low sign-up: Alert / User -->
+          <svg *ngIf="item.type === 'LOW_ENROLLMENT'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
         </div>
 
-        <div class="nexus-gauge-wrapper">
-          <!-- Circular SVG Donut Progress Ring -->
-          <div class="nexus-donut-box">
-            <svg class="nexus-donut-svg" viewBox="0 0 120 120" aria-hidden="true">
-              <circle
-                class="nexus-donut-bg"
-                cx="60"
-                cy="60"
-                r="48"
-                fill="none"
-                stroke="#F1F5F9"
-                stroke-width="11"
-              />
-              <circle
-                class="nexus-donut-fg"
-                cx="60"
-                cy="60"
-                r="48"
-                fill="none"
-                [attr.stroke]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : '#2563EB'"
-                stroke-width="11"
-                stroke-linecap="round"
-                stroke-dasharray="301.59"
-                [style.strokeDashoffset]="301.59 * (1 - (m.capacityUtilisationPct || 0) / 100)"
-              />
-            </svg>
-            <div class="nexus-donut-center">
-              <span class="nexus-donut-val kpi-num" style="margin: 0;" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</span>
-              <span class="nexus-donut-lbl">Utilised</span>
-            </div>
+        <!-- Middle: Main Information Block -->
+        <div class="radar-row-main">
+          <div class="radar-row-title-wrap">
+            <span class="attention-title radar-title">{{ item.activity.title }}</span>
           </div>
-
-          <!-- Legend / Breakdown -->
-          <div class="nexus-gauge-legend">
-            <div class="legend-row">
-              <span class="legend-indicator dot-blue"></span>
-              <span class="legend-name">Places Taken</span>
-              <span class="legend-value font-semibold">{{ m.placesTaken }}</span>
-            </div>
-            <div class="legend-row">
-              <span class="legend-indicator dot-amber"></span>
-              <span class="legend-name">Remaining</span>
-              <span class="legend-value font-semibold">{{ m.placesRemaining }}</span>
-            </div>
-            <div class="legend-row">
-              <span class="legend-indicator dot-slate"></span>
-              <span class="legend-name">Total Capacity</span>
-              <span class="legend-value font-semibold">{{ m.totalOfferedPlaces }}</span>
-            </div>
+          <div class="radar-row-meta flex items-center gap-2 text-xs">
+            <span class="attention-detail radar-detail">{{ item.detail }}</span>
+            <span class="meta-separator" style="color: #CBD5E1;">/</span>
+            <span class="radar-ngo-name">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="display: inline-block; vertical-align: -1px; margin-right: 3px;">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
+              </svg>
+              {{ item.ngoName }}
+            </span>
           </div>
         </div>
 
-        <div class="kpi-sub mt-2 text-xs">
-          {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
+        <!-- Right: Status Badge & Actions -->
+        <div class="radar-row-right flex items-center gap-3">
+          <span class="radar-tag" [ngClass]="'tag-' + item.severity">
+            {{
+              item.type === 'CAPACITY_FULL' ? 'Capacity Full' :
+              item.type === 'ALMOST_FULL' ? 'Almost Full' :
+              item.type === 'APPROACHING_CUTOFF' ? 'Cut-off Closed' :
+              'Low Sign-up'
+            }}
+          </span>
+
+          <div class="radar-row-actions flex items-center gap-2">
+            <button
+              type="button"
+              class="btn-radar-pill btn-radar-subtle"
+              (click)="filterRosterByActivity(item.activity.id)"
+              title="Inspect participant roster"
+            >
+              Roster
+            </button>
+            <a
+              routerLink="/admin/activities"
+              class="btn-radar-pill btn-radar-action"
+              title="Open in activity management"
+            >
+              Manage &rarr;
+            </a>
+          </div>
         </div>
-        <div class="kpi-progress-bar">
-          <div
-            class="kpi-progress-fill"
-            [style.width.%]="m.capacityUtilisationPct"
-            [style.background]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : 'var(--color-sky-gradient)'"
-          ></div>
+      </div>
+    </div>
+
+    <ng-template #noAttentionTemplate>
+      <div class="nexus-empty-radar p-4 text-center text-muted text-sm mt-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" style="color: #10B981; margin: 0 auto 0.5rem;" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <div>All active initiatives are operating smoothly within nominal capacity thresholds and cut-off deadlines.</div>
+      </div>
+    </ng-template>
+  </section>
+
+  <!-- Middle Analytics Row: Capacity Utilisation & Partner NGOs (Balanced 50:50 Side-by-Side) -->
+  <div class="dash-analytics-grid mb-6" *ngIf="totals$ | async as m">
+    <!-- Capacity Utilisation Card -->
+    <div class="nexus-card admin-kpi-card" id="kpi-utilisation">
+      <div class="nexus-card-header flex justify-between items-center mb-2">
+        <div>
+          <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Capacity Utilisation</div>
+          <span class="text-xs text-muted">CSR staff enrollment rate</span>
+        </div>
+        <span class="text-xs text-muted">Target: 80%</span>
+      </div>
+
+      <div class="nexus-gauge-wrapper">
+        <!-- Circular SVG Donut Progress Ring -->
+        <div class="nexus-donut-box">
+          <svg class="nexus-donut-svg" viewBox="0 0 120 120" aria-hidden="true">
+            <circle
+              class="nexus-donut-bg"
+              cx="60"
+              cy="60"
+              r="48"
+              fill="none"
+              stroke="#F1F5F9"
+              stroke-width="11"
+            />
+            <circle
+              class="nexus-donut-fg"
+              cx="60"
+              cy="60"
+              r="48"
+              fill="none"
+              [attr.stroke]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : '#2563EB'"
+              stroke-width="11"
+              stroke-linecap="round"
+              stroke-dasharray="301.59"
+              [style.strokeDashoffset]="301.59 * (1 - (m.capacityUtilisationPct || 0) / 100)"
+            />
+          </svg>
+          <div class="nexus-donut-center">
+            <span class="nexus-donut-val kpi-num" style="margin: 0;" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</span>
+            <span class="nexus-donut-lbl">Utilised</span>
+          </div>
+        </div>
+
+        <!-- Legend / Breakdown -->
+        <div class="nexus-gauge-legend">
+          <div class="legend-row">
+            <span class="legend-indicator dot-blue"></span>
+            <span class="legend-name">Places Taken</span>
+            <span class="legend-value font-semibold">{{ m.placesTaken }}</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-indicator dot-amber"></span>
+            <span class="legend-name">Remaining</span>
+            <span class="legend-value font-semibold">{{ m.placesRemaining }}</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-indicator dot-slate"></span>
+            <span class="legend-name">Total Capacity</span>
+            <span class="legend-value font-semibold">{{ m.totalOfferedPlaces }}</span>
+          </div>
         </div>
       </div>
 
-      <!-- Partner NGOs & History Card -->
-      <div class="nexus-card admin-kpi-card" id="kpi-ngos-ratio">
-        <div class="nexus-card-header flex justify-between items-center mb-3">
-          <div>
-            <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Partner NGOs & History</div>
-            <span class="text-xs text-muted">Community partner ecosystem</span>
+      <div class="kpi-sub mt-2 text-xs">
+        {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
+      </div>
+      <div class="kpi-progress-bar">
+        <div
+          class="kpi-progress-fill"
+          [style.width.%]="m.capacityUtilisationPct"
+          [style.background]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : 'var(--color-sky-gradient)'"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Partner NGOs & History Card -->
+    <div class="nexus-card admin-kpi-card" id="kpi-ngos-ratio">
+      <div class="nexus-card-header flex justify-between items-center mb-3">
+        <div>
+          <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Partner NGOs & History</div>
+          <span class="text-xs text-muted">Community partner ecosystem</span>
+        </div>
+        <div class="kpi-num text-ngo" style="font-size: 1.5rem; margin: 0;" id="kpi-val-ngos">{{ m.totalNgos }}</div>
+      </div>
+
+      <div class="kpi-sub mb-3">
+        <strong class="text-ngo">{{ m.approvedNgos }} approved</strong>, {{ m.cancelledRegistrations }} withdrawn
+      </div>
+
+      <div class="ngo-breakdown-list">
+        <div class="ngo-stat-item">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="text-secondary font-medium">Approved Partner NGOs</span>
+            <span class="font-bold text-ngo">{{ m.approvedNgos }} / {{ m.totalNgos }}</span>
           </div>
-          <div class="kpi-num text-ngo" style="font-size: 1.5rem; margin: 0;" id="kpi-val-ngos">{{ m.totalNgos }}</div>
+          <div class="ngo-meter-bar">
+            <div
+              class="ngo-meter-fill fill-ngo"
+              [style.width.%]="m.totalNgos > 0 ? (m.approvedNgos / m.totalNgos * 100) : 0"
+            ></div>
+          </div>
         </div>
 
-        <div class="kpi-sub mb-3">
-          <strong class="text-ngo">{{ m.approvedNgos }} approved</strong>, {{ m.cancelledRegistrations }} withdrawn
-        </div>
-
-        <div class="ngo-breakdown-list">
-          <div class="ngo-stat-item">
-            <div class="flex justify-between items-center text-xs mb-1">
-              <span class="text-secondary font-medium">Approved Partner NGOs</span>
-              <span class="font-bold text-ngo">{{ m.approvedNgos }} / {{ m.totalNgos }}</span>
-            </div>
-            <div class="ngo-meter-bar">
-              <div
-                class="ngo-meter-fill fill-ngo"
-                [style.width.%]="m.totalNgos > 0 ? (m.approvedNgos / m.totalNgos * 100) : 0"
-              ></div>
-            </div>
+        <div class="ngo-stat-item mt-3">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="text-secondary font-medium">Withdrawn Registrations</span>
+            <span class="font-bold text-muted">{{ m.cancelledRegistrations }} total</span>
           </div>
-
-          <div class="ngo-stat-item mt-3">
-            <div class="flex justify-between items-center text-xs mb-1">
-              <span class="text-secondary font-medium">Withdrawn Registrations</span>
-              <span class="font-bold text-muted">{{ m.cancelledRegistrations }} total</span>
-            </div>
-            <div class="ngo-meter-bar">
-              <div
-                class="ngo-meter-fill fill-slate"
-                [style.width.%]="m.placesTaken > 0 ? (m.cancelledRegistrations / (m.placesTaken + m.cancelledRegistrations) * 100) : 8"
-              ></div>
-            </div>
+          <div class="ngo-meter-bar">
+            <div
+              class="ngo-meter-fill fill-slate"
+              [style.width.%]="m.placesTaken > 0 ? (m.cancelledRegistrations / (m.placesTaken + m.cancelledRegistrations) * 100) : 8"
+            ></div>
           </div>
         </div>
       </div>
