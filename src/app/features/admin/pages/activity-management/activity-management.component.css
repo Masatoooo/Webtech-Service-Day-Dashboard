@@ -248,13 +248,13 @@
 }
 
 .active-badge {
-  font-size: 0.725rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: #2563EB;
-  background: #EFF6FF;
-  border: 1px solid #DBEAFE;
-  border-radius: var(--radius-full);
-  padding: 0.2rem 0.65rem;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
 }
 
 /* ==========================================================================
@@ -318,40 +318,38 @@
 }
 
 .type-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.65rem;
-  border-radius: var(--radius-full);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  background: #EFF6FF;
-  color: #2563EB;
-  border: 1px solid #DBEAFE;
+  display: inline-block;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: transparent !important;
+  color: #64748B;
+  border: none !important;
 }
 
 .type-pill[data-type="ENVIRONMENT"] {
-  background: #ECFDF5;
+  background: transparent !important;
   color: #059669;
-  border-color: #A7F3D0;
+  border: none !important;
 }
 
 .type-pill[data-type="EDUCATION"] {
-  background: #EFF6FF;
+  background: transparent !important;
   color: #2563EB;
-  border-color: #BFDBFE;
+  border: none !important;
 }
 
 .type-pill[data-type="COMMUNITY_DEV"] {
-  background: #FDF4FF;
-  color: #A21CAF;
-  border-color: #F5D0FE;
+  background: transparent !important;
+  color: #7C3AED;
+  border: none !important;
 }
 
 .type-pill[data-type="HEALTHCARE"] {
-  background: #FEF2F2;
+  background: transparent !important;
   color: #DC2626;
-  border-color: #FECACA;
+  border: none !important;
 }
 
 .id-tag {
@@ -373,32 +371,33 @@
 }
 
 .badge-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.18rem 0.55rem;
-  border-radius: var(--radius-full);
-  font-size: 0.675rem;
-  font-weight: 700;
+  display: inline-block;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.725rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  background: transparent !important;
+  border: none !important;
 }
 
 .badge-approved {
-  background: #ECFDF5;
+  background: transparent !important;
   color: #059669;
-  border: 1px solid #A7F3D0;
+  border: none !important;
 }
 
 .badge-pending {
-  background: #FEF3C7;
+  background: transparent !important;
   color: #D97706;
-  border: 1px solid #FDE68A;
+  border: none !important;
 }
 
 .badge-rejected {
-  background: #FEF2F2;
+  background: transparent !important;
   color: #DC2626;
-  border: 1px solid #FECACA;
+  border: none !important;
 }
 
 .schedule-date {
@@ -420,39 +419,23 @@
 }
 
 .badge-status-open {
-  font-size: 0.725rem;
+  font-size: 0.775rem;
   font-weight: 600;
   color: #059669;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.badge-status-open::before {
-  content: '';
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #10B981;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .badge-status-closed {
-  font-size: 0.725rem;
+  font-size: 0.775rem;
   font-weight: 600;
   color: #DC2626;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.badge-status-closed::before {
-  content: '';
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #EF4444;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .location-text {
@@ -485,66 +468,70 @@
 }
 
 .avail-badge {
-  font-size: 0.675rem;
-  font-weight: 700;
+  font-size: 0.725rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-full);
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  display: inline-block;
 }
 
 .avail-badge[data-avail="OPEN"] {
-  background: #ECFDF5;
+  background: transparent !important;
   color: #059669;
-  border: 1px solid #A7F3D0;
+  border: none !important;
 }
 
 .avail-badge[data-avail="ALMOST_FULL"] {
-  background: #FEF3C7;
+  background: transparent !important;
   color: #D97706;
-  border: 1px solid #FDE68A;
+  border: none !important;
 }
 
 .avail-badge[data-avail="FULL"] {
-  background: #FEF2F2;
+  background: transparent !important;
   color: #DC2626;
-  border: 1px solid #FECACA;
+  border: none !important;
 }
 
-/* Publication Status Badge */
+/* Publication Status Badge: Pure Editorial Typography */
 .pub-status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.7rem;
-  border-radius: var(--radius-full);
+  display: inline-block;
+  padding: 0 !important;
+  border-radius: 0 !important;
   font-size: 0.725rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  background: transparent !important;
+  border: none !important;
 }
 
 .pub-published {
-  background: #ECFDF5;
+  background: transparent !important;
   color: #059669;
-  border: 1px solid #A7F3D0;
+  border: none !important;
 }
 
 .pub-draft {
-  background: #FEF3C7;
+  background: transparent !important;
   color: #D97706;
-  border: 1px solid #FDE68A;
+  border: none !important;
 }
 
 .pub-cancelled {
-  background: #FEF2F2;
+  background: transparent !important;
   color: #DC2626;
-  border: 1px solid #FECACA;
+  border: none !important;
 }
 
 .pub-completed {
-  background: #EFF6FF;
+  background: transparent !important;
   color: #2563EB;
-  border: 1px solid #BFDBFE;
+  border: none !important;
 }
 
 /* Action Buttons */
@@ -552,7 +539,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  border-radius: var(--radius-full);
+  border-radius: 6px;
   font-size: 0.775rem;
   font-weight: 600;
   padding: 0.35rem 0.75rem;
@@ -570,10 +557,10 @@
 
 .btn-action-toggle {
   font-size: 0.775rem;
-  font-weight: 600;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-full);
-  transition: all 0.2s ease;
+  font-weight: 500;
+  padding: 0.32rem 0.68rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
 }
 
 .btn-danger-icon {
@@ -583,7 +570,7 @@
   align-items: center;
   justify-content: center;
   color: #EF4444;
-  border-radius: 50%;
+  border-radius: 6px;
   border: 1px solid transparent;
   transition: all 0.2s ease;
 }

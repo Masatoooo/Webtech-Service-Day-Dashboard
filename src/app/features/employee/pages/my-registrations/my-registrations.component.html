@@ -136,8 +136,7 @@
             </span>
             <span
               *ngIf="item.registration.status === 'CANCELLED'"
-              class="badge"
-              style="background: #EEF2F4; color: #5F6B76; border: 1px solid #D1DADC;"
+              class="badge badge-warm"
               [id]="'badge-status-' + item.registration.id"
             >
               Withdrawn / Cancelled
@@ -432,7 +431,7 @@
                   {{ option.activity.title }}
                 </div>
                 <div class="text-xs text-muted mt-1">
-                  {{ option.activity.startDateTime | date:'mediumDate' }} ({{ option.activity.startDateTime | date:'shortTime' }}–{{ option.activity.endDateTime | date:'shortTime' }}) •
+                  {{ option.activity.startDateTime | date:'mediumDate' }} ({{ option.activity.startDateTime | date:'shortTime' }}–{{ option.activity.endDateTime | date:'shortTime' }}) /
                   <strong>{{ option.slotSummary.remainingSlots }} spots left</strong>
                 </div>
                 <div class="text-xs" style="color: var(--color-forest);" *ngIf="option.ngo">

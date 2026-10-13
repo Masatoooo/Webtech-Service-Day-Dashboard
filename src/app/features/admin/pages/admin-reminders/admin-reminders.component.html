@@ -16,7 +16,7 @@
           <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
             <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
           </svg>
-          Simulated In App • No SMTP Delivery
+          Simulated In App / No SMTP Delivery
         </div>
       </div>
     </div>
@@ -223,7 +223,6 @@
           <div class="preview-field">
             <span class="preview-field-label">Rule Active:</span>
             <span class="preview-field-val">
-              <span class="status-indicator" [class.status-green]="simPreviewResult.rule.enabled" [class.status-red]="!simPreviewResult.rule.enabled"></span>
               {{ simPreviewResult.rule.enabled ? 'Yes (Ready to trigger)' : 'Disabled in settings' }}
             </span>
           </div>

@@ -51,7 +51,7 @@
 .verification-icon-wrap {
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 6px;
   background-color: var(--color-forest);
   color: var(--color-surface-white);
   display: flex;

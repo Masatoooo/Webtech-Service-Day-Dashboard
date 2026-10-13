@@ -5,7 +5,7 @@
       <h1 class="dash-greeting-title">
         Hello, {{ (currentUser$ | async)?.name?.split(' ')?.[0] || 'Marcus' }}
       </h1>
-      <p class="dash-greeting-date text-secondary">{{ todayFormatted }} • CSR Executive Command Center</p>
+      <p class="dash-greeting-date text-secondary">{{ todayFormatted }} / CSR Executive Command Center</p>
     </div>
 
     <div class="dash-top-actions flex items-center gap-3">
@@ -677,7 +677,7 @@
           <div class="mobile-info-row">
             <span class="mobile-info-lbl">Schedule</span>
             <span class="mobile-info-val">
-              {{ row.activity.startDateTime | date:'mediumDate' }} • {{ row.activity.startDateTime | date:'shortTime' }}
+              {{ row.activity.startDateTime | date:'mediumDate' }} / {{ row.activity.startDateTime | date:'shortTime' }}
             </span>
           </div>
 
@@ -951,7 +951,7 @@
             <h4 class="font-bold text-sm" style="color: var(--color-deep-slate); margin: 0;">
               {{ row.user?.name || 'Staff Member' }}
             </h4>
-            <div class="text-xs text-muted">{{ row.user?.department || 'General Staff' }} • {{ row.user?.email }}</div>
+            <div class="text-xs text-muted">{{ row.user?.department || 'General Staff' }} / {{ row.user?.email }}</div>
           </div>
           <div>
             <span
@@ -977,7 +977,7 @@
 
           <div class="mobile-info-row">
             <span class="mobile-info-lbl">Booking Date</span>
-            <span class="mobile-info-val">{{ row.registration.registeredAt | date:'mediumDate' }} • {{ row.registration.registeredAt | date:'shortTime' }}</span>
+            <span class="mobile-info-val">{{ row.registration.registeredAt | date:'mediumDate' }} / {{ row.registration.registeredAt | date:'shortTime' }}</span>
           </div>
 
           <div class="mobile-info-row">
@@ -987,7 +987,7 @@
                 *ngIf="row.attendance?.status === 'CHECKED_IN' || row.attendance?.status === 'PRESENT'"
                 style="color: var(--color-forest); font-weight: 700;"
               >
-                ✓ Checked In ({{ row.attendance?.checkedInAt | date:'shortTime' }})
+                Checked In ({{ row.attendance?.checkedInAt | date:'shortTime' }})
               </span>
               <span
                 *ngIf="!row.attendance && row.registration.status === 'ACTIVE'"

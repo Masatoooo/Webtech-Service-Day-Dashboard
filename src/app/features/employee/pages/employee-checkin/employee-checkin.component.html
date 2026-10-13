@@ -64,7 +64,7 @@
       </div>
       <div class="success-detail-item">
         <span class="detail-lbl">Arrival Timestamp</span>
-        <span class="detail-val font-mono">{{ checkInSuccess.attendance.checkedInAt | date:'mediumDate' }} • {{ checkInSuccess.attendance.checkedInAt | date:'mediumTime' }}</span>
+        <span class="detail-val font-mono">{{ checkInSuccess.attendance.checkedInAt | date:'mediumDate' }} / {{ checkInSuccess.attendance.checkedInAt | date:'mediumTime' }}</span>
       </div>
       <div class="success-detail-item">
         <span class="detail-lbl">Verification Method</span>
@@ -271,7 +271,7 @@
           >
             <div>
               <div class="font-semibold text-sm text-deep-slate">{{ item.activity.title }}</div>
-              <div class="text-xs text-muted">{{ item.activity.location }} • {{ item.activity.startDateTime | date:'shortDate' }}</div>
+              <div class="text-xs text-muted">{{ item.activity.location }} / {{ item.activity.startDateTime | date:'shortDate' }}</div>
             </div>
 
             <div class="flex items-center gap-2">

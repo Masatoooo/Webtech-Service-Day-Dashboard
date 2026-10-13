@@ -26,7 +26,7 @@
   height: 38px;
   background: var(--color-surface-white);
   border: 1px solid var(--color-border);
-  border-radius: 50%;
+  border-radius: 8px;
   color: var(--color-secondary-text);
   text-decoration: none;
   transition: all var(--transition-fast);
@@ -46,7 +46,7 @@
   color: var(--color-deep-slate);
   border: 1px solid var(--color-border);
   padding: 0.55rem 1.15rem;
-  border-radius: var(--radius-full);
+  border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
@@ -485,7 +485,6 @@
   background: #E2E8F0 !important;
   border-color: #CBD5E1 !important;
   color: #0F172A !important;
-}
 }
 
 @media (max-width: 768px) {

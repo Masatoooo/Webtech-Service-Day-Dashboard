@@ -76,7 +76,6 @@
         <div class="sidebar-avatar" aria-hidden="true">
           {{ user.avatarInitials || (user.name | slice:0:2 | uppercase) }}
         </div>
-        <div class="sidebar-status-dot" title="Active demo session"></div>
       </div>
       <div class="sidebar-user-name">{{ user.name }}</div>
       <div class="sidebar-user-role">{{ user.role === 'ADMIN' ? 'Administrator' : 'Employee' }}</div>
