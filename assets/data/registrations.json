@@ -1,0 +1,95 @@
+[
+  {
+    "id": "reg-1",
+    "employeeId": "usr-emp-1",
+    "activityId": "act-1",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-08T09:15:00"
+  },
+  {
+    "id": "reg-2",
+    "employeeId": "usr-emp-2",
+    "activityId": "act-1",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-08T10:30:00"
+  },
+  {
+    "id": "reg-3",
+    "employeeId": "usr-emp-3",
+    "activityId": "act-1",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-09T14:00:00"
+  },
+  {
+    "id": "reg-4",
+    "employeeId": "usr-emp-1",
+    "activityId": "act-2",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-09T11:00:00"
+  },
+  {
+    "id": "reg-5",
+    "employeeId": "usr-emp-2",
+    "activityId": "act-2",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-09T11:20:00"
+  },
+  {
+    "id": "reg-6",
+    "employeeId": "usr-emp-3",
+    "activityId": "act-2",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-09T12:05:00"
+  },
+  {
+    "id": "reg-7",
+    "employeeId": "usr-emp-4",
+    "activityId": "act-2",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-09T13:40:00"
+  },
+  {
+    "id": "reg-8",
+    "employeeId": "usr-emp-4",
+    "activityId": "act-3",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-10T08:00:00"
+  },
+  {
+    "id": "reg-9",
+    "employeeId": "usr-emp-5",
+    "activityId": "act-3",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-10T09:30:00"
+  },
+  {
+    "id": "reg-10",
+    "employeeId": "usr-emp-5",
+    "activityId": "act-4",
+    "status": "ACTIVE",
+    "registeredAt": "2026-10-10T16:00:00"
+  },
+  {
+    "id": "reg-11",
+    "employeeId": "usr-emp-4",
+    "activityId": "act-1",
+    "status": "CANCELLED",
+    "registeredAt": "2026-10-08T11:00:00",
+    "updatedAt": "2026-10-09T08:00:00",
+    "cancellationReason": "Schedule conflict with critical quarterly financial review."
+  },
+  {
+    "id": "reg-12",
+    "employeeId": "usr-emp-1",
+    "activityId": "act-10",
+    "status": "ACTIVE",
+    "registeredAt": "2026-09-20T10:00:00"
+  },
+  {
+    "id": "reg-13",
+    "employeeId": "usr-emp-2",
+    "activityId": "act-10",
+    "status": "ACTIVE",
+    "registeredAt": "2026-09-20T10:30:00"
+  }
+]

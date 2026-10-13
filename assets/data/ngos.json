@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ngo-1",
+    "name": "Yayasan Konservasi Laut Lestari",
+    "description": "Indonesian non-profit dedicated to marine biodiversity conservation, coastal reforestation, and community-led beach cleanups.",
+    "contactName": "Hendra Pratama",
+    "contactEmail": "hendra@konservasilaut.org",
+    "approvalStatus": "APPROVED",
+    "serviceArea": "Marine & Coastal Ecology"
+  },
+  {
+    "id": "ngo-2",
+    "name": "Lembaga Literasi Anak Bangsa",
+    "description": "Educational NGO focused on improving reading literacy, STEM accessibility, and digital skills for underserved youth.",
+    "contactName": "Nurul Hidayati",
+    "contactEmail": "nurul@literasianak.org",
+    "approvalStatus": "APPROVED",
+    "serviceArea": "Youth Education & STEM"
+  },
+  {
+    "id": "ngo-3",
+    "name": "Dapur Nutrisi Sejahtera",
+    "description": "Community food security initiative providing balanced hot meals, food salvage operations, and nutrition workshops.",
+    "contactName": "Stefanus Wicaksono",
+    "contactEmail": "stefanus@dapurnutrisi.org",
+    "approvalStatus": "APPROVED",
+    "serviceArea": "Food Security & Nutrition"
+  },
+  {
+    "id": "ngo-4",
+    "name": "Komunitas Hijau Perkotaan",
+    "description": "Urban agriculture and green space foundation revitalizing empty city parcels into cooperative micro-farms.",
+    "contactName": "Ratna Saraswati",
+    "contactEmail": "ratna@hijauperkotaan.org",
+    "approvalStatus": "APPROVED",
+    "serviceArea": "Urban Agriculture"
+  },
+  {
+    "id": "ngo-5",
+    "name": "Yayasan Bina Sehat Sentosa",
+    "description": "Healthcare outreach partner offering primary screening, elderly mobility care, and preventative wellness.",
+    "contactName": "dr. Wahyu Gunawan",
+    "contactEmail": "wahyu@binasehat.org",
+    "approvalStatus": "PENDING",
+    "serviceArea": "Preventative Community Healthcare"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "usr-admin-1",
+    "name": "Marcus Vance",
+    "email": "marcus.vance@corp.example.com",
+    "role": "ADMIN",
+    "department": "Corporate Sustainability & CSR",
+    "avatarInitials": "MV"
+  },
+  {
+    "id": "usr-emp-1",
+    "name": "Alice Chen",
+    "email": "alice.chen@corp.example.com",
+    "role": "EMPLOYEE",
+    "department": "Software Engineering",
+    "avatarInitials": "AC"
+  },
+  {
+    "id": "usr-emp-2",
+    "name": "Budi Santoso",
+    "email": "budi.santoso@corp.example.com",
+    "role": "EMPLOYEE",
+    "department": "Finance & Accounting",
+    "avatarInitials": "BS"
+  },
+  {
+    "id": "usr-emp-3",
+    "name": "Citra Dewi",
+    "email": "citra.dewi@corp.example.com",
+    "role": "EMPLOYEE",
+    "department": "Product Management",
+    "avatarInitials": "CD"
+  },
+  {
+    "id": "usr-emp-4",
+    "name": "David Kim",
+    "email": "david.kim@corp.example.com",
+    "role": "EMPLOYEE",
+    "department": "People & Culture",
+    "avatarInitials": "DK"
+  },
+  {
+    "id": "usr-emp-5",
+    "name": "Maya Indah",
+    "email": "maya.indah@corp.example.com",
+    "role": "EMPLOYEE",
+    "department": "Legal & Risk Governance",
+    "avatarInitials": "MI"
+  }
+]
