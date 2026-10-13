@@ -407,41 +407,40 @@
   flex-shrink: 0;
 }
 
-/* Discreet, Sophisticated Status Tag - Muted, Calm, Non-Clashing */
+/* Discreet, Sophisticated Status - Pure Editorial Typography (Zero Pills, Zero Borders, Zero AI-Slop Dots) */
 .radar-tag {
   font-family: var(--font-interface);
-  font-size: 0.725rem;
-  font-weight: 500;
-  padding: 0.2rem 0.65rem;
-  border-radius: 9999px;
-  display: inline-flex;
-  align-items: center;
-  letter-spacing: 0.01em;
+  font-size: 0.775rem;
+  font-weight: 600;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  display: inline-block;
+  letter-spacing: normal;
   white-space: nowrap;
 }
 
-/* High severity: subtle muted rose text and border, calm not screeching */
+/* Severity text colors: calm, editorial, non-clashing */
 .radar-tag.tag-high {
-  background: #FEF2F2;
-  color: #991B1B;
-  border: 1px solid #FEE2E2;
+  color: #B91C1C !important;
+  background: transparent !important;
+  border: none !important;
 }
 
-/* Medium severity: subtle warm sand/amber text, gentle not neon */
 .radar-tag.tag-medium {
-  background: #FFFBEB;
-  color: #92400E;
-  border: 1px solid #FEF3C7;
+  color: #B45309 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
-/* Low enrollment / info: quiet slate capsule */
 .radar-tag.tag-info {
-  background: #F1F5F9;
-  color: #475569;
-  border: 1px solid #E2E8F0;
+  color: #64748B !important;
+  background: transparent !important;
+  border: none !important;
 }
 
-/* Actions */
+/* Actions: Clean Modern Rectangular Buttons (No Rounded Pill Capsules) */
 .radar-row-actions {
   display: flex;
   align-items: center;
@@ -453,11 +452,11 @@
   font-family: var(--font-interface);
   font-size: 0.75rem !important;
   font-weight: 500 !important;
-  padding: 0.28rem 0.75rem !important;
-  border-radius: 9999px !important;
+  padding: 0.32rem 0.68rem !important;
+  border-radius: 6px !important;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -466,28 +465,27 @@
 
 .btn-radar-subtle {
   background: #FFFFFF !important;
-  border: 1px solid #E8ECF2 !important;
-  color: #64748B !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #475569 !important;
 }
 
 .btn-radar-subtle:hover {
-  background: #F8FAFD !important;
+  background: #F8FAFC !important;
   border-color: #CBD5E1 !important;
   color: #0F172A !important;
 }
 
 .btn-radar-action {
-  background: var(--color-primary-blue-light) !important;
-  border: 1px solid var(--color-primary-blue-subtle) !important;
-  color: var(--color-primary-blue) !important;
-  font-weight: 600 !important;
+  background: #F1F5F9 !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #1E293B !important;
 }
 
 .btn-radar-action:hover {
-  background: var(--color-primary-blue) !important;
-  border-color: var(--color-primary-blue) !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 2px 8px rgba(67, 85, 249, 0.2) !important;
+  background: #E2E8F0 !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
 }
 
 @media (max-width: 768px) {
@@ -579,9 +577,9 @@
 }
 
 .legend-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
   flex-shrink: 0;
 }
 

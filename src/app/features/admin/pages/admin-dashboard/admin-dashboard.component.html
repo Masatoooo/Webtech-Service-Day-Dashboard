@@ -65,12 +65,7 @@
       </div>
       <div class="kpi-num" id="kpi-val-activities">{{ m.totalActivities }}</div>
       <div class="kpi-sub">
-        <span class="nexus-trend-tag positive">
-          <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 2px;">
-            <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          +{{ m.publishedActivities }}
-        </span>
+        <span style="color: #059669; font-weight: 600;">+{{ m.publishedActivities }}</span>
         <span>published initiatives</span>
       </div>
       <div class="nexus-kpi-sparkline-wrap">
@@ -102,7 +97,6 @@
       </div>
       <div class="kpi-num" id="kpi-val-offered">{{ m.totalOfferedPlaces }}</div>
       <div class="kpi-sub">
-        <span class="nexus-sub-pill">Capacity</span>
         <span>Across all CSR programs</span>
       </div>
       <div class="nexus-kpi-sparkline-wrap">
@@ -125,7 +119,7 @@
       </div>
       <div class="kpi-num" style="color: var(--color-primary-blue);" id="kpi-val-taken">{{ m.placesTaken }}</div>
       <div class="kpi-sub">
-        <span class="nexus-sub-pill text-blue">● {{ m.activeRegistrations }}</span>
+        <span style="font-weight: 600; color: #0F172A;">{{ m.activeRegistrations }}</span>
         <span>confirmed volunteer spots</span>
       </div>
       <div class="nexus-kpi-sparkline-wrap">
@@ -149,8 +143,7 @@
       </div>
       <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#D97706' : 'var(--color-deep-slate)'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
       <div class="kpi-sub">
-        <span class="nexus-sub-pill" [class.text-amber]="m.placesRemaining <= 5">Open</span>
-        <span>Capacity for staff sign-up</span>
+        <span>Open capacity for staff sign-up</span>
       </div>
       <div class="nexus-kpi-sparkline-wrap">
         <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
@@ -173,7 +166,7 @@
               Initiatives nearing full capacity, approaching cut-off deadlines, or exhibiting low staff registrations.
             </p>
           </div>
-          <span class="stat-pill pill-slate" id="badge-attention-count">
+          <span class="text-xs text-muted font-medium" id="badge-attention-count">
             {{ needsAttentionItems.length }} alert(s)
           </span>
         </div>
@@ -215,7 +208,7 @@
               </div>
               <div class="radar-row-meta flex items-center gap-2 text-xs">
                 <span class="attention-detail radar-detail">{{ item.detail }}</span>
-                <span class="meta-separator">&bull;</span>
+                <span class="meta-separator" style="color: #CBD5E1;">/</span>
                 <span class="radar-ngo-name">
                   <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="display: inline-block; vertical-align: -1px; margin-right: 3px;">
                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
@@ -278,7 +271,7 @@
             <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Capacity Utilisation</div>
             <span class="text-xs text-muted">CSR staff enrollment rate</span>
           </div>
-          <span class="stat-pill pill-blue text-xs">Target: 80%</span>
+          <span class="text-xs text-muted">Target: 80%</span>
         </div>
 
         <div class="nexus-gauge-wrapper">
@@ -356,7 +349,7 @@
         </div>
 
         <div class="kpi-sub mb-3">
-          <strong class="text-ngo">{{ m.approvedNgos }} approved</strong> • {{ m.cancelledRegistrations }} withdrawn
+          <strong class="text-ngo">{{ m.approvedNgos }} approved</strong>, {{ m.cancelledRegistrations }} withdrawn
         </div>
 
         <div class="ngo-breakdown-list">
@@ -881,15 +874,13 @@
                 <span
                   *ngIf="row.registration.status === 'ACTIVE'"
                   class="badge badge-forest"
-                  style="font-size: 0.725rem; padding: 2px 7px;"
                   [id]="'roster-status-' + row.registration.id"
                 >
                   Active
                 </span>
                 <span
                   *ngIf="row.registration.status === 'CANCELLED'"
-                  class="badge"
-                  style="background: #EEF2F4; color: #5F6B76; border: 1px solid #D1DADC; font-size: 0.725rem; padding: 2px 7px;"
+                  class="badge badge-warm"
                   [id]="'roster-status-' + row.registration.id"
                 >
                   Withdrawn
@@ -918,15 +909,13 @@
                 <span
                   *ngIf="row.attendance?.status === 'CHECKED_IN' || row.attendance?.status === 'PRESENT'"
                   class="badge badge-forest"
-                  style="font-size: 0.725rem; padding: 2px 7px;"
                   id="roster-attendance-checked-in"
                 >
-                  ✓ Checked In ({{ row.attendance?.checkedInAt | date:'shortTime' }})
+                  Checked In ({{ row.attendance?.checkedInAt | date:'shortTime' }})
                 </span>
                 <span
                   *ngIf="!row.attendance && row.registration.status === 'ACTIVE'"
-                  class="badge"
-                  style="background: #EEF3F7; color: #1F486B; border: 1px solid #C7D9E6; font-size: 0.725rem; padding: 2px 7px;"
+                  class="badge badge-slate"
                   id="roster-attendance-pending"
                 >
                   Awaiting Check-in
@@ -968,14 +957,12 @@
             <span
               *ngIf="row.registration.status === 'ACTIVE'"
               class="badge badge-forest"
-              style="font-size: 0.725rem; padding: 2px 7px;"
             >
               Active
             </span>
             <span
               *ngIf="row.registration.status === 'CANCELLED'"
-              class="badge"
-              style="background: #EEF2F4; color: #5F6B76; border: 1px solid #D1DADC; font-size: 0.725rem; padding: 2px 7px;"
+              class="badge badge-warm"
             >
               Withdrawn
             </span>

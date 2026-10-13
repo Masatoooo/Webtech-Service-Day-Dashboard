@@ -79,13 +79,8 @@
         <div class="sidebar-status-dot" title="Active demo session"></div>
       </div>
       <div class="sidebar-user-name">{{ user.name }}</div>
+      <div class="sidebar-user-role">{{ user.role === 'ADMIN' ? 'Administrator' : 'Employee' }}</div>
       <div class="sidebar-user-email">{{ user.email }}</div>
-      <span
-        class="sidebar-role-badge"
-        [class.role-admin]="user.role === 'ADMIN'"
-      >
-        {{ user.role === 'ADMIN' ? 'Administrator' : 'Employee' }}
-      </span>
     </div>
 
     <ng-template #guestSidebar>

@@ -548,53 +548,52 @@ tbody tr:hover {
 }
 
 /* --------------------------------------------------------------------------
-   9. STATUS BADGES & TAGS (Moneza-Style Rounded Pill Tags)
+   9. STATUS LABELS (Pure Typographic Status - Zero Pills, Zero Borders, Zero AI-Slop Dots)
    -------------------------------------------------------------------------- */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
+  display: inline-block;
   font-family: var(--font-interface);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  line-height: 1;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-full);
-  border: 1px solid transparent;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
   white-space: nowrap;
 }
 
 .badge-forest,
 .badge-terracotta {
-  background-color: var(--status-success-bg);
-  color: var(--status-success-text);
-  border-color: var(--status-success-border);
+  background: transparent !important;
+  color: #059669 !important;
+  border: none !important;
 }
 
 .badge-slate,
 .badge-navy {
-  background-color: #F1F5F9;
-  color: var(--color-deep-slate);
-  border-color: #E2E8F0;
+  background: transparent !important;
+  color: #475569 !important;
+  border: none !important;
 }
 
 .badge-brass,
 .badge-gold {
-  background-color: var(--status-warning-bg);
-  color: var(--status-warning-text);
-  border-color: var(--status-warning-border);
+  background: transparent !important;
+  color: #D97706 !important;
+  border: none !important;
 }
 
 .badge-error {
-  background-color: var(--status-error-bg);
-  color: var(--status-error-text);
-  border-color: var(--status-error-border);
+  background: transparent !important;
+  color: #DC2626 !important;
+  border: none !important;
 }
 
 .badge-warm {
-  background-color: #EFF2F4;
-  color: var(--color-secondary-text);
-  border-color: var(--color-border);
+  background: transparent !important;
+  color: #64748B !important;
+  border: none !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -1329,68 +1328,78 @@ hr,
   font-size: var(--font-size-xs);
 }
 
-/* Category & Status Pills */
+/* Category & Status Typography (Pure Editorial Text, No Pills, No Dots) */
 .type-pill {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  background: #EFF2F4;
-  color: var(--color-deep-slate);
-  display: inline-flex;
-  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  color: #64748B !important;
+  display: inline-block;
+  text-transform: capitalize;
+  letter-spacing: normal;
 }
-.type-pill[data-type="ENVIRONMENT"] { background: #E8EFEB; color: #235C49; }
-.type-pill[data-type="EDUCATION"] { background: #EEF3F7; color: #1F486B; }
-.type-pill[data-type="FOOD_SECURITY"] { background: #FBF5E8; color: #845D16; }
-.type-pill[data-type="HEALTH"] { background: #F8EBEA; color: #8C2920; }
-.type-pill[data-type="COMMUNITY"] { background: #EAEBF2; color: #323E56; }
+.type-pill[data-type="ENVIRONMENT"],
+.type-pill[data-type="EDUCATION"],
+.type-pill[data-type="FOOD_SECURITY"],
+.type-pill[data-type="HEALTH"],
+.type-pill[data-type="COMMUNITY"] {
+  background: transparent !important;
+  border: none !important;
+  color: #64748B !important;
+}
 
 .badge-pill {
-  font-size: 0.675rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  display: inline-flex;
-  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  display: inline-block;
+  text-transform: capitalize;
+  letter-spacing: normal;
 }
-.badge-approved { background: #E8EFEB; color: #235C49; }
-.badge-pending { background: #FBF5E8; color: #845D16; }
-.badge-rejected { background: #FDF0EE; color: #A52C22; }
+.badge-approved { background: transparent !important; border: none !important; color: #059669 !important; }
+.badge-pending { background: transparent !important; border: none !important; color: #D97706 !important; }
+.badge-rejected { background: transparent !important; border: none !important; color: #DC2626 !important; }
 
 .pub-status-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.725rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 3px 10px;
-  border-radius: 9999px;
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  text-transform: capitalize;
+  letter-spacing: normal;
 }
-.pub-published { background: #E8EFEB; color: #235C49; border: 1px solid #BCD5C9; }
-.pub-draft { background: #EFF2F4; color: #43515D; border: 1px solid #DCE2E5; }
-.pub-cancelled { background: #FDF0EE; color: #A52C22; border: 1px solid #F3C6C1; }
-.pub-completed { background: #FBF5E8; color: #845D16; border: 1px solid #E8D5B0; }
+.pub-published { background: transparent !important; border: none !important; color: #059669 !important; }
+.pub-draft { background: transparent !important; border: none !important; color: #64748B !important; }
+.pub-cancelled { background: transparent !important; border: none !important; color: #DC2626 !important; }
+.pub-completed { background: transparent !important; border: none !important; color: #64748B !important; }
 
 .avail-badge {
-  font-size: 0.675rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
   display: inline-block;
+  text-transform: capitalize;
+  letter-spacing: normal;
 }
-.avail-badge[data-avail="AVAILABLE"] { color: #235C49; background: #EBF3EF; }
-.avail-badge[data-avail="ALMOST_FULL"] { color: #845D16; background: #FDF6E8; }
-.avail-badge[data-avail="FULL"] { color: #A52C22; background: #FDF0EE; font-weight: 700; }
-.avail-badge[data-avail="REGISTRATION_CLOSED"] { color: #5F6B76; background: #EEF2F4; }
-.avail-badge[data-avail="CANCELLED"] { color: #A52C22; background: #FDF0EE; }
-.avail-badge[data-avail="COMPLETED"] { color: #5F6B76; background: #EEF2F4; }
+.avail-badge[data-avail="AVAILABLE"] { color: #059669 !important; background: transparent !important; border: none !important; }
+.avail-badge[data-avail="ALMOST_FULL"] { color: #D97706 !important; background: transparent !important; border: none !important; }
+.avail-badge[data-avail="FULL"] { color: #DC2626 !important; background: transparent !important; border: none !important; font-weight: 600; }
+.avail-badge[data-avail="REGISTRATION_CLOSED"] { color: #64748B !important; background: transparent !important; border: none !important; }
+.avail-badge[data-avail="CANCELLED"] { color: #94A3B8 !important; background: transparent !important; border: none !important; }
+.avail-badge[data-avail="COMPLETED"] { color: #64748B !important; background: transparent !important; border: none !important; }
 
 /* Alert Feedback Banner */
 .alert-feedback {
@@ -1547,31 +1556,20 @@ hr,
   line-height: 1.3;
 }
 
+.sidebar-user-role {
+  font-family: var(--font-interface);
+  font-size: 0.75rem;
+  color: #64748B;
+  font-weight: 500;
+  margin-top: 0.2rem;
+  text-transform: capitalize;
+}
+
 .sidebar-user-email {
   font-size: 0.725rem;
-  color: var(--color-secondary-text);
+  color: #94A3B8;
   margin-top: 2px;
   word-break: break-all;
-}
-
-.sidebar-role-badge {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.675rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--radius-full);
-  background: #EFF6FF;
-  color: #2563EB;
-  border: 1px solid #DBEAFE;
-}
-
-.sidebar-role-badge.role-admin {
-  background: #EFF6FF;
-  color: #1D4ED8;
-  border: 1px solid #BFDBFE;
 }
 
 /* Sidebar Navigation Items */
@@ -1935,12 +1933,13 @@ hr,
 .card-brass { background: linear-gradient(135deg, #C9A66B 0%, #D4B37D 100%); }
 
 .stat-pill {
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  color: #64748B !important;
 }
 .stat-icon-wrap { font-size: 1rem; opacity: 0.7; }
 .stat-card-title {
@@ -2228,52 +2227,52 @@ hr,
   flex-shrink: 0;
 }
 
-/* Multi-State Availability Badges with Text & Icon (Accessibility) */
+/* Multi-State Availability: Pure Typographic Status (No pills, no borders, no dots) */
 .avail-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.725rem;
-  font-weight: 700;
-  padding: 0.25rem 0.65rem;
-  border-radius: 12px;
-  line-height: 1;
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
 }
 
 .avail-pill-available {
-  background: #E8EFEB;
-  color: #235C49;
-  border: 1px solid #BCD5C9;
+  color: #059669 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .avail-pill-almost {
-  background: #FBF5E8;
-  color: #845D16;
-  border: 1px solid #E8D5B0;
+  color: #D97706 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .avail-pill-full {
-  background: #FDF0EE;
-  color: #A52C22;
-  border: 1px solid #F3C6C1;
+  color: #DC2626 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .avail-pill-closed {
-  background: #EFF2F4;
-  color: #5F6B76;
-  border: 1px solid #DCE2E5;
+  color: #64748B !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .avail-pill-cancelled {
-  background: #FDF0EE;
-  color: #A52C22;
-  border: 1px solid #F3C6C1;
+  color: #94A3B8 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .avail-pill-completed {
-  background: #EFF2F4;
-  color: #5F6B76;
-  border: 1px solid #DCE2E5;
+  color: #64748B !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .opp-places-left {
@@ -2369,24 +2368,29 @@ hr,
   }
 }
 
-/* Category Badges */
+/* Category Labels: Clean Editorial Text (No badges, no borders) */
 .badge-category {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.22rem 0.6rem;
-  border-radius: 6px;
-  line-height: 1.2;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748B !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  text-transform: capitalize;
+  letter-spacing: normal;
+  line-height: 1.3;
 }
-.badge-category.category-environment { background: #E8F3EE; color: #1E5C46; border: 1px solid #BFDCCF; }
-.badge-category.category-education { background: #EBF3FC; color: #1B5299; border: 1px solid #C4DAFA; }
-.badge-category.category-food_security { background: #FCF4E8; color: #8A6013; border: 1px solid #F2DFB8; }
-.badge-category.category-community { background: #F4ECFA; color: #692A8E; border: 1px solid #E1CCF2; }
-.badge-category.category-health { background: #FDEEEE; color: #A82828; border: 1px solid #F6C8C8; }
+.badge-category.category-environment,
+.badge-category.category-education,
+.badge-category.category-food_security,
+.badge-category.category-community,
+.badge-category.category-health {
+  background: transparent !important;
+  border: none !important;
+  color: #64748B !important;
+}
 
 /* Filter Bar for Employee Opportunity Discovery */
 .opp-filter-card {
@@ -3174,29 +3178,32 @@ hr,
 }
 
 .attention-badge {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
+  font-size: 0.775rem;
+  font-weight: 600;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
   display: inline-block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
 }
 
 .badge-high {
-  background: #FEE2E2;
-  color: #991B1B;
+  background: transparent !important;
+  border: none !important;
+  color: #B91C1C !important;
 }
 
 .badge-medium {
-  background: #FEF3C7;
-  color: #92400E;
+  background: transparent !important;
+  border: none !important;
+  color: #B45309 !important;
 }
 
 .badge-info {
-  background: #DBEAFE;
-  color: #1E40AF;
+  background: transparent !important;
+  border: none !important;
+  color: #64748B !important;
 }
 
 .attention-title {
