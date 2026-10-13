@@ -89,10 +89,10 @@
 /* Top 4 Primary Metric Cards */
 .nexus-kpi-card {
   background: var(--color-surface-white);
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E8ECF2;
   border-radius: 20px;
   padding: 1.35rem 1.4rem 0.9rem 1.4rem;
-  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -101,85 +101,79 @@
 }
 
 .nexus-kpi-card:hover {
-  transform: translateY(-3px);
-  border-color: #CBD5E1;
-  box-shadow: 0 10px 28px -4px rgba(15, 23, 42, 0.08);
+  transform: translateY(-2px);
+  border-color: #DCE3ED;
+  box-shadow: 0 10px 28px -4px rgba(15, 23, 42, 0.06);
 }
 
 .nexus-kpi-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
 }
 
 .nexus-kpi-icon-box {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #F8FAFD;
+  border: 1px solid #EEF2F6;
+  color: #8C9BA5;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .nexus-kpi-card:hover .nexus-kpi-icon-box {
-  transform: scale(1.06);
+  color: var(--color-primary-blue);
+  background: var(--color-primary-blue-light);
+  border-color: var(--color-primary-blue-subtle);
 }
 
-.icon-purple {
-  background: #F3E8FF;
-  color: #7C3AED;
-}
-
-.icon-blue {
-  background: #EFF6FF;
-  color: #2563EB;
-}
-
-.icon-emerald {
-  background: #ECFDF5;
-  color: #059669;
-}
-
+.icon-purple,
+.icon-blue,
+.icon-emerald,
 .icon-amber {
-  background: #FEF3C7;
-  color: #D97706;
+  background: #F8FAFD;
+  border: 1px solid #EEF2F6;
+  color: #8C9BA5;
 }
 
 .nexus-kpi-card .kpi-label {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-family: var(--font-interface);
+  font-size: 0.825rem;
+  font-weight: 500;
   color: #64748B;
-  text-transform: capitalize;
   letter-spacing: 0.01em;
   margin: 0;
 }
 
 .nexus-kpi-card .kpi-num {
   font-family: var(--font-interface);
-  font-size: 2.15rem;
-  font-weight: 800;
+  font-size: 2.1rem;
+  font-weight: 700;
   color: #0F172A;
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   margin-bottom: 0.35rem;
 }
 
 .nexus-kpi-card .kpi-sub {
-  font-size: 0.785rem;
-  color: #64748B;
+  font-size: 0.775rem;
+  color: #94A3B8;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 0.75rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .nexus-trend-tag {
   font-size: 0.725rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 0.15rem 0.5rem;
   border-radius: 9999px;
   display: inline-flex;
@@ -187,8 +181,27 @@
 }
 
 .nexus-trend-tag.positive {
-  background: #DCFCE7;
-  color: #15803D;
+  background: #F0FDF4;
+  color: #16A34A;
+}
+
+.nexus-sub-pill {
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+  background: #F8FAFD;
+  color: #64748B;
+}
+
+.nexus-sub-pill.text-blue {
+  background: #F0F2FE;
+  color: var(--color-primary-blue);
+}
+
+.nexus-sub-pill.text-amber {
+  background: #FFFBEB;
+  color: #D97706;
 }
 
 .nexus-kpi-sparkline-wrap {
@@ -198,12 +211,12 @@
   margin-bottom: -0.9rem;
   height: 38px;
   margin-top: auto;
-  opacity: 0.85;
+  opacity: 0.65;
   transition: opacity 0.2s ease;
 }
 
 .nexus-kpi-card:hover .nexus-kpi-sparkline-wrap {
-  opacity: 1;
+  opacity: 0.95;
 }
 
 .nexus-kpi-sparkline-wrap svg {
@@ -404,10 +417,14 @@
 }
 
 .radar-ngo-name {
-  color: #475569;
+  color: var(--color-ngo-teal);
   font-weight: 500;
   display: inline-flex;
   align-items: center;
+}
+
+.text-ngo {
+  color: var(--color-ngo-teal) !important;
 }
 
 /* Actions */
@@ -421,8 +438,8 @@
 .btn-radar-pill {
   font-family: var(--font-interface);
   font-size: 0.76rem !important;
-  font-weight: 600 !important;
-  padding: 0.32rem 0.8rem !important;
+  font-weight: 500 !important;
+  padding: 0.32rem 0.85rem !important;
   border-radius: 9999px !important;
   text-decoration: none;
   cursor: pointer;
@@ -435,26 +452,28 @@
 
 .btn-radar-subtle {
   background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
-  color: #475569 !important;
+  border: 1px solid #E8ECF2 !important;
+  color: #64748B !important;
 }
 
 .btn-radar-subtle:hover {
-  background: #F1F5F9 !important;
+  background: #F8FAFD !important;
   border-color: #CBD5E1 !important;
   color: #0F172A !important;
 }
 
 .btn-radar-action {
-  background: #EFF6FF !important;
-  border: 1px solid #DBEAFE !important;
-  color: #2563EB !important;
+  background: var(--color-primary-blue-light) !important;
+  border: 1px solid var(--color-primary-blue-subtle) !important;
+  color: var(--color-primary-blue) !important;
+  font-weight: 600 !important;
 }
 
 .btn-radar-action:hover {
-  background: #2563EB !important;
-  border-color: #2563EB !important;
+  background: var(--color-primary-blue) !important;
+  border-color: var(--color-primary-blue) !important;
   color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(67, 85, 249, 0.2) !important;
 }
 
 @media (max-width: 680px) {
@@ -517,17 +536,17 @@
 .nexus-donut-val {
   font-family: var(--font-interface);
   font-size: 1.45rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #0F172A;
   line-height: 1;
 }
 
 .nexus-donut-lbl {
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64748B;
+  color: #94A3B8;
   margin-top: 3px;
 }
 
@@ -553,15 +572,15 @@
 }
 
 .dot-blue {
-  background: #2563EB;
+  background: var(--color-primary-blue);
 }
 
 .dot-amber {
-  background: #F59E0B;
+  background: #94A3B8;
 }
 
 .dot-slate {
-  background: #94A3B8;
+  background: #CBD5E1;
 }
 
 .legend-name {
@@ -571,6 +590,7 @@
 
 .legend-value {
   color: #0F172A;
+  font-weight: 600;
 }
 
 /* NGO Meter Bar in Right Column */
@@ -587,8 +607,9 @@
   transition: width 0.5s ease;
 }
 
-.fill-emerald {
-  background: #10B981;
+.fill-emerald,
+.fill-ngo {
+  background: var(--color-ngo-teal) !important;
 }
 
 .fill-slate {

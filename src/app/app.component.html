@@ -102,6 +102,8 @@
     <nav class="sidebar-nav" aria-label="Sidebar Menu" *ngIf="isAuthenticated$ | async">
       <!-- Administrator Navigation Menu -->
       <ng-container *ngIf="(userRole$ | async) === 'ADMIN'">
+        <div class="sidebar-nav-header">MENU</div>
+
         <a
           routerLink="/admin"
           routerLinkActive="active"
@@ -128,6 +130,8 @@
           </svg>
           <span>Activities & NGOs</span>
         </a>
+
+        <div class="sidebar-nav-header" style="margin-top: 0.5rem;">OPERATIONS</div>
 
         <a
           routerLink="/admin/reminders"
@@ -159,6 +163,8 @@
 
       <!-- Employee Navigation Menu -->
       <ng-container *ngIf="(userRole$ | async) === 'EMPLOYEE'">
+        <div class="sidebar-nav-header">MENU</div>
+
         <a
           routerLink="/employee"
           routerLinkActive="active"
@@ -185,6 +191,8 @@
           </svg>
           <span>Opportunities</span>
         </a>
+
+        <div class="sidebar-nav-header" style="margin-top: 0.5rem;">MY CSR</div>
 
         <a
           routerLink="/employee/registrations"

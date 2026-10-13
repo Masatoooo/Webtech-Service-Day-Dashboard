@@ -8,21 +8,28 @@
    1. DESIGN TOKENS & CSS VARIABLES
    -------------------------------------------------------------------------- */
 :root {
-  /* Neo-Fintech Moneza Blue Palette */
-  --color-primary-blue:       #2563EB;
-  --color-primary-blue-hover: #1D4ED8;
-  --color-primary-blue-light: #EFF6FF;
-  --color-primary-blue-subtle:#DBEAFE;
-  --color-sky-gradient:       linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
+  /* Neo-Fintech Modern Blue & Clean Executive Palette */
+  --color-primary-blue:       #4355F9;
+  --color-primary-blue-hover: #3446E4;
+  --color-primary-blue-light: #F0F2FE;
+  --color-primary-blue-subtle:#E8EBFC;
+  --color-sky-gradient:       linear-gradient(135deg, #4355F9 0%, #38BDF8 100%);
   --color-deep-slate:         #0F172A;
-  --color-soft-canvas:        #F8FAFD;
+  --color-soft-canvas:        #F8F9FD;
   --color-surface-white:      #FFFFFF;
-  --color-forest:             #2563EB;
-  --color-forest-hover:       #1D4ED8;
+  --color-forest:             #4355F9;
+  --color-forest-hover:       #3446E4;
   --color-muted-brass:        #0284C7;
   --color-secondary-text:     #64748B;
-  --color-border:             #E2E8F0;
-  --color-soft-sage:          #EFF6FF;
+  --color-border:             #E8ECF2;
+  --color-soft-sage:          #F0F2FE;
+
+  /* NGO Partner Palette — Emerald / Forest Teal */
+  --color-ngo-teal:           #0D9488;
+  --color-ngo-teal-hover:     #0F766E;
+  --color-ngo-teal-light:     #F0FDFA;
+  --color-ngo-teal-subtle:    rgba(13, 148, 136, 0.08);
+  --color-ngo-teal-border:    #CCFBF1;
 
   /* Backward Compatibility Aliases */
   --color-midnight-navy:  var(--color-deep-slate);
@@ -44,7 +51,7 @@
   --accent-primary:       var(--color-forest);
   --accent-primary-hover: var(--color-forest-hover);
   --accent-secondary:     var(--color-muted-brass);
-  --focus-ring:           #2563EB;
+  --focus-ring:           #4355F9;
 
   /* Status Colors (Soft Pastel Neo-Pills) */
   --status-success-bg:     #ECFDF5;
@@ -59,13 +66,13 @@
   --status-error-text:     #991B1B;
   --status-error-border:   #FECACA;
 
-  --status-info-bg:        #EFF6FF;
-  --status-info-text:      #1E40AF;
-  --status-info-border:    #BFDBFE;
+  --status-info-bg:        #F0F2FE;
+  --status-info-text:      #3446E4;
+  --status-info-border:    #E8EBFC;
 
-  /* Typography Stacks (Plus Jakarta Sans) */
-  --font-interface:  'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-editorial:  'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Typography Stacks (Poppins) */
+  --font-interface:  'Poppins', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-editorial:  'Poppins', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
   /* Type Scale */
   --font-size-xs:    0.75rem;     /* 12px */
@@ -1571,34 +1578,44 @@ hr,
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;
   flex: 1;
+}
+
+.sidebar-nav-header {
+  font-family: var(--font-interface);
+  font-size: 0.685rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+  padding: 0.75rem 0.75rem 0.25rem 0.75rem;
 }
 
 .sidebar-nav-item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   padding: 0.72rem 1rem;
   border-radius: 12px;
-  color: var(--color-secondary-text);
+  color: #64748B;
   text-decoration: none;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sidebar-nav-item:hover:not(.disabled) {
-  background-color: #EFF6FF;
+  background-color: #F8FAFD;
   color: var(--color-primary-blue);
   transform: translateX(2px);
 }
 
 .sidebar-nav-item.active {
-  background: #EFF6FF;
+  background: var(--color-primary-blue-light);
   color: var(--color-primary-blue);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .sidebar-nav-item:active:not(.disabled) {
@@ -1615,11 +1632,16 @@ hr,
   width: 18px;
   height: 18px;
   flex-shrink: 0;
+  color: #8C9BA5;
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
 }
 
+.sidebar-nav-item:hover .sidebar-nav-icon {
+  color: var(--color-primary-blue);
+}
+
 .sidebar-nav-item.active .sidebar-nav-icon {
-  transform: scale(1.1);
+  transform: scale(1.05);
   color: var(--color-primary-blue);
 }
 
