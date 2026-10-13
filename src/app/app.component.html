@@ -8,14 +8,11 @@
 <!-- Modern Application Shell with Left Sidebar & Responsive Mobile Navigation -->
 <div class="app-shell" *ngIf="!(isLoginRoute$ | async)">
   <!-- Mobile Navigation Top Bar (Active on viewports <= 900px) -->
+  <!-- Mobile Navigation Top Bar (Active on viewports <= 900px) -->
   <header class="mobile-top-bar" aria-label="Mobile Navigation Header">
     <a routerLink="/" (click)="closeMobileMenu()" class="mobile-brand-link" aria-label="Service Day Home">
-      <div class="sidebar-brand-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FFFFFF"/>
-        </svg>
-      </div>
-      <span class="brand-title sidebar-brand-name">Service Day</span>
+      <img src="assets/images/service-day-logo.png" alt="Service Day" class="mobile-brand-logo-img" />
+      <span class="brand-title visually-hidden">Service Day</span>
     </a>
 
     <div class="mobile-top-actions">
@@ -60,12 +57,19 @@
     <!-- Brand Title & Header (Desktop) -->
     <div class="sidebar-brand-row">
       <a routerLink="/" (click)="closeMobileMenu()" class="sidebar-brand" aria-label="Service Day Home" [title]="isDesktopSidebarCollapsed ? 'Service Day' : ''">
-        <div class="sidebar-brand-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FFFFFF"/>
-          </svg>
-        </div>
-        <span class="brand-title sidebar-brand-name">Service Day</span>
+        <!-- Icon mark shown in collapsed mode -->
+        <img
+          src="assets/images/service-day-icon.png"
+          alt="Service Day"
+          class="sidebar-brand-icon-img"
+        />
+        <!-- Full logo shown in expanded mode -->
+        <img
+          src="assets/images/service-day-logo.png"
+          alt="Service Day"
+          class="sidebar-brand-full-logo"
+        />
+        <span class="brand-title visually-hidden">Service Day</span>
       </a>
       <button
         type="button"
