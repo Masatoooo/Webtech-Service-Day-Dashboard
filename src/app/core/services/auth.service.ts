@@ -85,13 +85,29 @@ export class AuthService {
 
     if (!this.dataStore.isInitialized) {
       return this.dataStore.init().pipe(
-        map(() => matchUser())
+        switchMap(() => {
+          try {
+            return of(matchUser());
+          } catch (err) {
+            if (typeof this.dataStore.syncSeedUsers === 'function') {
+              return this.dataStore.syncSeedUsers().pipe(
+                map(() => matchUser())
+              );
+            }
+            return throwError(() => err);
+          }
+        })
       );
     }
 
     try {
       return of(matchUser());
     } catch (err) {
+      if (typeof this.dataStore.syncSeedUsers === 'function') {
+        return this.dataStore.syncSeedUsers().pipe(
+          map(() => matchUser())
+        );
+      }
       return throwError(() => err);
     }
   }

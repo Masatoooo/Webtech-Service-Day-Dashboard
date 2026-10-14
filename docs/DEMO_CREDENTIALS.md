@@ -25,6 +25,7 @@ In compliance with the project PRD and Task Pack rules:
 | Name | Role | Email | Convenience Demo Alias | Suggested Password | Department |
 |---|---|---|---|---|---|
 | **Marcus Vance** | `ADMIN` | `marcus.vance@corp.example.com` | `admin@serviceday.demo` | `demo123` | Corporate Sustainability & CSR |
+| **Super Admin** | `ADMIN` | `dev@svd.id` | &mdash; | `demo123` | Corporate Sustainability & CSR |
 
 **Access Rights:**
 - Destination: `/admin` (Administrator Operations & Governance Console)

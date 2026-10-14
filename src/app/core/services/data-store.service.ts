@@ -104,6 +104,12 @@ export class DataStoreService {
 
       this._initialized$.next(true);
       this._error$.next(null);
+
+      // Silently sync newly added seed users from server in the background
+      if (this.mockData && typeof this.mockData.loadUsers === 'function') {
+        this.syncSeedUsers().subscribe();
+      }
+
       return of(true);
     }
 
@@ -156,6 +162,34 @@ export class DataStoreService {
         this._loading$.next(false);
         return throwError(() => new Error(`[DataStoreService] Reset failed: ${errorMsg}`));
       })
+    );
+  }
+
+  /**
+   * Synchronizes stored users with seed users from server.
+   * Merges any users present in users.json that are missing in localStorage,
+   * preserving any existing mock users/registrations created during testing.
+   */
+  syncSeedUsers(): Observable<User[]> {
+    if (!this.mockData || typeof this.mockData.loadUsers !== 'function') {
+      return of(this.usersSnapshot);
+    }
+
+    return this.mockData.loadUsers().pipe(
+      tap((seedUsers: User[]) => {
+        if (!Array.isArray(seedUsers) || seedUsers.length === 0) return;
+        const currentUsers = this._users$.getValue();
+        const existingEmails = new Set(currentUsers.map((u) => u.email.toLowerCase()));
+        const newUsers = seedUsers.filter((u) => !existingEmails.has(u.email.toLowerCase()));
+
+        if (newUsers.length > 0) {
+          const merged = [...currentUsers, ...newUsers];
+          this._users$.next(merged);
+          this.storage.setItem(STORAGE_KEYS.USERS, merged);
+        }
+      }),
+      map(() => this._users$.getValue()),
+      catchError(() => of(this._users$.getValue()))
     );
   }
 
