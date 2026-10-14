@@ -42,3 +42,7 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Documentation & Specifications
+PRD_Frontend_Service_Day_Dashboard.md
+Service_Day_Frontend_AI_Agent_Task_Pack.md
