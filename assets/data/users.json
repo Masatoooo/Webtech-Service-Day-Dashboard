@@ -46,5 +46,14 @@
     "role": "EMPLOYEE",
     "department": "Legal & Risk Governance",
     "avatarInitials": "MI"
+  },
+    {
+    "id": "usr-admin-2",
+    "name": "Super Admin",
+    "email": "dev@svd.id",
+    "role": "ADMIN",
+    "department": "Corporate Sustainability & CSR",
+    "avatarInitials": "SA"
   }
+
 ]
