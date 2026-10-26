@@ -8,7 +8,7 @@ import { ActivityService } from '../../../../core/services/activity.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { User, Activity, Registration, NGO } from '../../../../models';
 
-describe('EmployeeDashboardComponent (Task 11: Polish & Responsive Pass)', () => {
+describe('EmployeeDashboardComponent', () => {
   let component: EmployeeDashboardComponent;
   let fixture: ComponentFixture<EmployeeDashboardComponent>;
 

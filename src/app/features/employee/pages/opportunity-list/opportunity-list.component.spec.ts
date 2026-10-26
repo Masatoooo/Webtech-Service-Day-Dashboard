@@ -11,7 +11,7 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
 import { FormsModule } from '@angular/forms';
 import { Activity, NGO, Registration } from '../../../../models';
 
-describe('OpportunityListComponent (Task 06: Use Case 2)', () => {
+describe('OpportunityListComponent', () => {
   let component: OpportunityListComponent;
   let fixture: ComponentFixture<OpportunityListComponent>;
   let mockActivityService: any;
@@ -206,7 +206,7 @@ describe('OpportunityListComponent (Task 06: Use Case 2)', () => {
     expect(component.filteredOpportunities.length).toBe(3);
   });
 
-  it('should manage the Task 06 registration contract modal without triggering fake mutations', () => {
+  it('should manage the registration contract modal without triggering fake mutations', () => {
     const item = component.allOpportunities[0];
     component.openRegistrationContract(item);
     expect(component.contractModalItem).toBe(item);

@@ -166,7 +166,7 @@ describe('Domain Services & Data Relationship Consistency', () => {
     });
   });
 
-  describe('Registration Rules & Business Workflows (Task 07: BR-01, BR-08, BR-09, BR-10, BR-11, FR-15, FR-18, FR-19)', () => {
+  describe('Registration Rules & Business Workflows', () => {
     it('should prevent duplicate active registration for the same employee and activity', () => {
       expect(() => {
         registrationService.register('usr-emp-1', 'act-1');

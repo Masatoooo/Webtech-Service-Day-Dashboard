@@ -8,7 +8,7 @@ import { DataStoreService } from '../../../../core/services/data-store.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Notification, User } from '../../../../models';
 
-describe('EmployeeNotificationsComponent (Task 06: Employee Notifications UI)', () => {
+describe('EmployeeNotificationsComponent', () => {
   let component: EmployeeNotificationsComponent;
   let fixture: ComponentFixture<EmployeeNotificationsComponent>;
   let mockAuthService: any;

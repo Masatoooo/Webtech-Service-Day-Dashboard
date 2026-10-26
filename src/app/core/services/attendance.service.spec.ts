@@ -6,7 +6,7 @@ import { DataStoreService } from './data-store.service';
 import { StorageService } from './storage.service';
 import { Activity, Attendance, NGO, Registration, User } from '../../models';
 
-describe('AttendanceService (Task 10: QR Code Generation & Check-In Validation)', () => {
+describe('AttendanceService', () => {
   let service: AttendanceService;
   let dataStore: DataStoreService;
 

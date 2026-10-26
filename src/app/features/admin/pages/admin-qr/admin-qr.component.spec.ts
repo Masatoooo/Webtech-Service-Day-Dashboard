@@ -9,7 +9,7 @@ import { DataStoreService } from '../../../../core/services/data-store.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Activity, Attendance, NGO, Registration, User } from '../../../../models';
 
-describe('AdminQrComponent (Task 10: Admin QR Generation & Attendance Poster)', () => {
+describe('AdminQrComponent', () => {
   let component: AdminQrComponent;
   let fixture: ComponentFixture<AdminQrComponent>;
   let mockActivityService: any;

@@ -3089,7 +3089,7 @@ hr,
   line-height: 1.5;
 }
 
-/* Informational Registration Contract Modal / Alert (Task 06 Contract) */
+/* Informational Registration Contract Modal / Alert */
 .contract-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -3432,7 +3432,7 @@ hr,
 }
 
 /* ==========================================================================
-   MY REGISTRATIONS HUB & BUSINESS RULE WORKFLOWS (Task 07)
+   MY REGISTRATIONS HUB & BUSINESS RULE WORKFLOWS
    ========================================================================== */
 .reg-nav-tabs {
   display: flex;
@@ -3544,7 +3544,7 @@ hr,
 }
 
 /* ==========================================================================
-   ADMINISTRATOR DASHBOARD & PARTICIPATION MONITORING (Task 08)
+   ADMINISTRATOR DASHBOARD & PARTICIPATION MONITORING
    ========================================================================== */
 .admin-kpi-grid {
   display: grid;

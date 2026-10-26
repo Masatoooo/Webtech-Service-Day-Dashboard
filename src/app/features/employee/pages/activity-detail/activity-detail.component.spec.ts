@@ -10,7 +10,7 @@ import { RegistrationService } from '../../../../core/services/registration.serv
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Activity, NGO, Registration } from '../../../../models';
 
-describe('ActivityDetailComponent (Task 06: Use Case 2)', () => {
+describe('ActivityDetailComponent', () => {
   let component: ActivityDetailComponent;
   let fixture: ComponentFixture<ActivityDetailComponent>;
   let mockActivityService: any;
@@ -123,7 +123,7 @@ describe('ActivityDetailComponent (Task 06: Use Case 2)', () => {
     expect(expectations.tasks[0]).toContain('Seedling');
   });
 
-  it('should display the clean Task 06 registration contract notice when triggered without fake success', () => {
+  it('should display the registration notice when triggered', () => {
     expect(component.showContractNotice).toBe(false);
     component.triggerRegistrationContract();
     expect(component.showContractNotice).toBe(true);

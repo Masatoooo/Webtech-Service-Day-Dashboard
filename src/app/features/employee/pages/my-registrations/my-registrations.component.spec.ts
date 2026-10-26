@@ -10,7 +10,7 @@ import { RegistrationService } from '../../../../core/services/registration.serv
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Activity, NGO, Registration, User } from '../../../../models';
 
-describe('MyRegistrationsComponent (Task 07: Use Case 3)', () => {
+describe('MyRegistrationsComponent', () => {
   let component: MyRegistrationsComponent;
   let fixture: ComponentFixture<MyRegistrationsComponent>;
   let mockAuthService: any;

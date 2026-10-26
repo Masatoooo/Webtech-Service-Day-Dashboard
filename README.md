@@ -1,188 +1,115 @@
-# Service Day Dashboard — Corporate Volunteer Management Platform
+# Service Day Dashboard — Web Technologies Assignment (CLO2)
 
-[![Angular](https://img.shields.io/badge/Angular-21.2.0-DD0031.svg?style=flat&logo=angular)](https://angular.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![Vitest](https://img.shields.io/badge/Tests-180%20Passed-41B883.svg?style=flat&logo=vitest)](https://vitest.dev/)
-[![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat)](https://github.com/)
-
-A modern, responsive, and accessible Angular enterprise web application built for **Corporate Social Responsibility (CSR) and Employee Volunteer Operations**. Designed following the **Warm Editorial** design system (Executive Slate `#202C3B`, Forest `#356859`, Ochre `#C9A66B`, and Sand `#F5F2EB`).
+**Module:** Web Technologies / Web Application Development  
+**Coursework:** Assignment 2 (CLO2) — Front-End Web Application  
+**Student Name:** [Student Name / Group Members]  
+**Student ID:** [Student ID(s)]  
 
 ---
 
-## 1. System Requirements & Prerequisites
+## 1. Project Overview
 
-| Requirement | Recommended Version | Minimum Version | Notes |
-|---|---|---|---|
-| **Node.js** | `v20.x` or `v24.x` (Tested on `v24.12.0`) | `v18.19.0+` | LTS release recommended |
-| **npm** | `v10.x` or `v11.x` (Tested on `11.6.2`) | `v9.0.0+` | Bundled with Node.js |
-| **Angular CLI** | `@angular/cli@21.2.25` | `^21.0.0` | Global install optional (`npx ng` works) |
-| **Browser** | Chrome, Edge, Safari, Firefox | Evergreen | Supports CSS Grid, Flexbox, & modern JS |
+The **Service Day Dashboard** is a front-end Single Page Application (SPA) built using **Angular 21** for managing corporate volunteering initiatives and NGO partnerships. The application addresses the case study requirements by providing two distinct role-based experiences:
+
+- **Employee Portal (`/employee`):** Allows employees to discover volunteer opportunities, inspect details and logistics, register with an ethical commitment contract, manage active bookings, transfer between activities, view in-app notifications, and perform on-site QR attendance check-in.
+- **Administrator Portal (`/admin`):** Enables administrators to monitor aggregate corporate volunteering metrics, manage activities (Create, Edit, Cancel), configure and simulate automated reminder notifications, send custom broadcasts, and generate printable venue QR posters.
+
+The project is implemented entirely on the client side using Angular's `HttpClient` to load seed data from mock JSON files (`public/assets/data/`), with state and slot availability managed reactively through RxJS `BehaviorSubject` streams and persisted in browser `localStorage`.
 
 ---
 
-## 2. Quick Start & Execution Commands
+## 2. Technologies Used
 
-### 2.1 Installation
-Clone the repository and install dependencies:
+- **Framework:** Angular 21 (`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/router`)
+- **Language:** TypeScript 5.9
+- **State Management:** Reactive Extensions for JavaScript (`rxjs` 7.8)
+- **Styling:** Semantic HTML5 and Vanilla CSS (Flexbox, CSS Grid, and custom CSS variables)
+- **Utilities:**
+  - `qrcode`: Client-side QR code matrix generation on HTML5 canvas for venue check-in posters.
+  - `html5-qrcode`: In-browser webcam scanner for on-site attendance verification.
+
+---
+
+## 3. Prerequisites & System Setup
+
+Ensure you have the following installed on your machine:
+- **Node.js:** v20.x LTS or v24.x (Tested on v20.x and v24.x)
+- **npm:** v10.x or v11.x (Bundled with Node.js)
+- **Web Browser:** Google Chrome, Microsoft Edge, Mozilla Firefox, or Safari
+
+---
+
+## 4. Installation & Running Locally
+
+### Step 1: Install Dependencies
+Open your terminal in the project directory and install the required npm packages:
 ```bash
-# Navigate to project directory
-cd service-day-dashboard
-
-# Install exact dependencies
 npm install
 ```
 
-### 2.2 Local Development Server
-Start the Angular dev server with live-reloading:
+### Step 2: Start the Development Server
+Run the local dev server:
 ```bash
 npm start
 # or
 ng serve
 ```
-Once initialized, navigate to **`http://localhost:4200/`** in your browser. The application automatically redirects unauthenticated traffic to the secure `/login` portal.
 
-### 2.3 Running Automated Unit & Integration Tests
-Execute the full test suite via Vitest:
-```bash
-# Single-run test execution (180 tests across 24 test suites)
-npm test -- --watch=false
-
-# Interactive watch mode during development
-npm test
+### Step 3: Open in Browser
+Open your browser and navigate to:
 ```
-
-### 2.4 Production Compilation & Build
-Compile optimized production bundles:
-```bash
-npm run build
+http://localhost:4200/
 ```
-Compiled output is saved to `dist/service-day-dashboard/`. Chunk budgets and bundle sizes are strictly validated.
+Unauthenticated requests will automatically redirect to the `/login` page.
 
 ---
 
-## 3. Demo Credentials & Access Governance
+## 5. Demo Accounts for Testing
 
-The platform features role-based access control (RBAC) supporting **Administrator** and **Employee** roles without arbitrary client-side role selectors. Roles are strictly resolved from authenticated corporate profiles.
+The application uses role-based authentication based on user email profiles. Any non-empty password (e.g., `demo123`) can be used for demonstration purposes.
 
-> **Password Note:** For evaluation purposes, any non-empty password (e.g., `demo123`) is accepted when submitting a valid corporate email.
-
-| Role | Corporate Email | Demo Shortcut Alias | Suggested Password | Default Landing | Primary Capabilities |
+| Role | Email Address | Convenient Alias | Password | Landing Page | Key Features |
 |---|---|---|---|---|---|
-| **Administrator** | `marcus.vance@corp.example.com` | `admin@serviceday.demo` | `demo123` | `/admin` | Activity CRUD, Capacity Governance, Reminder Rules, Broadcasts, Venue QR Generation |
-| **Employee** | `alice.chen@corp.example.com` | `employee@serviceday.demo` | `demo123` | `/employee` | Catalog Discovery, Slot Booking, Registrations, Activity Transfer, In-App Inbox, On-Site QR Check-In |
-| **Employee** | `budi.santoso@corp.example.com` | &mdash; | `demo123` | `/employee` | Financial Dept Volunteer |
-| **Employee** | `citra.dewi@corp.example.com` | &mdash; | `demo123` | `/employee` | Product Team Volunteer |
-| **Employee** | `david.kim@corp.example.com` | &mdash; | `demo123` | `/employee` | HR Team Volunteer |
+| **Administrator** | `marcus.vance@corp.example.com` | `admin@serviceday.demo` | `demo123` | `/admin` | KPI dashboard, Activity CRUD, Reminder rule simulator, Broadcast announcements, Venue QR poster generation. |
+| **Employee** | `alice.chen@corp.example.com` | `employee@serviceday.demo` | `demo123` | `/employee` | Opportunity catalog, Slot booking, My registrations, Activity transfer, In-app notifications, QR scanner check-in. |
+| **Employee** | `budi.santoso@corp.example.com` | — | `demo123` | `/employee` | Finance Dept volunteer with existing confirmed registrations. |
 
-> For complete authentication rules, return URL behaviors, and guard mechanics, refer to [`docs/DEMO_CREDENTIALS.md`](docs/DEMO_CREDENTIALS.md).
+> **Tip:** You can click the **"Reset Demo Data"** button located at the bottom of the sidebar at any time to restore the initial mock data.
 
 ---
 
-## 4. Architectural Structure & Module Organization
+## 6. Key Features & Rubric Highlights
 
-The codebase follows the strict Angular **Core / Shared / Feature** architectural pattern adhering to Model-View-Component (MVC) separation:
+- **Model-View-Controller (MVC) Architecture:**
+  - **Models (`src/app/models/`):** Strongly typed interfaces and enums for `Activity`, `NGO`, `User`, `Registration`, `Notification`, and `Attendance`.
+  - **Views (`*.component.html` & `*.component.css`):** Semantic templates focused solely on presentation, using semantic tags (`header`, `nav`, `main`, `section`, `article`) and accessible attributes.
+  - **Controllers (`*.component.ts`):** Lean components handling user interaction and delegating data logic to services.
+  - **Services (`src/app/core/services/`):** Centralized singleton services (`DataStoreService`, `MockDataService`, `AuthService`, `NotificationService`).
 
-```text
-service-day-dashboard/
-├── docs/                                 # Architecture and QA documentation
-│   ├── DATA_LAYER_DOCUMENTATION.md       # Data store, hydration & entity relationships
-│   ├── DEMO_CREDENTIALS.md               # User roles, test accounts & security notes
-│   └── MANUAL_QA_CHECKLIST.md            # 16-scenario comprehensive test verification plan
-├── public/
-│   └── assets/data/                      # JSON Mock seed data files (served at /assets/data/*)
-│       ├── activities.json               # CSR initiatives with logistics, capacities & cutoffs
-│       ├── attendance.json               # Attendance check-in event logs
-│       ├── ngos.json                     # Partner NGO organizations
-│       ├── notifications.json            # In-app alert notices & broadcast messages
-│       ├── registrations.json            # Employee event bookings
-│       └── users.json                    # Corporate user directory with roles
-└── src/
-    ├── app/
-    │   ├── core/                         # Singleton services, guards, and interceptors
-    │   │   ├── guards/                   # AuthGuard, RoleGuard, LoginGuard, RootRedirectGuard
-    │   │   ├── services/                 # AuthService, DataStoreService, MockDataService, StorageService
-    │   │   └── core.module.ts            # Root-level provider module
-    │   ├── models/                       # Strongly-typed domain TypeScript interfaces & enums
-    │   │   ├── activity.model.ts         # Activity, ServiceType, PublicationStatus, SlotSummary
-    │   │   ├── attendance.model.ts       # Attendance, VerificationMethod
-    │   │   ├── ngo.model.ts              # NGO partner entity
-    │   │   ├── notification.model.ts     # In-app notification entity
-    │   │   ├── registration.model.ts     # Registration, RegistrationStatus
-    │   │   └── user.model.ts             # User, UserRole, UserSession
-    │   ├── shared/                       # Reusable UI components, pipes, directives
-    │   │   └── shared.module.ts          # CommonModule, FormsModule, ReactiveFormsModule exports
-    │   ├── features/                     # Feature domain business modules
-    │   │   ├── admin/                    # Administrator Operations Feature (Lazy-Loaded)
-    │   │   │   ├── pages/
-    │   │   │   │   ├── admin-dashboard/  # Executive KPI summaries & quick actions
-    │   │   │   │   ├── activity-management/ # Activity CRUD & capacity management
-    │   │   │   │   ├── admin-reminders/  # 7/3/1 day reminder simulation & broadcast composer
-    │   │   │   │   └── admin-qr/         # Printable logistics QR poster generation
-    │   │   │   │   └── admin.module.ts   # Admin lazy-loaded feature module
-    │   │   │   └── admin-routing.module.ts
-    │   │   ├── auth/                     # Authentication & onboarding feature
-    │   │   │   ├── login/                # Accessible email/password corporate sign-in
-    │   │   │   └── register/             # Employee registration & profile creation
-    │   │   └── employee/                 # Employee Volunteer Feature (Lazy-Loaded)
-    │   │       ├── pages/
-    │   │       │   ├── employee-dashboard/ # Personal volunteer stats & upcoming initiative hero
-    │   │       │   ├── opportunity-list/ # Catalog search, filtering, and slot badges
-    │   │       │   ├── activity-detail/  # Activity logistical briefing & booking modal
-    │   │       │   ├── my-registrations/ # Active bookings, cancellation & activity transfer
-    │   │       │   ├── employee-checkin/ # Camera QR scanner & manual fallback simulation
-    │   │       │   └── employee-notifications/ # In-app inbox with unread filters
-    │   │       └── employee.module.ts    # Employee lazy-loaded feature module
-    │   ├── app-routing.module.ts         # Top-level routing with lazy route definitions
-    │   ├── app.component.{ts,html,css}   # App Shell with responsive sidebar & mobile top bar
-    │   └── app.module.ts                 # Root NgModule with APP_INITIALIZER store hydration
-    ├── assets/                           # Image assets, SVG icons, and mock data mirror
-    ├── index.html                        # Semantic HTML5 host document with Google Fonts preloads
-    └── styles.css                        # Warm Editorial Design System, utilities & responsive rules
-```
+- **Responsive Web Design:**
+  - Built with CSS Flexbox and Grid without heavy UI frameworks.
+  - Desktop view presents comprehensive data tables for administrative monitoring.
+  - Mobile view automatically transforms data tables into clean, readable cards to prevent horizontal overflow on smaller screens.
+
+- **Asynchronous Data & Real-Time Updates:**
+  - Seed data is loaded asynchronously from mock JSON files using Angular's `HttpClient`.
+  - Slot availability (`capacity - active registrations`) recalculates dynamically in real time across the application without page reloads.
+  - Registration cut-off dates are enforced automatically to prevent booking on expired initiatives.
+
+- **Modular Design:**
+  - Application code is organized into `CoreModule`, `SharedModule`, and lazy-loaded feature modules (`AdminModule` and `EmployeeModule`) to ensure scalability and clean dependency separation.
 
 ---
 
-## 5. Reactive Data Layer & Persistence Architecture
+## 7. Build & Test Commands
 
-The frontend uses an enterprise-grade **Client-Side Reactive Data Store** (`DataStoreService`):
+- **Production Build:**
+  ```bash
+  npm run build
+  ```
+  Generates production-optimized output in `dist/service-day-dashboard/`.
 
-1. **Hydration Engine:** During application startup via `APP_INITIALIZER`, `DataStoreService` inspects browser `localStorage`.
-   - If previous state exists, it hydrates in-memory `BehaviorSubject` streams immediately.
-   - If empty (first launch or post-reset), it triggers `MockDataService`, which loads seed datasets from `public/assets/data/*.json` asynchronously via Angular `HttpClient` (`forkJoin`).
-2. **Reactive Immutability:** All features subscribe to public `Observable` streams (`activities$`, `registrations$`, `notifications$`, `attendance$`). Mutations (registering, cancelling, updating capacity) emit new state snapshots and persist to `localStorage` atomically.
-3. **Reactive Slot Arithmetic:** Remaining slots and availability statuses are dynamically calculated on the fly (`capacity - active registrations`), ensuring 100% synchronization between admin and employee portals.
-4. **1-Click Reset Demo Data:** A convenient **Reset Demo Data** button is located in the sidebar footer (and programmatically callable via `dataStoreService.resetDemoData()`), enabling evaluators to restore pristine demo data in 1 second.
-
----
-
-## 6. Implementation Status of Core Use Cases
-
-| Use Case | Description | Status | Implementation Highlights |
-|---|---|---|---|
-| **UC-1** | Authentication & RBAC | **Complete** | Role-based guards (`AuthGuard`, `RoleGuard`), return URL navigation, zero role switcher cards on login screen. |
-| **UC-2** | Activity Management | **Complete** | Full CRUD, capacity limits, deadline datepicker, publication workflow (`PUBLISHED`, `DRAFT`, `CANCELLED`). |
-| **UC-3** | Catalog & Registration | **Complete** | Search & multi-parameter filtering, dynamic capacity counter, ethical commitment modal, cutoff rejection. |
-| **UC-4** | Bookings & Transfer | **Complete** | Booking cancellation with slot restoration, atomic activity transfer, active vs history tabs. |
-| **UC-5** | In-App Alerts & Reminders | **Complete** | Employee inbox (read/unread filters), admin 7/3/1 day reminder simulation engine, custom broadcast announcements. |
-| **UC-6** | QR Code & Attendance | **Complete** | Printable logistics poster generation (`qrcode`), camera check-in scanner (`html5-qrcode`), duplicate prevention. |
-
----
-
-## 7. Known Frontend-Only Limitations
-
-To uphold absolute academic and professional honesty, the following constraints are explicitly documented:
-
-- **No Remote Backend / Database:** The application is purely client-side; no Node.js/Express server or database is running.
-- **Client-Scoped Persistence:** Data changes persist in the evaluator's local browser via `localStorage`. Changes in one browser will not synchronize with a different browser profile or device.
-- **Simulated Authentication:** Passwords are not evaluated using server-side cryptography. Submitting any non-empty password with a valid corporate email succeeds.
-- **Simulated Email & SMS Delivery:** Reminders and broadcasts generate persistent in-app notifications and audit logs; no external SMTP emails or SMS messages are dispatched.
-- **Simulated QR Verification:** QR codes encode opaque demo tokens (`SDD-{activityId}-{timestamp}`). Verification is decoded and validated by client-side service logic without remote cryptographic signature validation.
-
----
-
-## 8. Verification & QA Documentation
-
-- **Coursework Deliverables Report:** Full technology inventory, architectural rationale, user manuals, video script, and references are detailed in [`docs/COURSEWORK_DELIVERABLES_REPORT.md`](docs/COURSEWORK_DELIVERABLES_REPORT.md).
-- **Manual QA Checklist:** A detailed 16-test scenario guide covering step-by-step reproduction instructions is available in [`docs/MANUAL_QA_CHECKLIST.md`](docs/MANUAL_QA_CHECKLIST.md).
-- **Data Layer Architecture:** Extended documentation detailing domain interfaces, serialization boundaries, and hydration flows is available in [`docs/DATA_LAYER_DOCUMENTATION.md`](docs/DATA_LAYER_DOCUMENTATION.md).
-- **Demo Credentials:** Complete role-based test account credentials and guard mechanics are available in [`docs/DEMO_CREDENTIALS.md`](docs/DEMO_CREDENTIALS.md).
+- **Run Tests:**
+  ```bash
+  npm test
+  ```

@@ -10,7 +10,7 @@ import { DataStoreService } from '../../../../core/services/data-store.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Activity, Attendance, CheckInSuccessResult, Registration, User } from '../../../../models';
 
-describe('EmployeeCheckinComponent (Task 10: Employee QR Check-In & Manual Fallback)', () => {
+describe('EmployeeCheckinComponent', () => {
   let component: EmployeeCheckinComponent;
   let fixture: ComponentFixture<EmployeeCheckinComponent>;
   let mockAuthService: any;

@@ -43,7 +43,7 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
   isUserRegistered: boolean = false;
   userRegistration: Registration | null = null;
 
-  // Task 07 Active Registration Modal State
+  // Active Registration Modal State
   showRegistrationModal: boolean = false;
   overlappingActivities: Activity[] = [];
   isSubmittingRegistration: boolean = false;

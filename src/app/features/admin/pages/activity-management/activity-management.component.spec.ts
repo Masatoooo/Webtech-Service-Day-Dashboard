@@ -8,7 +8,7 @@ import { NGOService } from '../../../../core/services/ngo.service';
 import { RegistrationService } from '../../../../core/services/registration.service';
 import { Activity, NGO, Registration, ActivitySlotSummary } from '../../../../models';
 
-describe('ActivityManagementComponent (Task 05 - Use Case 1)', () => {
+describe('ActivityManagementComponent', () => {
   let component: ActivityManagementComponent;
   let fixture: ComponentFixture<ActivityManagementComponent>;
 

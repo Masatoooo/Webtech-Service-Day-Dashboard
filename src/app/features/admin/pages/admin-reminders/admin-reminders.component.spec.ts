@@ -8,7 +8,7 @@ import { ActivityService } from '../../../../core/services/activity.service';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { Activity, NotificationHistoryItem, ReminderRule } from '../../../../models';
 
-describe('AdminRemindersComponent (Task 09: Admin Reminders & Broadcast UI)', () => {
+describe('AdminRemindersComponent', () => {
   let component: AdminRemindersComponent;
   let fixture: ComponentFixture<AdminRemindersComponent>;
   let mockNotificationService: any;

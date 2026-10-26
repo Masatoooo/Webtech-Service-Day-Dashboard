@@ -6,7 +6,7 @@ import { DataStoreService } from './data-store.service';
 import { StorageService } from './storage.service';
 import { Activity, Registration, User } from '../../models';
 
-describe('NotificationService (Task 09: Notifications & Reminder Simulation)', () => {
+describe('NotificationService', () => {
   let service: NotificationService;
   let dataStore: DataStoreService;
   let storage: StorageService;

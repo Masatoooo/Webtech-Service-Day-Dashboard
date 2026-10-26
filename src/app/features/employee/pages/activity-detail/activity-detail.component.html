@@ -39,13 +39,13 @@
 
   <!-- Main Activity Detail Content -->
   <div *ngIf="!isLoading && !notFound && activity">
-    <!-- Informative Contract Notice (Task 06 Contract: No Fake Success) -->
+    <!-- Informative Notice -->
     <div *ngIf="showContractNotice" class="alert alert-info mb-6" id="contract-registration-notice">
       <div class="flex justify-between items-start">
         <div>
-          <div class="font-bold text-base mb-1">Task 06 Discovery Contract Verified</div>
+          <div class="font-bold text-base mb-1">Activity Selected</div>
           <p class="text-sm" style="line-height: 1.5; margin: 0;">
-            You selected <strong>{{ activity.title }}</strong>. Full registration mutation workflows, dynamic slot deduction, duplicate protection, and cancellation rules are scheduled for <strong>Task 07 (Use Case 3)</strong>. In Task 06, all details, schedules, and capacity limits are verified from the central data store.
+            You are viewing <strong>{{ activity.title }}</strong>. Please check the schedule, location, and remaining spots before submitting your volunteer registration.
           </p>
         </div>
         <button
@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <!-- Feedback Banner (Task 07 Registration Success / Error) -->
+    <!-- Feedback Banner (Registration Success / Error) -->
     <div
       *ngIf="feedbackBanner"
       class="alert mb-6"

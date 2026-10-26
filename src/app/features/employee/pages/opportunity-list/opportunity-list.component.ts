@@ -52,7 +52,7 @@ export class OpportunityListComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   registeredActivityIds = new Set<string>();
 
-  // Task 07 Active Registration Modal State
+  // Active Registration Modal State
   registerModalItem: OpportunityItem | null = null;
   overlappingActivities: Activity[] = [];
   isSubmittingRegistration: boolean = false;

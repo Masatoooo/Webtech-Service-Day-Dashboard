@@ -17,7 +17,7 @@ import {
   ActivitySlotSummary
 } from '../../../../models';
 
-describe('AdminDashboardComponent (Task 08: Use Case 4)', () => {
+describe('AdminDashboardComponent', () => {
   let component: AdminDashboardComponent;
   let fixture: ComponentFixture<AdminDashboardComponent>;
 
