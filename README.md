@@ -2,8 +2,8 @@
 
 **Module:** Web Technologies / Web Application Development  
 **Coursework:** Assignment 2 (CLO2) — Front-End Web Application  
-**Student Name:** [Student Name / Group Members]  
-**Student ID:** [Student ID(s)]  
+**Student Name:** Komang Masato Kaneko  
+**Student ID:** e2400066  
 
 ---
 
