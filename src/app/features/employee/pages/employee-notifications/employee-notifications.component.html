@@ -1,16 +1,15 @@
 <div class="employee-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row flex-wrap gap-3">
       <div>
-        <div class="role-pretitle">Communications & Alerts</div>
-        <h1 class="page-title">Notifications & Announcements</h1>
-        <p class="header-desc text-muted">
-          Real-time updates on activity registrations, capacity changes, and corporate service broadcasts.
+        <div class="role-pretitle">Inbox</div>
+        <h1 class="page-title">Notifications</h1>
+        <p class="header-desc">
+          Updates about your registrations, reminders before activities, and company announcements.
         </p>
       </div>
 
-      <div class="header-badge-wrap flex items-center gap-2">
+      <div class="header-actions">
         <button
           *ngIf="unreadCount > 0"
           type="button"
@@ -21,26 +20,24 @@
         >
           Mark all as read
         </button>
-        <app-status-badge variant="forest" label="In-App Updates"></app-status-badge>
       </div>
-    </div>
   </header>
 
   <!-- Metric Summary Row -->
   <div class="metrics-grid mb-6">
     <div class="metric-card">
-      <div class="metric-label">Total Notifications</div>
+      <div class="metric-label">All</div>
       <div class="metric-val" id="metric-notif-total">{{ totalCount }}</div>
-      <div class="metric-meta text-muted">All activity & broadcast items</div>
+      <div class="metric-meta text-muted">Everything in your inbox</div>
     </div>
 
     <div class="metric-card">
-      <div class="metric-label">Unread Messages</div>
-      <div class="metric-val" [style.color]="unreadCount > 0 ? '#845D16' : '#202C3B'" id="metric-notif-unread">
+      <div class="metric-label">Unread</div>
+      <div class="metric-val" [class.text-brass]="unreadCount > 0" id="metric-notif-unread">
         {{ unreadCount }}
       </div>
       <div class="metric-meta text-muted">
-        {{ unreadCount > 0 ? 'Requires your attention' : 'All caught up' }}
+        {{ unreadCount > 0 ? 'Waiting for you' : 'All caught up' }}
       </div>
     </div>
 
@@ -197,7 +194,7 @@
                 'notif-badge-update': notif.type === 'ACTIVITY_UPDATE'
               }"
             >
-              {{ notif.type }}
+              {{ notif.type.replace('_', ' ') | titlecase }}
             </span>
 
             <span class="notif-sim-tag" title="In-App Simulation">

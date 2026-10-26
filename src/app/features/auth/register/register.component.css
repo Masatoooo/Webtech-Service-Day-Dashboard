@@ -1,13 +1,9 @@
-:host{display:block;width:100%;height:100%}
-.form-header{margin-bottom:1.25rem}
-.brand-kicker{font-size:.725rem;font-weight:700;letter-spacing:.12em;color:var(--text-secondary);display:block;margin-bottom:.3rem}
-.brand-title-wrap{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.35rem}
-.brand-logo-icon{width:28px;height:28px}
-.brand-name{font-size:1.35rem;font-weight:800;letter-spacing:.06em;color:var(--color-deep-slate);margin:0}
-.form-subtitle{font-size:.8125rem;color:var(--text-secondary);margin:0}
-.login-fields-form{margin-bottom:.875rem}
-.form-group{margin-bottom:.75rem}
-.pill-select{cursor:pointer;color:var(--color-deep-slate)}
-.form-hint{font-size:.725rem;padding-left:.5rem;display:block}
-.text-error{color:var(--status-error-text)}
-.form-actions{margin-top:1rem}
+:host { display: block; width: 100%; height: 100%; }
+.form-header { margin-bottom: 1.5rem; }
+.form-subtitle { font-size: 0.9375rem; color: var(--text-secondary); margin: 0; }
+.login-fields-form { margin-bottom: 0.5rem; }
+.form-group { margin-bottom: 1rem; }
+.pill-select { cursor: pointer; color: var(--ink-900); background-image: none !important; }
+.form-hint { display: block; font-size: var(--font-size-xs); margin-top: 0.35rem; }
+.text-error { color: var(--status-error-text); }
+.form-actions { margin-top: 1.25rem; }

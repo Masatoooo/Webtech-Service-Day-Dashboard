@@ -1,27 +1,21 @@
 <div class="employee-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row">
-      <div>
-        <div class="role-pretitle">Employee Discovery</div>
-        <h1 class="page-title">Service Day Opportunities</h1>
-        <p class="header-desc text-muted">
-          Browse verified community engagement initiatives sponsored for Corporate Service Day. Discover projects, check requirements, and prepare your participation.
-        </p>
-      </div>
-      <div class="header-badge-wrap">
-        <app-status-badge variant="forest" label="Staff Opportunities"></app-status-badge>
-      </div>
+    <div>
+      <div class="role-pretitle">Volunteer</div>
+      <h1 class="page-title">Opportunities</h1>
+      <p class="header-desc">
+        Community activities run with our NGO partners. Check the details, then sign up for the ones that fit your schedule.
+      </p>
     </div>
   </header>
 
-  <!-- Feedback Banner (Task 07 Registration Success / Error) -->
+  <!-- Registration feedback -->
   <div
     *ngIf="feedbackBanner"
-    class="alert mb-6"
+    class="alert mb-6 items-center justify-between"
     [ngClass]="feedbackBanner.type === 'success' ? 'alert-success' : 'alert-error'"
     id="registration-feedback-banner"
-    style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;"
   >
     <div class="flex items-center gap-2">
       <svg *ngIf="feedbackBanner.type === 'success'" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
@@ -32,44 +26,33 @@
       </svg>
       <span>{{ feedbackBanner.message }}</span>
     </div>
-    <button
-      type="button"
-      class="btn-icon"
-      (click)="dismissFeedbackBanner()"
-      aria-label="Dismiss alert"
-      style="background: transparent; border: none; cursor: pointer; color: inherit; padding: 2px;"
-    >
-      ✕
-    </button>
+    <button type="button" class="btn-dismiss" (click)="dismissFeedbackBanner()" aria-label="Dismiss alert">&times;</button>
   </div>
 
-  <!-- Metric Counters Row -->
-  <div class="metrics-grid mb-6">
+  <!-- Summary -->
+  <div class="metrics-strip opp-metrics mb-6">
     <div class="metric-card">
-      <div class="metric-label">Approved Initiatives</div>
+      <div class="metric-label">Approved activities</div>
       <div class="metric-val" id="metric-total-opps">{{ totalApproved }}</div>
-      <div class="metric-meta text-muted">Verified NGO partnerships</div>
+      <div class="metric-meta">With verified NGO partners</div>
     </div>
-
     <div class="metric-card">
-      <div class="metric-label">Open for Registration</div>
-      <div class="metric-val" id="metric-available-opps">{{ totalAvailable }}</div>
-      <div class="metric-meta text-muted">Ready for participant enrollment</div>
+      <div class="metric-label">Open for sign-up</div>
+      <div class="metric-val text-forest" id="metric-available-opps">{{ totalAvailable }}</div>
+      <div class="metric-meta">Places still available</div>
     </div>
-
     <div class="metric-card">
-      <div class="metric-label">Almost Full</div>
-      <div class="metric-val" id="metric-almost-opps">{{ totalAlmostFull }}</div>
-      <div class="metric-meta text-muted">Limited places remaining (≤ 3 slots)</div>
+      <div class="metric-label">Almost full</div>
+      <div class="metric-val" [class.text-brass]="totalAlmostFull > 0" id="metric-almost-opps">{{ totalAlmostFull }}</div>
+      <div class="metric-meta">3 places or fewer left</div>
     </div>
   </div>
 
-  <!-- Search and Filter Card -->
-  <div class="opp-filter-card">
+  <!-- Search and filters -->
+  <div class="opp-filter-card mb-4">
     <div class="opp-filter-grid">
-      <!-- Search Input -->
       <div class="filter-field">
-        <label for="opp-search" class="filter-label">Search Activities & NGOs</label>
+        <label for="opp-search" class="filter-label">Search</label>
         <div class="filter-input-wrap">
           <svg class="filter-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -78,274 +61,165 @@
             id="opp-search"
             type="text"
             class="filter-input"
-            placeholder="Search by title, NGO, mission, or location..."
+            placeholder="Activity, NGO or location"
             [(ngModel)]="searchQuery"
             (input)="applyFilters()"
           />
         </div>
       </div>
 
-      <!-- Service Category Filter -->
       <div class="filter-field">
-        <label for="filter-category" class="filter-label">Focus Area</label>
-        <select
-          id="filter-category"
-          class="filter-select"
-          [(ngModel)]="selectedCategory"
-          (change)="applyFilters()"
-        >
-          <option value="ALL">All Focus Areas</option>
-          <option value="ENVIRONMENT">Environment & Nature</option>
-          <option value="EDUCATION">Education & Youth</option>
-          <option value="FOOD_SECURITY">Food Security</option>
-          <option value="COMMUNITY">Community Support</option>
-          <option value="HEALTH">Public Health</option>
+        <label for="filter-category" class="filter-label">Focus area</label>
+        <select id="filter-category" class="filter-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+          <option value="ALL">All focus areas</option>
+          <option value="ENVIRONMENT">Environment &amp; nature</option>
+          <option value="EDUCATION">Education &amp; youth</option>
+          <option value="FOOD_SECURITY">Food security</option>
+          <option value="COMMUNITY">Community support</option>
+          <option value="HEALTH">Public health</option>
         </select>
       </div>
 
-      <!-- Availability / Status Filter -->
       <div class="filter-field">
-        <label for="filter-status" class="filter-label">Availability State</label>
-        <select
-          id="filter-status"
-          class="filter-select"
-          [(ngModel)]="selectedStatus"
-          (change)="applyFilters()"
-        >
-          <option value="ALL">All Statuses</option>
+        <label for="filter-status" class="filter-label">Availability</label>
+        <select id="filter-status" class="filter-select" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+          <option value="ALL">Any</option>
           <option value="AVAILABLE">Available</option>
-          <option value="ALMOST_FULL">Almost Full</option>
-          <option value="FULL">Capacity Full</option>
-          <option value="REGISTRATION_CLOSED">Registration Closed</option>
+          <option value="ALMOST_FULL">Almost full</option>
+          <option value="FULL">Full</option>
+          <option value="REGISTRATION_CLOSED">Registration closed</option>
           <option value="CANCELLED">Cancelled</option>
           <option value="COMPLETED">Completed</option>
         </select>
       </div>
 
-      <!-- Location Filter -->
       <div class="filter-field">
-        <label for="filter-location" class="filter-label">Location Area</label>
-        <select
-          id="filter-location"
-          class="filter-select"
-          [(ngModel)]="selectedLocation"
-          (change)="applyFilters()"
-        >
-          <option value="ALL">All Locations</option>
+        <label for="filter-location" class="filter-label">Location</label>
+        <select id="filter-location" class="filter-select" [(ngModel)]="selectedLocation" (change)="applyFilters()">
+          <option value="ALL">All locations</option>
           <option *ngFor="let loc of availableLocations" [value]="loc">{{ loc }}</option>
         </select>
       </div>
 
-      <!-- Reset Filters Button -->
-      <div class="filter-field">
-        <label class="filter-label filter-label-spacer">Reset</label>
+      <div class="filter-field filter-actions-field">
         <button
           type="button"
-          class="btn btn-secondary flex items-center justify-center gap-1"
+          class="btn btn-ghost w-full"
           (click)="resetFilters()"
           [disabled]="!hasActiveFilters()"
           id="btn-reset-filters"
-          title="Clear search queries and reset filters"
-          style="height: 40px; font-size: 0.825rem; font-weight: 600;"
+          title="Clear search and reset filters"
         >
-          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-          </svg>
           Reset
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Results Count Bar -->
-  <div class="flex justify-between items-center mb-4" style="font-size: 0.85rem; color: var(--color-secondary-text);">
-    <div>
-      Showing <strong>{{ filteredOpportunities.length }}</strong> of {{ allOpportunities.length }} approved opportunities
-      <span *ngIf="hasActiveFilters()" class="text-muted">(filtered)</span>
-    </div>
-  </div>
+  <p class="meta-count mb-3">
+    Showing <strong>{{ filteredOpportunities.length }}</strong> of {{ allOpportunities.length }} opportunities<span *ngIf="hasActiveFilters()"> (filtered)</span>
+  </p>
 
-  <!-- Opportunities Editorial List -->
-  <div class="opp-list" *ngIf="filteredOpportunities.length > 0; else noResultsTemplate">
-    <div
+  <!-- Opportunity cards -->
+  <div class="opp-grid" *ngIf="filteredOpportunities.length > 0; else noResultsTemplate">
+    <article
       *ngFor="let item of filteredOpportunities"
-      class="opp-card"
+      class="opp-tile"
+      [class.is-muted]="!isActionable(item.slotSummary.availabilityStatus) && !isRegistered(item.activity.id)"
       [id]="'opp-card-' + item.activity.id"
-      [style.border-left-color]="
-        item.activity.serviceType === 'ENVIRONMENT' ? '#356859' :
-        item.activity.serviceType === 'EDUCATION' ? '#1B5299' :
-        item.activity.serviceType === 'FOOD_SECURITY' ? '#C9A66B' :
-        item.activity.serviceType === 'COMMUNITY' ? '#692A8E' : '#A82828'
-      "
     >
-      <!-- Main Content Block -->
-      <div class="opp-main-info">
-        <!-- Top Tags Row -->
-        <div class="opp-header-row">
-          <span
-            class="badge-category"
-            [ngClass]="'category-' + item.activity.serviceType.toLowerCase()"
-          >
-            {{ getCategoryLabel(item.activity.serviceType) }}
-          </span>
+      <div class="opp-tile-top">
+        <span class="badge-category" [ngClass]="'category-' + item.activity.serviceType.toLowerCase()">
+          {{ getCategoryLabel(item.activity.serviceType) }}
+        </span>
 
-          <span class="opp-ngo-name flex items-center gap-1" *ngIf="item.ngo">
-            <svg viewBox="0 0 20 20" fill="#356859" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            {{ item.ngo.name }}
-          </span>
-        </div>
-
-        <!-- Activity Title -->
-        <h2 class="opp-title">
-          <a
-            [routerLink]="['/employee/activities', item.activity.id]"
-            class="opp-title-link"
-            [id]="'link-title-' + item.activity.id"
-          >
-            {{ item.activity.title }}
-          </a>
-        </h2>
-
-        <!-- Short Description -->
-        <p class="opp-desc">
-          {{ item.activity.description }}
-        </p>
-
-        <!-- Aligned Metadata Row -->
-        <div class="opp-meta-row">
-          <!-- Date & Time -->
-          <span class="opp-meta-item" title="Schedule">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-            </svg>
-            <strong>{{ item.activity.startDateTime | date:'mediumDate' }}</strong>
-            <span>({{ item.activity.startDateTime | date:'shortTime' }} – {{ item.activity.endDateTime | date:'shortTime' }})</span>
-          </span>
-
-          <!-- Location -->
-          <span class="opp-meta-item" title="Location">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-            </svg>
-            <span>{{ item.activity.location }}</span>
-          </span>
-
-          <!-- Capacity & Remaining Places -->
-          <span class="opp-meta-item" title="Capacity Status">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-            </svg>
-            <span>Capacity: <strong>{{ item.slotSummary.filledSlots }}/{{ item.slotSummary.capacity }}</strong></span>
-            <span class="text-muted">({{ item.slotSummary.remainingSlots }} left)</span>
-          </span>
-
-          <!-- Registration Cut-off -->
-          <span class="opp-meta-item" title="Registration Deadline">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-            </svg>
-            <span>Cut-off: <strong>{{ item.activity.registrationCutoff | date:'mediumDate' }}</strong></span>
-          </span>
-        </div>
-      </div>
-
-      <!-- Action & Multi-State Badge Block -->
-      <div class="opp-action-block">
-        <!-- Multi-State Availability Badge (Icon + Text: Does NOT rely on color alone) -->
-        <div [ngSwitch]="item.slotSummary.availabilityStatus">
-          <!-- Available -->
-          <span *ngSwitchCase="'AVAILABLE'" class="avail-pill avail-pill-available">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            Available ({{ item.slotSummary.remainingSlots }} spots)
-          </span>
-
-          <!-- Almost Full -->
+        <ng-container [ngSwitch]="item.slotSummary.availabilityStatus">
+          <span *ngSwitchCase="'AVAILABLE'" class="avail-pill avail-pill-available">{{ item.slotSummary.remainingSlots }} places left</span>
           <span *ngSwitchCase="'ALMOST_FULL'" class="avail-pill avail-pill-almost">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
             </svg>
-            Almost Full ({{ item.slotSummary.remainingSlots }} spots left)
+            Only {{ item.slotSummary.remainingSlots }} left
           </span>
-
-          <!-- Capacity Full -->
-          <span *ngSwitchCase="'FULL'" class="avail-pill avail-pill-full">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.366zm1.414-1.414L6.525 5.11a6 6 0 018.366 8.366zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
-            </svg>
-            Capacity Full
-          </span>
-
-          <!-- Registration Closed -->
-          <span *ngSwitchCase="'REGISTRATION_CLOSED'" class="avail-pill avail-pill-closed">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-            </svg>
-            Registration Closed
-          </span>
-
-          <!-- Cancelled -->
-          <span *ngSwitchCase="'CANCELLED'" class="avail-pill avail-pill-cancelled">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-            </svg>
-            Activity Cancelled
-          </span>
-
-          <!-- Completed -->
-          <span *ngSwitchCase="'COMPLETED'" class="avail-pill avail-pill-completed">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-              <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
-            </svg>
-            Initiative Completed
-          </span>
-        </div>
-
-        <!-- Buttons Row -->
-        <div class="flex items-center gap-2 mt-1">
-          <!-- View Details Button -->
-          <a
-            [routerLink]="['/employee/activities', item.activity.id]"
-            class="btn btn-sm btn-secondary"
-            [id]="'btn-details-' + item.activity.id"
-          >
-            View Details
-          </a>
-
-          <!-- If already registered for this activity -->
-          <a
-            *ngIf="isRegistered(item.activity.id)"
-            routerLink="/employee/registrations"
-            class="btn btn-sm"
-            [id]="'btn-enrolled-' + item.activity.id"
-            style="background: #E8EFEB; color: #235C49; border: 1px solid #BCD5C9; font-weight: 600;"
-            title="You are already enrolled in this activity. Click to view My Registrations."
-          >
-            ✓ Enrolled
-          </a>
-
-          <!-- Register CTA Button -->
-          <button
-            *ngIf="!isRegistered(item.activity.id)"
-            type="button"
-            class="btn btn-sm btn-primary"
-            [disabled]="!isActionable(item.slotSummary.availabilityStatus)"
-            (click)="openRegistrationModal(item)"
-            [id]="'btn-register-' + item.activity.id"
-            [title]="
-              !isActionable(item.slotSummary.availabilityStatus)
-                ? 'Sign-up unavailable (' + item.slotSummary.availabilityStatus + ')'
-                : 'Sign up for this activity'
-            "
-          >
-            Register
-          </button>
-        </div>
+          <span *ngSwitchCase="'FULL'" class="avail-pill avail-pill-full">Full</span>
+          <span *ngSwitchCase="'REGISTRATION_CLOSED'" class="avail-pill avail-pill-closed">Registration closed</span>
+          <span *ngSwitchCase="'CANCELLED'" class="avail-pill avail-pill-cancelled">Cancelled</span>
+          <span *ngSwitchCase="'COMPLETED'" class="avail-pill avail-pill-completed">Completed</span>
+        </ng-container>
       </div>
-    </div>
+
+      <h2 class="opp-title">
+        <a [routerLink]="['/employee/activities', item.activity.id]" class="opp-title-link" [id]="'link-title-' + item.activity.id">
+          {{ item.activity.title }}
+        </a>
+      </h2>
+      <p class="opp-ngo-name" *ngIf="item.ngo">with {{ item.ngo.name }}</p>
+      <p class="opp-desc">{{ item.activity.description }}</p>
+
+      <ul class="opp-facts">
+        <li>
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+          </svg>
+          <span><strong>{{ item.activity.startDateTime | date:'EEE d MMM' }}</strong> · {{ item.activity.startDateTime | date:'shortTime' }}–{{ item.activity.endDateTime | date:'shortTime' }}</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg>
+          <span>{{ item.activity.location }}</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+          </svg>
+          <span>Sign up by {{ item.activity.registrationCutoff | date:'d MMM' }}</span>
+        </li>
+      </ul>
+
+      <div class="opp-capacity" [attr.aria-label]="item.slotSummary.filledSlots + ' of ' + item.slotSummary.capacity + ' places taken'">
+        <div class="capacity-progress-bar">
+          <div
+            class="capacity-progress-fill"
+            [class.fill-high]="item.slotSummary.availabilityStatus === 'ALMOST_FULL'"
+            [class.fill-full]="item.slotSummary.availabilityStatus === 'FULL'"
+            [style.width.%]="item.slotSummary.capacity ? (item.slotSummary.filledSlots / item.slotSummary.capacity * 100) : 0"
+          ></div>
+        </div>
+        <span class="capacity-numbers">{{ item.slotSummary.filledSlots }}/{{ item.slotSummary.capacity }} taken</span>
+      </div>
+
+      <div class="opp-tile-actions">
+        <a [routerLink]="['/employee/activities', item.activity.id]" class="btn btn-secondary" [id]="'btn-details-' + item.activity.id">
+          Details
+        </a>
+
+        <a
+          *ngIf="isRegistered(item.activity.id)"
+          routerLink="/employee/registrations"
+          class="btn btn-enrolled"
+          [id]="'btn-enrolled-' + item.activity.id"
+          title="You are already registered. Open My Registrations."
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          Registered
+        </a>
+
+        <button
+          *ngIf="!isRegistered(item.activity.id)"
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!isActionable(item.slotSummary.availabilityStatus)"
+          (click)="openRegistrationModal(item)"
+          [id]="'btn-register-' + item.activity.id"
+          [title]="!isActionable(item.slotSummary.availabilityStatus) ? 'Sign-up unavailable' : 'Sign up for this activity'"
+        >
+          Sign up
+        </button>
+      </div>
+    </article>
   </div>
 
   <!-- Empty Results State -->
@@ -357,9 +231,9 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </div>
-      <h3 class="opp-empty-title">No matching opportunities found</h3>
+      <h3 class="opp-empty-title">No matching opportunities</h3>
       <p class="opp-empty-desc">
-        We couldn't find any approved activities matching your current filters. Try adjusting your search query, focus area, or availability selection.
+        Try a different search, focus area or availability.
       </p>
       <button
         type="button"
@@ -367,7 +241,7 @@
         (click)="resetFilters()"
         id="btn-empty-reset"
       >
-        Clear Filters
+        Clear filters
       </button>
     </div>
   </ng-template>
@@ -385,19 +259,19 @@
     id="contract-modal"
   >
     <div class="contract-modal-card" (click)="$event.stopPropagation()" *ngIf="(registerModalItem || contractModalItem) as modalItem">
-      <div class="contract-badge">Staff Participation Sign-Up</div>
+      <div class="contract-badge">Sign up</div>
       <h3 class="contract-modal-title" id="modal-activity-title">{{ modalItem.activity.title }}</h3>
       <p class="contract-modal-body" *ngIf="modalItem.ngo">
-        Initiative hosted by <strong>{{ modalItem.ngo.name }}</strong>
+        Hosted by <strong>{{ modalItem.ngo.name }}</strong>
       </p>
 
       <div class="contract-detail-box">
         <div class="contract-detail-item">
-          <span class="text-muted">Session Date</span>
+          <span class="text-muted">Date</span>
           <strong>{{ modalItem.activity.startDateTime | date:'mediumDate' }}</strong>
         </div>
         <div class="contract-detail-item">
-          <span class="text-muted">Time Window</span>
+          <span class="text-muted">Time</span>
           <strong>{{ modalItem.activity.startDateTime | date:'shortTime' }} – {{ modalItem.activity.endDateTime | date:'shortTime' }}</strong>
         </div>
         <div class="contract-detail-item">
@@ -405,11 +279,11 @@
           <span>{{ modalItem.activity.location }}</span>
         </div>
         <div class="contract-detail-item">
-          <span class="text-muted">Available Capacity</span>
-          <strong>{{ modalItem.slotSummary.remainingSlots }} places remaining ({{ modalItem.slotSummary.filledSlots }}/{{ modalItem.slotSummary.capacity }} filled)</strong>
+          <span class="text-muted">Places</span>
+          <strong>{{ modalItem.slotSummary.remainingSlots }} of {{ modalItem.slotSummary.capacity }} left</strong>
         </div>
         <div class="contract-detail-item">
-          <span class="text-muted">Registration Cut-off</span>
+          <span class="text-muted">Changes close</span>
           <strong>{{ modalItem.activity.registrationCutoff | date:'mediumDate' }}</strong>
         </div>
       </div>
@@ -419,29 +293,28 @@
         *ngIf="overlappingActivities.length > 0"
         class="alert alert-warning mb-4"
         id="schedule-overlap-warning"
-        style="font-size: 0.825rem; line-height: 1.45;"
       >
         <div class="font-bold flex items-center gap-1 mb-1">
           <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
           </svg>
-          Schedule Overlap Detected
+          This overlaps with another activity
         </div>
         <span>
           You already have an active registration for
           <strong *ngFor="let ov of overlappingActivities; let last = last">
             '{{ ov.title }}' ({{ ov.startDateTime | date:'shortTime' }}–{{ ov.endDateTime | date:'shortTime' }}){{ !last ? ', ' : '' }}
           </strong>
-          on this date. Service Day allows multiple enrollments, but please ensure your schedule permits participation.
+          on this date. You can still sign up, but check you can make both.
         </span>
       </div>
 
       <!-- Registration Error Alert -->
-      <div *ngIf="registrationModalError" class="alert alert-error mb-4" id="modal-registration-error" style="font-size: 0.825rem;">
+      <div *ngIf="registrationModalError" class="alert alert-error mb-4" id="modal-registration-error">
         {{ registrationModalError }}
       </div>
 
-      <div class="flex justify-end gap-2">
+      <div class="contract-actions">
         <button
           type="button"
           class="btn btn-secondary"
@@ -457,7 +330,7 @@
           (click)="navigateToDetails(modalItem.activity.id)"
           id="btn-modal-view-details"
         >
-          View Full Details
+          Full details
         </button>
         <button
           type="button"
@@ -466,7 +339,7 @@
           [disabled]="isSubmittingRegistration"
           id="btn-confirm-register"
         >
-          {{ isSubmittingRegistration ? 'Registering...' : 'Confirm Registration' }}
+          {{ isSubmittingRegistration ? 'Signing up…' : 'Confirm sign-up' }}
         </button>
       </div>
     </div>

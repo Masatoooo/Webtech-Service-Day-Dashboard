@@ -1,24 +1,12 @@
 <div class="employee-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row flex-wrap gap-3">
-      <div>
-        <div class="role-pretitle">Event Day Operations</div>
-        <h1 class="page-title">Event Check-In & Attendance</h1>
-        <p class="header-desc text-muted">
-          Scan the on-site venue QR code or enter the event reference code to record your arrival.
-        </p>
-      </div>
-
-      <div class="flex items-center gap-2 flex-wrap">
-        <app-status-badge variant="forest" label="On-Site Check-In"></app-status-badge>
-        <div class="sim-badge-alert" title="Transparent simulation note">
-          <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
-            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
-          </svg>
-          Demo Check-In Simulation
-        </div>
-      </div>
+    <div>
+      <div class="role-pretitle">On the day</div>
+      <h1 class="page-title">Event check-in</h1>
+      <p class="header-desc">
+        Scan the QR poster at the venue, or type the code printed under it, to record your arrival.
+      </p>
     </div>
   </header>
 
@@ -30,7 +18,7 @@
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Frontend Demonstration Note:</strong> This check-in verification is processed locally in the frontend demo environment against your enrolled registrations. Authoritative cryptographic validation will be handled by the server backend.
+      <strong>Demo check-in.</strong> Your code is checked in this browser against your registrations. A real deployment would verify it on a server.
     </div>
   </div>
 

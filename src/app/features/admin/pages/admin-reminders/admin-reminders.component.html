@@ -1,24 +1,12 @@
 <div class="admin-page">
   <!-- Header Section -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row flex-wrap gap-3">
-      <div>
-        <div class="role-pretitle">Communications & Operations</div>
-        <h1 class="page-title">Notification & Reminder Center</h1>
-        <p class="header-desc text-muted">
-          Manage reminder schedules, test simulated dispatches, compose employee broadcasts, and monitor event audit history.
-        </p>
-      </div>
-
-      <div class="flex items-center gap-2 flex-wrap">
-        <app-status-badge variant="forest" label="In-App Notification Engine"></app-status-badge>
-        <div class="sim-badge-alert" title="Transparent simulation note">
-          <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
-            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
-          </svg>
-          Simulated In App / No SMTP Delivery
-        </div>
-      </div>
+    <div>
+      <div class="role-pretitle">Operations</div>
+      <h1 class="page-title">Reminders &amp; alerts</h1>
+      <p class="header-desc">
+        Set when volunteers are reminded, test a reminder, send a message to staff, and see what was sent.
+      </p>
     </div>
   </header>
 
@@ -30,7 +18,7 @@
       </svg>
     </div>
     <div class="banner-text">
-      <strong>Transparent Testing Architecture:</strong> In-app reminders and broadcasts are persisted into browser storage and dispatched directly to employee in-app inboxes. This prototype does not execute unattended background timers or send external emails when the browser is closed.
+      <strong>Simulated delivery.</strong> Reminders and broadcasts are saved in this browser and appear in employees' in-app inboxes. No emails are sent and nothing runs in the background when the browser is closed.
     </div>
   </div>
 
@@ -38,9 +26,9 @@
   <section class="admin-section mb-6" id="sec-reminder-rules">
     <div class="section-header-row mb-4">
       <div>
-        <h2 class="section-heading">Automated Reminder Schedule Rules</h2>
+        <h2 class="section-heading">Reminder schedule</h2>
         <p class="section-subheading text-muted">
-          Enable or disable corporate milestone notifications scheduled at 7 days, 3 days, and 1 day prior to volunteer initiatives.
+          Turn reminders on or off for 7 days, 3 days and 1 day before each activity.
         </p>
       </div>
       <button
@@ -50,7 +38,7 @@
         id="btn-reset-rules"
         title="Restore default rule configurations"
       >
-        Reset Defaults
+        Reset to defaults
       </button>
     </div>
 
@@ -64,7 +52,7 @@
         <div class="rule-card-header">
           <div class="rule-badge-group">
             <span class="days-badge" [class.days-7]="rule.daysBefore === 7" [class.days-3]="rule.daysBefore === 3" [class.days-1]="rule.daysBefore === 1">
-              {{ rule.daysBefore }}d Before
+              {{ rule.daysBefore }} {{ rule.daysBefore === 1 ? 'day' : 'days' }} before
             </span>
             <span class="rule-status-label" [class.active]="rule.enabled">
               {{ rule.enabled ? 'Enabled' : 'Disabled' }}
@@ -87,9 +75,9 @@
         <p class="rule-desc text-muted">{{ rule.description }}</p>
 
         <div class="rule-template-box">
-          <div class="template-label">Subject Template:</div>
+          <div class="template-label">Subject</div>
           <div class="template-val font-mono">{{ rule.subjectTemplate }}</div>
-          <div class="template-label mt-2">Body Template:</div>
+          <div class="template-label mt-2">Message</div>
           <div class="template-val font-mono text-muted">{{ rule.bodyTemplate }}</div>
         </div>
       </div>
@@ -100,9 +88,9 @@
   <section class="admin-section mb-6" id="sec-reminder-simulator">
     <div class="section-header-row mb-4">
       <div>
-        <h2 class="section-heading">Interactive Reminder Simulation & Test Trigger</h2>
+        <h2 class="section-heading">Test a reminder</h2>
         <p class="section-subheading text-muted">
-          Select an active activity and reminder milestone to preview message interpolation and trigger in-app inbox delivery.
+          Pick an activity and timing to preview the message, then send it to registered volunteers' inboxes.
         </p>
       </div>
     </div>
@@ -126,7 +114,7 @@
       <div class="sim-controls-grid mb-4">
         <!-- Activity Selection -->
         <div class="form-group">
-          <label class="form-label" for="sim-select-activity">Target Activity</label>
+          <label class="form-label" for="sim-select-activity">Activity</label>
           <select
             id="sim-select-activity"
             class="form-control"
@@ -137,25 +125,25 @@
               {{ act.title }} ({{ act.startDateTime | date:'mediumDate' }})
             </option>
           </select>
-          <small class="form-help">Enrolled volunteers will receive the generated alert.</small>
+          <small class="form-help">Registered volunteers will get the reminder.</small>
         </div>
 
         <!-- Interval Selection -->
         <div class="form-group">
-          <label class="form-label" for="sim-select-interval">Reminder Milestone</label>
+          <label class="form-label" for="sim-select-interval">When</label>
           <select
             id="sim-select-interval"
             class="form-control"
             [(ngModel)]="selectedSimDaysBefore"
             (change)="generateSimulationPreview()"
           >
-            <option [ngValue]="7">7 Days Advance Notice</option>
-            <option [ngValue]="3">3 Days Readiness Check</option>
-            <option [ngValue]="1">24 Hours (1 Day) Final Alert</option>
+            <option [ngValue]="7">7 days before</option>
+            <option [ngValue]="3">3 days before</option>
+            <option [ngValue]="1">1 day before</option>
           </select>
           <small class="form-help">
-            Rule status:
-            <strong>{{ getSimRuleForDays(selectedSimDaysBefore)?.enabled ? 'Enabled' : 'Disabled' }}</strong>
+            This reminder is
+            <strong>{{ getSimRuleForDays(selectedSimDaysBefore)?.enabled ? 'on' : 'off' }}</strong>
           </small>
         </div>
       </div>
@@ -173,7 +161,7 @@
             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
           </svg>
-          Preview Simulation
+          Preview
         </button>
 
         <button
@@ -185,7 +173,7 @@
           <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
           </svg>
-          Trigger Demo Simulation
+          Send test reminder
         </button>
       </div>
 
@@ -193,7 +181,7 @@
       <div *ngIf="simPreviewResult" class="preview-inspection-card" id="card-sim-preview">
         <div class="preview-header">
           <div class="flex items-center gap-2">
-            <span class="preview-tag">Preview Mode</span>
+            <span class="preview-tag">Preview</span>
             <span class="text-sm font-semibold text-deep-slate">{{ simPreviewResult.rule.name }}</span>
           </div>
           <span class="sim-badge-alert">Simulated in app</span>
@@ -201,17 +189,17 @@
 
         <div class="preview-grid">
           <div class="preview-field">
-            <span class="preview-field-label">Target Activity:</span>
+            <span class="preview-field-label">Activity</span>
             <span class="preview-field-val">{{ simPreviewResult.activity.title }}</span>
           </div>
 
           <div class="preview-field">
-            <span class="preview-field-label">Scheduled Reminder Date:</span>
+            <span class="preview-field-label">Would be sent on</span>
             <span class="preview-field-val">{{ simPreviewResult.scheduledDateStr }}</span>
           </div>
 
           <div class="preview-field">
-            <span class="preview-field-label">Active Recipients:</span>
+            <span class="preview-field-label">Recipients</span>
             <span class="preview-field-val font-semibold">
               {{ simPreviewResult.recipientCount }} registered volunteer(s)
               <span *ngIf="simPreviewResult.recipientNames.length > 0" class="text-muted text-xs block">
@@ -221,9 +209,9 @@
           </div>
 
           <div class="preview-field">
-            <span class="preview-field-label">Rule Active:</span>
+            <span class="preview-field-label">Reminder</span>
             <span class="preview-field-val">
-              {{ simPreviewResult.rule.enabled ? 'Yes (Ready to trigger)' : 'Disabled in settings' }}
+              {{ simPreviewResult.rule.enabled ? 'On' : 'Off in schedule' }}
             </span>
           </div>
         </div>
@@ -233,7 +221,7 @@
             <strong>Subject:</strong> {{ simPreviewResult.sampleTitle }}
           </div>
           <div class="preview-body mt-2">
-            <strong>Message Body:</strong>
+            <strong>Message:</strong>
             <p>{{ simPreviewResult.sampleMessage }}</p>
           </div>
         </div>
@@ -245,9 +233,9 @@
   <section class="admin-section mb-6" id="sec-broadcast-composer">
     <div class="section-header-row mb-4">
       <div>
-        <h2 class="section-heading">Compose Corporate Broadcast Bulletin</h2>
+        <h2 class="section-heading">Send a message to staff</h2>
         <p class="section-subheading text-muted">
-          Publish immediate announcement notifications to all corporate employees or to specific activity participant rosters.
+          Post an announcement to everyone, or only to people registered for one activity.
         </p>
       </div>
     </div>
@@ -270,7 +258,7 @@
     <form [formGroup]="broadcastForm" (ngSubmit)="sendBroadcast()" class="broadcast-card" id="form-broadcast">
       <!-- Target Group Selection -->
       <div class="form-group mb-4">
-        <label class="form-label">Broadcast Target Group</label>
+        <label class="form-label">Send to</label>
         <div class="radio-cards-grid">
           <label class="radio-card" [class.selected]="broadcastForm.get('targetGroup')?.value === 'ALL_EMPLOYEES'">
             <input
@@ -280,8 +268,8 @@
               id="radio-target-all"
             />
             <div class="radio-card-content">
-              <div class="radio-card-title">All Corporate Employees</div>
-              <div class="radio-card-desc text-muted">Company-wide Service Day bulletin delivered to every employee inbox</div>
+              <div class="radio-card-title">All employees</div>
+              <div class="radio-card-desc text-muted">Every employee gets it in their inbox</div>
             </div>
           </label>
 
@@ -293,8 +281,8 @@
               id="radio-target-activity"
             />
             <div class="radio-card-content">
-              <div class="radio-card-title">Enrolled Activity Participants</div>
-              <div class="radio-card-desc text-muted">Specific roster alert for volunteers enrolled in an individual session</div>
+              <div class="radio-card-title">One activity's volunteers</div>
+              <div class="radio-card-desc text-muted">Only people registered for the activity you choose</div>
             </div>
           </label>
         </div>
@@ -307,7 +295,7 @@
         id="group-broadcast-activity"
       >
         <label class="form-label" for="broadcast-activity-select">
-          Select Target Activity <span class="text-danger">*</span>
+          Activity <span class="text-danger">*</span>
         </label>
         <select
           id="broadcast-activity-select"
@@ -315,7 +303,7 @@
           formControlName="activityId"
           [class.is-invalid]="broadcastForm.get('activityId')?.invalid && broadcastForm.get('activityId')?.touched"
         >
-          <option value="">-- Choose Initiative --</option>
+          <option value="">Choose an activity</option>
           <option *ngFor="let act of activities" [value]="act.id">
             {{ act.title }} ({{ act.location }})
           </option>
@@ -331,7 +319,7 @@
       <!-- Subject Input -->
       <div class="form-group mb-4">
         <label class="form-label" for="broadcast-subject">
-          Broadcast Subject <span class="text-danger">*</span>
+          Subject <span class="text-danger">*</span>
         </label>
         <input
           type="text"
@@ -352,14 +340,14 @@
       <!-- Body Input -->
       <div class="form-group mb-4">
         <label class="form-label" for="broadcast-body">
-          Message Body <span class="text-danger">*</span>
+          Message <span class="text-danger">*</span>
         </label>
         <textarea
           id="broadcast-body"
           class="form-control"
           rows="4"
           formControlName="body"
-          placeholder="Provide clear logistical or event details for your volunteers..."
+          placeholder="What do volunteers need to know?"
           [class.is-invalid]="broadcastForm.get('body')?.invalid && broadcastForm.get('body')?.touched"
         ></textarea>
         <div
@@ -373,7 +361,7 @@
       <!-- Live Inbox Preview & Dispatch Action -->
       <div class="composer-footer">
         <div class="composer-disclaimer text-xs text-muted">
-          Dispatched notifications will display the <strong>"Simulated in app"</strong> label in employee inboxes.
+          Messages show a <strong>"Simulated in app"</strong> label in employee inboxes.
         </div>
 
         <button
@@ -385,7 +373,7 @@
           <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
           </svg>
-          {{ broadcastSubmitting ? 'Simulating Broadcast...' : 'Dispatch Broadcast (Simulated)' }}
+          {{ broadcastSubmitting ? 'Sending…' : 'Send message' }}
         </button>
       </div>
     </form>
@@ -395,9 +383,9 @@
   <section class="admin-section mb-6" id="sec-notification-history">
     <div class="section-header-row mb-4">
       <div>
-        <h2 class="section-heading">Simulated Notification History & Audit Log</h2>
+        <h2 class="section-heading">Sent history</h2>
         <p class="section-subheading text-muted">
-          Track simulated reminder triggers, broadcast bulletins, and operational alerts with audit verification statuses.
+          Every simulated reminder and message sent from this page.
         </p>
       </div>
 
@@ -408,7 +396,7 @@
         (click)="clearHistoryLog()"
         id="btn-clear-history"
       >
-        Clear History Log
+        Clear history
       </button>
     </div>
 
@@ -449,7 +437,7 @@
           (click)="setHistoryType('ACTIVITY_UPDATE')"
           id="btn-hist-filter-update"
         >
-          Activity Updates
+          Activity updates
         </button>
       </div>
 
@@ -457,7 +445,7 @@
         <input
           type="text"
           class="form-control form-control-sm"
-          placeholder="Search notification history..."
+          placeholder="Search history"
           [(ngModel)]="historySearchQuery"
           (ngModelChange)="onHistorySearch($event)"
           id="input-hist-search"
@@ -471,11 +459,11 @@
         <thead>
           <tr>
             <th>Type</th>
-            <th>Title & Message Summary</th>
-            <th>Target Group</th>
+            <th>Message</th>
+            <th>Sent to</th>
             <th>Recipients</th>
-            <th>Status Label</th>
-            <th>Simulated At</th>
+            <th>Status</th>
+            <th>Sent</th>
           </tr>
         </thead>
         <tbody>
@@ -490,18 +478,18 @@
                   'notif-badge-registration': item.type === 'REGISTRATION'
                 }"
               >
-                {{ item.type }}
+                {{ item.type.replace('_', ' ') | titlecase }}
               </span>
             </td>
             <td>
               <div class="hist-title font-semibold">{{ item.title }}</div>
               <div class="hist-msg text-xs text-muted text-truncate">{{ item.message }}</div>
               <div *ngIf="item.activityTitle" class="hist-act text-xs text-forest mt-1">
-                Ref: {{ item.activityTitle }}
+                {{ item.activityTitle }}
               </div>
             </td>
             <td>
-              <span class="text-xs font-semibold">{{ item.targetGroup }}</span>
+              <span class="text-xs font-semibold whitespace-nowrap">{{ item.targetGroup }}</span>
             </td>
             <td>
               <span class="badge-count">{{ item.recipientCount }}</span>
@@ -519,7 +507,7 @@
                 {{ item.statusLabel }}
               </span>
             </td>
-            <td class="text-xs text-muted font-mono whitespace-nowrap">
+            <td class="text-xs text-muted whitespace-nowrap">
               {{ item.createdAt | date:'shortDate' }} {{ item.createdAt | date:'shortTime' }}
             </td>
           </tr>
@@ -533,9 +521,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32" class="text-muted" aria-hidden="true">
           <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h4 class="mt-2 text-sm font-semibold">No notification simulation events logged</h4>
+        <h4 class="mt-2 text-sm font-semibold">Nothing sent yet</h4>
         <p class="text-xs text-muted">
-          Use the Simulator or Broadcast composer above to trigger test dispatches.
+          Send a test reminder or a message above and it will appear here.
         </p>
       </div>
     </ng-template>

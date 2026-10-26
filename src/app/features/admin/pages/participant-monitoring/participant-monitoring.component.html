@@ -1,23 +1,18 @@
 <div class="participant-monitoring-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row">
-      <div>
-        <div class="eyebrow">Operations / Participants & Attendance</div>
-        <h1 class="page-title">Participant Roster & Attendance Monitoring</h1>
-        <p class="header-desc text-muted">
-          Operational participant oversight, enrollment auditing, and real-time session check-in tracking across corporate staff.
-        </p>
-      </div>
+    <div>
+      <div class="eyebrow">Operations</div>
+      <h1 class="page-title">Participants &amp; attendance</h1>
+      <p class="header-desc">
+        Who signed up for each activity, and who has checked in on the day.
+      </p>
+    </div>
 
-      <div class="header-actions flex items-center gap-3">
-        <a routerLink="/admin" class="btn btn-secondary btn-sm" id="btn-back-overview">
-          &larr; Overview
-        </a>
-        <a routerLink="/admin/qr" class="btn btn-secondary btn-sm" id="btn-goto-qr" title="Open QR Code Generation">
-          QR Check-In Codes &rarr;
-        </a>
-      </div>
+    <div class="header-actions">
+      <a routerLink="/admin/qr" class="btn btn-secondary" id="btn-goto-qr" title="Open QR check-in posters">
+        QR check-in posters
+      </a>
     </div>
   </header>
 
@@ -29,8 +24,8 @@
       </svg>
     </div>
     <div class="governance-notice-content">
-      <strong class="governance-notice-title">Read-Only Governance Policy:</strong>
-      <span> Administrative monitoring oversees active registrations and physical event check-ins. To safeguard employee autonomy and data integrity, registration withdrawals and transfers are initiated exclusively by volunteer staff prior to registration deadlines.</span>
+      <strong class="governance-notice-title">This roster is read-only.</strong>
+      <span> Only employees can withdraw from or transfer their own registrations, and only before the cut-off date.</span>
     </div>
   </div>
 
@@ -40,17 +35,16 @@
       <div>
         <div class="flex items-center gap-2 mb-1">
           <span class="type-pill" [attr.data-type]="selectedActivity.serviceType">
-            {{ selectedActivity.serviceType | titlecase }}
+            {{ selectedActivity.serviceType.replace('_', ' ') | titlecase }}
           </span>
-          <span class="text-xs text-muted">ID: #{{ selectedActivity.id }}</span>
         </div>
         <h2 class="context-activity-title">{{ selectedActivity.title }}</h2>
-        <div class="context-meta-row flex items-center gap-4 text-xs text-muted mt-2">
+        <div class="context-meta-row mt-2">
           <span *ngIf="selectedActivityNgo">
-            Partner NGO: <strong class="text-slate-800">{{ selectedActivityNgo.name }}</strong>
+            <strong class="text-slate-800">{{ selectedActivityNgo.name }}</strong>
           </span>
-          <span>Schedule: {{ selectedActivity.startDateTime | date:'mediumDate' }}, {{ selectedActivity.startDateTime | date:'shortTime' }}</span>
-          <span>Location: {{ selectedActivity.location }}</span>
+          <span>{{ selectedActivity.startDateTime | date:'mediumDate' }}, {{ selectedActivity.startDateTime | date:'shortTime' }}</span>
+          <span>{{ selectedActivity.location }}</span>
         </div>
       </div>
 
@@ -61,29 +55,29 @@
         </div>
         <div class="context-stat-box">
           <div class="context-stat-lbl">Enrolled</div>
-          <div class="context-stat-val text-blue">{{ selectedActivityStats.filled }}</div>
+          <div class="context-stat-val">{{ selectedActivityStats.filled }}</div>
         </div>
         <div class="context-stat-box">
           <div class="context-stat-lbl">Remaining</div>
           <div class="context-stat-val">{{ selectedActivityStats.remaining }}</div>
         </div>
         <div class="context-stat-box">
-          <div class="context-stat-lbl">Checked In</div>
-          <div class="context-stat-val text-emerald">{{ selectedActivityStats.checkedInCount }}</div>
+          <div class="context-stat-lbl">Checked in</div>
+          <div class="context-stat-val text-forest">{{ selectedActivityStats.checkedInCount }}</div>
         </div>
       </div>
     </div>
 
     <div class="context-footer-actions flex justify-between items-center mt-3 pt-3">
       <div class="text-xs text-muted">
-        Utilisation: <strong class="text-slate-900">{{ selectedActivityStats.pctUtilised }}%</strong> filled
+        <strong class="text-slate-900">{{ selectedActivityStats.pctUtilised }}%</strong> of places filled
       </div>
       <div class="flex items-center gap-2">
-        <a routerLink="/admin/qr" class="btn btn-xs btn-secondary" title="View activity QR Code">
-          Generate QR Poster
+        <a routerLink="/admin/qr" class="btn btn-sm btn-secondary" title="View activity QR Code">
+          QR poster
         </a>
-        <a routerLink="/admin/activities" class="btn btn-xs btn-secondary" title="Edit activity in Activities">
-          Manage Activity
+        <a routerLink="/admin/activities" class="btn btn-sm btn-secondary" title="Edit activity in Activities">
+          Edit activity
         </a>
       </div>
     </div>
@@ -93,121 +87,45 @@
   <div class="metrics-strip metrics-strip-4 mb-6">
     <!-- Card 1: Total Records -->
     <div class="nexus-kpi-card" id="metric-roster-total">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-blue-light text-blue" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Total Records</span>
-      </div>
+      <span class="nexus-kpi-label">Records</span>
       <div class="nexus-kpi-value-wrap">
         <span class="nexus-kpi-value" id="val-roster-total">{{ metrics.totalEnrollments }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Matching current filters</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-roster-blue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#4355F9" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#4355F9" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 30 C 30 30, 45 14, 75 18 C 105 22, 130 12, 160 16 C 180 20, 190 8, 200 10 L 200 44 L 0 44 Z" fill="url(#spk-roster-blue)" />
-          <path d="M0 30 C 30 30, 45 14, 75 18 C 105 22, 130 12, 160 16 C 180 20, 190 8, 200 10" stroke="#4355F9" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Matching filters</span>
       </div>
     </div>
 
     <!-- Card 2: Active Volunteers -->
     <div class="nexus-kpi-card" id="metric-roster-active">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-emerald-light text-emerald" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Active Volunteers</span>
-      </div>
+      <span class="nexus-kpi-label">Active volunteers</span>
       <div class="nexus-kpi-value-wrap">
-        <span class="nexus-kpi-value text-emerald" id="val-roster-active">{{ metrics.activeVolunteers }}</span>
+        <span class="nexus-kpi-value text-forest" id="val-roster-active">{{ metrics.activeVolunteers }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Confirmed slot allocations</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-roster-emerald" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#059669" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#059669" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8 L 200 44 L 0 44 Z" fill="url(#spk-roster-emerald)" />
-          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Holding a place</span>
       </div>
     </div>
 
     <!-- Card 3: Checked-In Staff -->
     <div class="nexus-kpi-card" id="metric-roster-attendance">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-purple-light text-purple" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Checked-In Staff</span>
-      </div>
+      <span class="nexus-kpi-label">Checked in</span>
       <div class="nexus-kpi-value-wrap">
-        <span class="nexus-kpi-value text-purple" id="val-roster-attendance">{{ metrics.confirmedAttendance }}</span>
+        <span class="nexus-kpi-value" id="val-roster-attendance">{{ metrics.confirmedAttendance }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Verified event attendance</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-roster-purple" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 32 C 25 34, 50 18, 80 20 C 110 22, 135 10, 165 12 C 185 14, 195 4, 200 6 L 200 44 L 0 44 Z" fill="url(#spk-roster-purple)" />
-          <path d="M0 32 C 25 34, 50 18, 80 20 C 110 22, 135 10, 165 12 C 185 14, 195 4, 200 6" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Attended on the day</span>
       </div>
     </div>
 
     <!-- Card 4: Withdrawn Registrations -->
     <div class="nexus-kpi-card" id="metric-roster-withdrawn">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-slate-light text-slate" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Withdrawn Registrations</span>
-      </div>
+      <span class="nexus-kpi-label">Withdrawn</span>
       <div class="nexus-kpi-value-wrap">
-        <span class="nexus-kpi-value text-slate" id="val-roster-withdrawn">{{ metrics.withdrawn }}</span>
+        <span class="nexus-kpi-value" id="val-roster-withdrawn">{{ metrics.withdrawn }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Released back to capacity</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-roster-slate" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#64748B" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#64748B" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 32 C 30 26, 60 30, 90 24 C 120 18, 150 28, 175 20 C 185 16, 195 18, 200 16 L 200 44 L 0 44 Z" fill="url(#spk-roster-slate)" />
-          <path d="M0 32 C 30 26, 60 30, 90 24 C 120 18, 150 28, 175 20 C 185 16, 195 18, 200 16" stroke="#64748B" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Places released</span>
       </div>
     </div>
   </div>
@@ -217,23 +135,23 @@
     <div class="filter-grid filter-grid-roster">
       <!-- Select Activity -->
       <div class="filter-field">
-        <label for="select-roster-activity" class="filter-label">Filter by Activity</label>
+        <label for="select-roster-activity" class="filter-label">Activity</label>
         <select
           id="select-roster-activity"
           class="filter-select"
           [(ngModel)]="selectedActivityId"
           (ngModelChange)="onActivityChange($event)"
         >
-          <option value="ALL">All Activities (Global Roster)</option>
+          <option value="ALL">All activities</option>
           <option *ngFor="let act of activities" [value]="act.id">
-            {{ act.title }} ({{ act.serviceType }})
+            {{ act.title }}
           </option>
         </select>
       </div>
 
       <!-- Search participant -->
       <div class="filter-field search-box">
-        <label for="input-roster-search" class="filter-label">Search Staff Participants</label>
+        <label for="input-roster-search" class="filter-label">Search</label>
         <div class="filter-input-wrap">
           <svg class="filter-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -242,7 +160,7 @@
             id="input-roster-search"
             type="text"
             class="filter-input"
-            placeholder="Search by name, email, department..."
+            placeholder="Name, email or department"
             [(ngModel)]="participantSearchTerm"
             (ngModelChange)="applyFilters()"
           />
@@ -251,49 +169,44 @@
 
       <!-- Registration Status Filter -->
       <div class="filter-field">
-        <label for="select-roster-reg-status" class="filter-label">Registration Status</label>
+        <label for="select-roster-reg-status" class="filter-label">Registration</label>
         <select
           id="select-roster-reg-status"
           class="filter-select"
           [(ngModel)]="selectedRegistrationStatus"
           (ngModelChange)="applyFilters()"
         >
-          <option value="ALL">All Registrations</option>
-          <option value="ACTIVE">Active Volunteers</option>
-          <option value="CANCELLED">Withdrawn / Cancelled</option>
+          <option value="ALL">All</option>
+          <option value="ACTIVE">Active</option>
+          <option value="CANCELLED">Withdrawn</option>
         </select>
       </div>
 
       <!-- Attendance Status Filter -->
       <div class="filter-field">
-        <label for="select-roster-att-status" class="filter-label">Attendance State</label>
+        <label for="select-roster-att-status" class="filter-label">Attendance</label>
         <select
           id="select-roster-att-status"
           class="filter-select"
           [(ngModel)]="selectedAttendanceStatus"
           (ngModelChange)="applyFilters()"
         >
-          <option value="ALL">All Attendance States</option>
-          <option value="CHECKED_IN">Checked-In Verified</option>
-          <option value="PENDING">Pending Check-In</option>
+          <option value="ALL">All</option>
+          <option value="CHECKED_IN">Checked in</option>
+          <option value="PENDING">Not yet checked in</option>
         </select>
       </div>
 
       <!-- Reset -->
       <div class="filter-field filter-actions-field">
-        <label class="filter-label filter-label-spacer">Reset</label>
         <button
           type="button"
-          class="btn btn-secondary flex items-center justify-center gap-2"
+          class="btn btn-ghost w-full"
           (click)="resetFilters()"
           id="btn-reset-roster-filters"
           title="Reset search and filters"
-          style="height: 42px; font-weight: 600; width: 100%; border-radius: 12px;"
         >
-          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-          </svg>
-          Reset Filters
+          Reset
         </button>
       </div>
     </div>
@@ -303,30 +216,23 @@
       <span class="meta-count" id="text-roster-results-count">
         Showing <strong>{{ filteredRosterRows.length }}</strong> of <strong>{{ allRosterRows.length }}</strong> participant records
       </span>
-      <span *ngIf="participantSearchTerm || selectedActivityId !== 'ALL' || selectedRegistrationStatus !== 'ALL' || selectedAttendanceStatus !== 'ALL'" class="active-badge">
-        Filtered Results
+      <span *ngIf="participantSearchTerm || selectedActivityId !== 'ALL' || selectedRegistrationStatus !== 'ALL' || selectedAttendanceStatus !== 'ALL'" class="badge active-badge">
+        Filtered
       </span>
     </div>
   </div>
 
   <!-- Detailed Roster Table Card (Modernized & Sleek) -->
   <div class="dash-table-wrap desktop-only-table mb-8">
-    <div class="table-scroll-hint" aria-hidden="true">
-      <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
-      <span>Swipe horizontally to view all columns</span>
-    </div>
-
-    <div style="overflow-x: auto;">
+    <div class="table-responsive">
       <table class="dash-table roster-table" aria-label="Participant Roster and Attendance Table">
         <thead>
           <tr>
-            <th scope="col" style="min-width: 260px;">Employee Volunteer</th>
-            <th scope="col" style="min-width: 250px;">Target CSR Activity</th>
-            <th scope="col" style="min-width: 160px;">Registration State</th>
-            <th scope="col" style="min-width: 200px;">Attendance Status</th>
-            <th scope="col" style="min-width: 150px; text-align: right;">Enrolled Timestamp</th>
+            <th scope="col" style="min-width: 240px;">Volunteer</th>
+            <th scope="col" style="min-width: 240px;">Activity</th>
+            <th scope="col">Registration</th>
+            <th scope="col">Attendance</th>
+            <th scope="col" class="text-right">Signed up</th>
           </tr>
         </thead>
         <tbody>
@@ -338,27 +244,20 @@
                   {{ row.user?.avatarInitials || (row.user?.name | slice:0:2 | uppercase) || 'SD' }}
                 </div>
                 <div>
-                  <div class="font-bold text-slate-900" style="font-size: 0.925rem;">{{ row.user?.name || 'Staff Member' }}</div>
-                  <div class="text-xs text-muted flex items-center gap-1 mt-0.5">
-                    <a [href]="'mailto:' + row.user?.email" style="color: #64748B; text-decoration: none;">{{ row.user?.email || 'N/A' }}</a>
-                  </div>
-                  <div class="text-xs mt-1" style="color: #4338CA; font-weight: 600;" *ngIf="row.user?.department">
-                    Dept: {{ row.user?.department }}
-                  </div>
+                  <div class="font-semibold">{{ row.user?.name || 'Staff Member' }}</div>
+                  <div class="cell-sub">{{ row.user?.email || 'N/A' }}</div>
+                  <div class="cell-sub" *ngIf="row.user?.department">{{ row.user?.department }}</div>
                 </div>
               </div>
             </td>
 
             <!-- Target CSR Activity -->
             <td>
-              <div class="font-bold text-slate-900" style="font-size: 0.9rem;" *ngIf="row.activity">
+              <div class="font-semibold" *ngIf="row.activity">
                 {{ row.activity.title }}
               </div>
-              <div class="text-xs text-muted flex items-center gap-1.5 mt-1" *ngIf="row.ngo">
-                <span>Partner NGO:</span>
-                <strong style="color: #1E293B;">{{ row.ngo.name }}</strong>
-              </div>
-              <div class="text-xs text-muted mt-0.5" *ngIf="row.activity">
+              <div class="cell-sub" *ngIf="row.ngo">{{ row.ngo.name }}</div>
+              <div class="cell-sub" *ngIf="row.activity">
                 {{ row.activity.startDateTime | date:'mediumDate' }}
               </div>
             </td>
@@ -370,41 +269,41 @@
                 [class.pill-active]="row.registration.status === 'ACTIVE'"
                 [class.pill-cancelled]="row.registration.status === 'CANCELLED'"
               >
-                {{ row.registration.status === 'ACTIVE' ? 'Active Volunteer' : 'Withdrawn' }}
+                {{ row.registration.status === 'ACTIVE' ? 'Active' : 'Withdrawn' }}
               </span>
-              <div *ngIf="row.registration.cancellationReason" class="text-xs text-muted mt-1 italic">
+              <div *ngIf="row.registration.cancellationReason" class="cell-sub italic cancel-reason">
                 "{{ row.registration.cancellationReason }}"
               </div>
             </td>
 
             <!-- Attendance Status -->
             <td>
-              <div *ngIf="row.isCheckedIn" class="flex items-center gap-1.5" style="color: #059669; font-weight: 600; font-size: 0.8rem;">
+              <div *ngIf="row.isCheckedIn" class="att-state att-in">
                 <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                <span>Checked In</span>
+                <span>Checked in</span>
               </div>
-              <div *ngIf="row.isCheckedIn && row.attendance?.checkedInAt" class="text-xs text-muted mt-0.5">
-                {{ row.attendance?.checkedInAt | date:'shortTime' }} via {{ row.attendance?.verificationMethod || 'QR Scan' }}
+              <div *ngIf="row.isCheckedIn && row.attendance?.checkedInAt" class="cell-sub">
+                {{ row.attendance?.checkedInAt | date:'shortTime' }} · {{ row.attendance?.verificationMethod === 'MANUAL_FALLBACK' ? 'Manual code' : 'QR scan' }}
               </div>
-              <div *ngIf="!row.isCheckedIn && row.registration.status === 'ACTIVE'" class="text-xs text-muted flex items-center gap-1.5">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="color: #94A3B8;" aria-hidden="true">
+              <div *ngIf="!row.isCheckedIn && row.registration.status === 'ACTIVE'" class="att-state">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="color: var(--ink-400);" aria-hidden="true">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                 </svg>
-                <span>Pending Event Check-In</span>
+                <span>Not yet</span>
               </div>
-              <div *ngIf="row.registration.status === 'CANCELLED'" class="text-xs text-muted" style="color: #94A3B8;">
-                Slot Released
+              <div *ngIf="row.registration.status === 'CANCELLED'" class="att-state att-muted">
+                Place released
               </div>
             </td>
 
             <!-- Enrolled Timestamp -->
-            <td style="text-align: right;">
-              <div class="font-medium text-slate-800" style="font-size: 0.825rem;">
+            <td class="text-right">
+              <div class="whitespace-nowrap">
                 {{ row.registration.registeredAt | date:'mediumDate' }}
               </div>
-              <div class="text-xs text-muted mt-0.5">
+              <div class="cell-sub">
                 {{ row.registration.registeredAt | date:'shortTime' }}
               </div>
             </td>
@@ -422,12 +321,12 @@
 
   <!-- Mobile Card View -->
   <div class="mobile-only-cards" *ngIf="filteredRosterRows.length > 0">
-    <div *ngFor="let row of filteredRosterRows" class="mobile-roster-card mb-4" [id]="'m-roster-' + row.registration.id">
+    <div *ngFor="let row of filteredRosterRows" class="mobile-roster-card" [id]="'m-roster-' + row.registration.id">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
           <div class="user-avatar-badge">{{ row.user?.avatarInitials || (row.user?.name | slice:0:2 | uppercase) || 'SD' }}</div>
           <div>
-            <div class="font-bold text-slate-900">{{ row.user?.name || 'Staff Member' }}</div>
+            <div class="font-semibold">{{ row.user?.name || 'Staff Member' }}</div>
             <div class="text-xs text-muted">{{ row.user?.department }}</div>
           </div>
         </div>
@@ -436,14 +335,14 @@
         </span>
       </div>
 
-      <div class="text-xs font-semibold text-slate-800 mb-1" *ngIf="row.activity">{{ row.activity.title }}</div>
-      <div class="text-xs text-muted mb-3" *ngIf="row.ngo">NGO: {{ row.ngo.name }}</div>
+      <div class="text-sm font-semibold mb-1" *ngIf="row.activity">{{ row.activity.title }}</div>
+      <div class="text-xs text-muted mb-3" *ngIf="row.ngo">{{ row.ngo.name }}</div>
 
       <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
         <div>
-          <span *ngIf="row.isCheckedIn" class="text-emerald font-semibold">Checked In</span>
-          <span *ngIf="!row.isCheckedIn && row.registration.status === 'ACTIVE'" class="text-muted">Pending Check-in</span>
-          <span *ngIf="row.registration.status === 'CANCELLED'" class="text-muted">Slot Released</span>
+          <span *ngIf="row.isCheckedIn" class="text-forest font-semibold">Checked in</span>
+          <span *ngIf="!row.isCheckedIn && row.registration.status === 'ACTIVE'" class="text-muted">Not checked in</span>
+          <span *ngIf="row.registration.status === 'CANCELLED'" class="text-muted">Place released</span>
         </div>
         <div class="text-muted">{{ row.registration.registeredAt | date:'mediumDate' }}</div>
       </div>

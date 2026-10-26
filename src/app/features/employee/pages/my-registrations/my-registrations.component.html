@@ -1,27 +1,21 @@
 <div class="employee-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row">
-      <div>
-        <div class="role-pretitle">Staff Participation Hub</div>
-        <h1 class="page-title">My Registrations</h1>
-        <p class="header-desc text-muted">
-          Manage your enrolled Service Day initiatives. Modify your volunteer schedule, transfer between partner programs, or process timely cancellations.
-        </p>
-      </div>
-      <div class="header-badge-wrap">
-        <app-status-badge variant="forest" label="Staff Registrations"></app-status-badge>
-      </div>
+    <div>
+      <div class="role-pretitle">My volunteering</div>
+      <h1 class="page-title">My registrations</h1>
+      <p class="header-desc">
+        Activities you've signed up for. Check in on the day, or transfer and withdraw before the cut-off.
+      </p>
     </div>
   </header>
 
   <!-- Feedback Banner (Success / Error Alert) -->
   <div
     *ngIf="feedbackBanner"
-    class="alert mb-6"
+    class="alert mb-6 items-center justify-between"
     [ngClass]="feedbackBanner.type === 'success' ? 'alert-success' : 'alert-error'"
     id="reg-feedback-banner"
-    style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;"
   >
     <div class="flex items-center gap-2">
       <svg *ngIf="feedbackBanner.type === 'success'" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
@@ -32,15 +26,7 @@
       </svg>
       <span>{{ feedbackBanner.message }}</span>
     </div>
-    <button
-      type="button"
-      class="btn-icon"
-      (click)="dismissFeedbackBanner()"
-      aria-label="Dismiss alert"
-      style="background: transparent; border: none; cursor: pointer; color: inherit; padding: 2px;"
-    >
-      ✕
-    </button>
+    <button type="button" class="btn-dismiss" (click)="dismissFeedbackBanner()" aria-label="Dismiss alert">&times;</button>
   </div>
 
   <!-- Registration Tabs Navigation -->
@@ -105,13 +91,6 @@
         *ngFor="let item of filteredItems"
         class="opp-card"
         [id]="'my-reg-card-' + item.registration.id"
-        [style.border-left-color]="
-          item.registration.status === 'CANCELLED' ? '#CAD2D6' :
-          item.activity?.serviceType === 'ENVIRONMENT' ? '#356859' :
-          item.activity?.serviceType === 'EDUCATION' ? '#1B5299' :
-          item.activity?.serviceType === 'FOOD_SECURITY' ? '#C9A66B' :
-          item.activity?.serviceType === 'COMMUNITY' ? '#692A8E' : '#202C3B'
-        "
       >
         <!-- Card Main Info -->
         <div class="opp-main-info">
@@ -144,7 +123,7 @@
 
             <!-- Partner NGO -->
             <span class="opp-ngo-name flex items-center gap-1" *ngIf="item.ngo">
-              <svg viewBox="0 0 20 20" fill="#356859" width="14" height="14" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="currentColor" style="color: var(--evergreen-700)" width="14" height="14" aria-hidden="true">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
               </svg>
               {{ item.ngo.name }}
@@ -209,7 +188,7 @@
           <div
             *ngIf="item.registration.status === 'CANCELLED'"
             class="p-3 mt-2"
-            style="background: #F8F9FA; border-radius: 8px; border: 1px solid #E4E8EB; font-size: 0.8rem; color: #5F6B76;"
+            style="background: var(--surface-2); border-radius: 8px; border: 1px solid var(--line); font-size: 0.8rem; color: var(--ink-500);"
             [id]="'cancellation-note-' + item.registration.id"
           >
             <strong>Withdrawn Record:</strong>
@@ -269,7 +248,7 @@
             <button
               type="button"
               class="btn btn-sm btn-secondary"
-              style="color: #A52C22; border-color: #F3C6C1;"
+              style="color: var(--status-error-text); border-color: var(--status-error-border);"
               [disabled]="!item.canCancel"
               (click)="openCancelModal(item)"
               [id]="'btn-cancel-' + item.registration.id"
@@ -327,7 +306,7 @@
     id="cancel-modal"
   >
     <div class="contract-modal-card" (click)="$event.stopPropagation()">
-      <div class="contract-badge" style="background: #FDF0EE; color: #A52C22;">Withdraw Participation</div>
+      <div class="contract-badge" style="background: var(--status-error-bg); color: var(--status-error-text);">Withdraw Participation</div>
       <h3 class="contract-modal-title" id="cancel-modal-title">Withdraw Registration</h3>
       <p class="contract-modal-body">
         Are you sure you want to withdraw from <strong>{{ cancelModalItem.activity?.title }}</strong>?
@@ -375,7 +354,7 @@
         <button
           type="button"
           class="btn btn-primary"
-          style="background: #A52C22; border-color: #8D251D;"
+          style="background: var(--status-error-text); border-color: var(--status-error-text);"
           (click)="confirmCancel()"
           [disabled]="isCancelling"
           id="btn-confirm-cancel-registration"
@@ -443,7 +422,7 @@
         </div>
 
         <ng-template #noEligibleTargets>
-          <div class="p-4 text-center" style="background: #F8F9FA; border-radius: 8px; border: 1px solid #E1E8E4; font-size: 0.85rem; color: #5F6B76;">
+          <div class="p-4 text-center" style="background: var(--surface-2); border-radius: 8px; border: 1px solid var(--line); font-size: 0.85rem; color: var(--ink-500);">
             No alternative initiatives currently available for transfer (all other activities have reached full capacity, closed cut-offs, or you are already registered).
           </div>
         </ng-template>

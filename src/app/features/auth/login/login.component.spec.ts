@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of, throwError, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuthModule } from '../auth.module';
@@ -132,8 +133,59 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
 
     expect(component.errorMessage).toContain('Invalid credentials');
+    expect(component.isLoading).toBe(false);
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('[role="alert"]')?.textContent).toContain('Invalid credentials');
+  });
+
+  it('should notify change detection and clear loading when login fails asynchronously', () => {
+    const cdr = (component as unknown as { cdr: { markForCheck: () => void } }).cdr;
+    const markForCheck = vi.spyOn(cdr, 'markForCheck');
+    mockAuthService.login = () =>
+      throwError(() => new Error('Invalid credentials.'));
+
+    component.loginForm.controls['email'].setValue('wrong@corp.example.com');
+    component.loginForm.controls['password'].setValue('invalid');
+
+    component.onSubmit();
+
+    expect(component.isLoading).toBe(false);
+    expect(markForCheck).toHaveBeenCalled();
+  });
+
+  it('should clear loading if the auth service throws synchronously', () => {
+    mockAuthService.login = () => {
+      throw new Error('Unexpected authentication failure.');
+    };
+
+    component.loginForm.controls['email'].setValue('wrong@corp.example.com');
+    component.loginForm.controls['password'].setValue('invalid');
+
+    component.onSubmit();
+
+    expect(component.isLoading).toBe(false);
+    expect(component.errorMessage).toContain('Unexpected authentication failure.');
+  });
+
+  it('should render the error and reset the button after an async login failure', async () => {
+    fixture.autoDetectChanges();
+    mockAuthService.login = () =>
+      timer(0).pipe(
+        switchMap(() =>
+          throwError(() => new Error('Invalid credentials. Please try again.'))
+        )
+      );
+
+    component.loginForm.controls['email'].setValue('wrong@corp.example.com');
+    component.loginForm.controls['password'].setValue('invalid');
+
+    component.onSubmit();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    await vi.waitFor(() => {
+      expect(compiled.querySelector('[role="alert"]')?.textContent).toContain('Invalid credentials');
+    });
+    expect(compiled.querySelector('#btn-login-submit')?.textContent).toContain('SIGN IN');
   });
 
   it('should toggle password visibility on button click', () => {

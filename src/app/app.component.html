@@ -8,11 +8,10 @@
 <!-- Modern Application Shell with Left Sidebar & Responsive Mobile Navigation -->
 <div class="app-shell" *ngIf="!(isLoginRoute$ | async)">
   <!-- Mobile Navigation Top Bar (Active on viewports <= 900px) -->
-  <!-- Mobile Navigation Top Bar (Active on viewports <= 900px) -->
   <header class="mobile-top-bar" aria-label="Mobile Navigation Header">
     <a routerLink="/" (click)="closeMobileMenu()" class="mobile-brand-link" aria-label="Service Day Home">
-      <img src="assets/images/service-day-logo.png" alt="Service Day" class="mobile-brand-logo-img" />
-      <span class="brand-title visually-hidden">Service Day</span>
+      <img src="assets/images/service-day-mark.svg" alt="" class="brand-mark-img" width="30" height="30" />
+      <span class="brand-title brand-wordmark">Service Day</span>
     </a>
 
     <div class="mobile-top-actions">
@@ -57,19 +56,9 @@
     <!-- Brand Title & Header (Desktop) -->
     <div class="sidebar-brand-row">
       <a routerLink="/" (click)="closeMobileMenu()" class="sidebar-brand" aria-label="Service Day Home" [title]="isDesktopSidebarCollapsed ? 'Service Day' : ''">
-        <!-- Icon mark shown in collapsed mode -->
-        <img
-          src="assets/images/service-day-icon.png"
-          alt="Service Day"
-          class="sidebar-brand-icon-img"
-        />
-        <!-- Full logo shown in expanded mode -->
-        <img
-          src="assets/images/service-day-logo.png"
-          alt="Service Day"
-          class="sidebar-brand-full-logo"
-        />
-        <span class="brand-title visually-hidden">Service Day</span>
+        <img src="assets/images/service-day-mark.svg" alt="" class="brand-mark-img" width="30" height="30" />
+        <!-- Wordmark hides in the collapsed rail -->
+        <span class="brand-title brand-wordmark">Service Day</span>
       </a>
       <button
         type="button"
@@ -322,7 +311,7 @@
         id="btn-sidebar-reset-demo"
         title="Reset all demo data back to pristine seed defaults"
       >
-        <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
           <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
         </svg>
         <span>Reset Demo Data</span>

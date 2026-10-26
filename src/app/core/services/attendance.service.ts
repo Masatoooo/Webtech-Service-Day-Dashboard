@@ -71,7 +71,7 @@ export class AttendanceService {
         width: 320,
         margin: 2,
         color: {
-          dark: '#202C3B',
+          dark: '#09090B',
           light: '#FFFFFF'
         }
       });

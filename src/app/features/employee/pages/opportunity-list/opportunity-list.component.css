@@ -1,3 +1,125 @@
 :host {
   display: block;
 }
+
+.opp-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Card grid */
+.opp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.opp-tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 1.15rem 1.25rem 1.25rem;
+  transition: border-color var(--transition-fast);
+}
+
+.opp-tile:hover {
+  border-color: var(--line-strong);
+}
+
+.opp-tile.is-muted .opp-title,
+.opp-tile.is-muted .opp-desc {
+  color: var(--text-secondary);
+}
+
+.opp-tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.opp-tile .opp-title {
+  font-size: 1.0625rem;
+  margin-bottom: 0.15rem;
+}
+
+.opp-tile .opp-ngo-name {
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+}
+
+.opp-tile .opp-desc {
+  margin-bottom: 0.9rem;
+}
+
+.opp-facts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  color: var(--ink-700);
+}
+
+.opp-facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.opp-facts svg {
+  color: var(--ink-400);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.opp-facts strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.opp-capacity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.opp-capacity .capacity-progress-bar {
+  flex: 1;
+}
+
+.opp-capacity .capacity-numbers {
+  white-space: nowrap;
+}
+
+.opp-tile-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .opp-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .opp-metrics .metric-meta {
+    display: none;
+  }
+
+  .opp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .opp-tile {
+    padding: 1rem;
+  }
+}

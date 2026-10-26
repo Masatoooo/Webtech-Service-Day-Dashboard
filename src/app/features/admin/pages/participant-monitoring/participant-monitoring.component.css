@@ -17,3 +17,30 @@
     margin-top: 0.75rem;
   }
 }
+
+.att-state {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.att-state svg { color: var(--ink-400); flex-shrink: 0; }
+
+.att-state.att-in {
+  color: var(--evergreen-700);
+  font-weight: 600;
+}
+
+.att-state.att-in svg { color: var(--evergreen-700); }
+
+.att-state.att-muted { color: var(--text-muted); }
+
+.cancel-reason { max-width: 32ch; white-space: normal; }
+
+.context-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

@@ -1,20 +1,14 @@
 <div class="auth-page-wrapper">
-  <!-- Subtle decorative ambient background accents matching theme -->
-  <div class="auth-bg-shape auth-shape-tl" aria-hidden="true"></div>
-  <div class="auth-bg-shape auth-shape-br" aria-hidden="true"></div>
-
-  <!-- Centered Split Card Container -->
+  <!-- Full-height split: brand panel + form column -->
   <div class="auth-card-container">
     
-    <!-- Left Section: Registration Form (White) -->
+    <!-- Form column -->
     <div class="auth-form-side">
       <div class="auth-content-inner">
         <!-- Brand Header -->
-        <div class="form-header text-center">
-          <div class="login-brand-logo-wrap">
-            <img src="assets/images/service-day-logo.png" alt="Service Day Logo" class="login-main-logo-img" />
-          </div>
-          <p class="form-subtitle">Create your corporate volunteer staff account.</p>
+        <div class="form-header">
+          <h1 class="auth-form-title">Create your account</h1>
+          <p class="form-subtitle">Join your colleagues and sign up for community service activities.</p>
         </div>
 
         <!-- Accessible Alert Messages -->
@@ -25,11 +19,12 @@
           {{ successMessage }}
         </app-alert>
 
-        <!-- Form with rounded pill inputs -->
+        <!-- Registration form -->
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate class="login-fields-form">
           
           <!-- Full Name -->
           <div class="form-group">
+            <label class="auth-field-label" for="register-name">Full name</label>
             <div class="input-pill-wrapper" [class.input-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
               <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
                 <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
@@ -39,7 +34,7 @@
                 type="text"
                 class="pill-input"
                 formControlName="name"
-                placeholder="Full Legal Name"
+                placeholder="e.g. Alice Chen"
                 autocomplete="name"
                 aria-required="true"
               />
@@ -48,6 +43,7 @@
 
           <!-- Email -->
           <div class="form-group">
+            <label class="auth-field-label" for="register-email">Work email</label>
             <div class="input-pill-wrapper" [class.input-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
               <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -58,7 +54,7 @@
                 type="email"
                 class="pill-input"
                 formControlName="email"
-                placeholder="Corporate Email Address"
+                placeholder="name@company.com"
                 autocomplete="email"
                 aria-required="true"
               />
@@ -67,6 +63,7 @@
 
           <!-- Department -->
           <div class="form-group">
+            <label class="auth-field-label" for="register-department">Department</label>
             <div class="input-pill-wrapper">
               <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
@@ -78,7 +75,9 @@
           </div>
 
           <!-- Password -->
+          <div class="form-row-grid">
           <div class="form-group">
+            <label class="auth-field-label" for="register-password">Password</label>
             <div class="input-pill-wrapper" [class.input-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
               <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
@@ -88,7 +87,7 @@
                 [type]="showPassword ? 'text' : 'password'"
                 class="pill-input"
                 formControlName="password"
-                placeholder="Create Password (min. 6 chars)"
+                placeholder="At least 6 characters"
                 autocomplete="new-password"
               />
               <button
@@ -112,6 +111,7 @@
 
           <!-- Confirm Password -->
           <div class="form-group">
+            <label class="auth-field-label" for="register-confirm-password">Confirm password</label>
             <div class="input-pill-wrapper" [class.input-invalid]="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched">
               <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
@@ -121,7 +121,7 @@
                 [type]="showConfirmPassword ? 'text' : 'password'"
                 class="pill-input"
                 formControlName="confirmPassword"
-                placeholder="Confirm Password"
+                placeholder="Repeat password"
                 autocomplete="new-password"
               />
               <button
@@ -145,6 +145,7 @@
               Passwords do not match.
             </span>
           </div>
+          </div>
 
           <div class="form-actions">
             <button
@@ -160,25 +161,26 @@
         </form>
 
         <!-- Sign in switch option -->
-        <div class="auth-switch-prompt text-center">
-          <span class="auth-switch-text">Already have an account? </span>
-          <a routerLink="/login" class="link-auth-strong" id="link-goto-login">Sign In</a>
+        <div class="auth-switch-prompt">
+          <span class="auth-switch-text">Already have an account?</span>
+          <a routerLink="/login" class="link-auth-strong" id="link-goto-login">Sign in</a>
         </div>
       </div>
     </div>
 
-    <!-- Right Section: Brand Side (Deep Slate, sleek & unified) -->
+    <!-- Brand panel (renders first via CSS order) -->
     <div class="auth-brand-side">
-      <div class="auth-brand-content text-center">
-        <!-- Official White Service Day Logo -->
-        <div class="auth-white-logo-wrap">
-          <img src="assets/images/service-day-logo-white.png" alt="Service Day" class="auth-white-logo-img" />
+      <div class="auth-brand-content">
+        <span class="auth-brand-wordmark">
+          <img src="assets/images/service-day-mark.svg" alt="" width="32" height="32" />
+          Service Day
+        </span>
+        <div>
+          <h2 class="auth-brand-headline">Make your time <em>count</em>.</h2>
+          <p class="auth-brand-description">
+            Connect with corporate community initiatives and make a meaningful difference.
+          </p>
         </div>
-        <h2 class="auth-brand-name visually-hidden">Service Day</h2>
-        <div class="auth-brand-divider" aria-hidden="true"></div>
-        <p class="auth-brand-description">
-          Make your time count. Connect with corporate community initiatives and make a meaningful difference.
-        </p>
       </div>
     </div>
 

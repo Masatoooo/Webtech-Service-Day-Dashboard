@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, defer, Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { User, UserRole } from '../../models';
 import { StorageService } from './storage.service';
 import { DataStoreService } from './data-store.service';
@@ -65,51 +65,54 @@ export class AuthService {
    * Matches by exact email (case-insensitive) or documented demo aliases.
    */
   login(email: string, _password?: string): Observable<User> {
-    const normalizedInput = (email || '').trim().toLowerCase();
-    const targetEmail = DEMO_EMAIL_ALIASES[normalizedInput] || normalizedInput;
+    return defer(() => {
+      const normalizedInput = (email || '').trim().toLowerCase();
+      const targetEmail = DEMO_EMAIL_ALIASES[normalizedInput] || normalizedInput;
 
-    const matchUser = () => {
-      const availableUsers = this.dataStore.usersSnapshot;
-      const matchedUser = availableUsers.find(
-        (u) => u.email.toLowerCase() === targetEmail
-      );
-
-      if (!matchedUser) {
-        throw new Error('Invalid credentials. Please enter a recognized employee or administrator email.');
-      }
-
-      this._currentUser$.next(matchedUser);
-      this.storage.setItem(CURRENT_USER_KEY, matchedUser);
-      return matchedUser;
-    };
-
-    if (!this.dataStore.isInitialized) {
-      return this.dataStore.init().pipe(
-        switchMap(() => {
-          try {
-            return of(matchUser());
-          } catch (err) {
-            if (typeof this.dataStore.syncSeedUsers === 'function') {
-              return this.dataStore.syncSeedUsers().pipe(
-                map(() => matchUser())
-              );
-            }
-            return throwError(() => err);
-          }
-        })
-      );
-    }
-
-    try {
-      return of(matchUser());
-    } catch (err) {
-      if (typeof this.dataStore.syncSeedUsers === 'function') {
-        return this.dataStore.syncSeedUsers().pipe(
-          map(() => matchUser())
+      const matchUser = (): User => {
+        const availableUsers = this.dataStore.usersSnapshot;
+        const matchedUser = availableUsers.find(
+          (u) => u.email.toLowerCase() === targetEmail
         );
+
+        if (!matchedUser) {
+          throw new Error('Invalid credentials. Please enter a recognized employee or administrator email.');
+        }
+
+        this._currentUser$.next(matchedUser);
+        this.storage.setItem(CURRENT_USER_KEY, matchedUser);
+        return matchedUser;
+      };
+
+      // defer() converts a synchronous matchUser() throw into an observable error
+      // instead of letting it escape login() before the caller can subscribe.
+      const attemptMatch$ = (): Observable<User> => defer(() => of(matchUser()));
+
+      const attemptWithSeedSync$ = (): Observable<User> =>
+        attemptMatch$().pipe(
+          catchError((err) => {
+            // Stored demo state may predate newly added seed users. Refresh the
+            // seed directory once, then retry; preserve the original error if
+            // the retry still does not match.
+            if (typeof this.dataStore.syncSeedUsers !== 'function') {
+              return throwError(() => err);
+            }
+
+            return this.dataStore.syncSeedUsers().pipe(
+              switchMap(() => attemptMatch$()),
+              catchError(() => throwError(() => err))
+            );
+          })
+        );
+
+      if (!this.dataStore.isInitialized) {
+        return this.dataStore
+          .init()
+          .pipe(switchMap(() => attemptWithSeedSync$()));
       }
-      return throwError(() => err);
-    }
+
+      return attemptWithSeedSync$();
+    });
   }
 
   /**

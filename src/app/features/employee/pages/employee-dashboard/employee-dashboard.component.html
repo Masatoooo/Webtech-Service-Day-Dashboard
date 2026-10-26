@@ -1,205 +1,118 @@
 <div class="employee-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row">
-      <div>
-        <div class="role-pretitle">Staff Contributions</div>
-        <h1 class="page-title">Volunteer Portal</h1>
-        <p class="header-desc text-muted">
-          Welcome back<span *ngIf="currentUser$ | async as user">, <strong>{{ user.name }}</strong> ({{ user.department }})</span>. Explore community initiatives, track registrations, and record event attendance.
-        </p>
-      </div>
-      <div class="header-badge-wrap flex items-center gap-2">
-        <app-status-badge variant="forest" label="Volunteer Active"></app-status-badge>
-      </div>
+    <div>
+      <div class="eyebrow">Volunteer portal</div>
+      <h1 class="page-title">
+        Welcome back<ng-container *ngIf="currentUser$ | async as user">, {{ user.name.split(' ')[0] }}</ng-container>
+      </h1>
+      <p class="header-desc">
+        <ng-container *ngIf="(currentUser$ | async)?.department as dept">{{ dept }} · </ng-container>Find community activities, manage your sign-ups and check in on the day.
+      </p>
     </div>
   </header>
 
-  <!-- Quick Action & Upcoming Registration Hero (Moneza-Style Gradient Banner) -->
+  <!-- Next activity, or a prompt to browse -->
   <section class="mb-6">
     <ng-container *ngIf="upcomingEnrolled$ | async as enrolled; else discoverBanner">
-      <div class="card enrolled-hero-card" id="card-upcoming-enrolled">
-        <div class="enrolled-hero-body">
-          <div class="enrolled-hero-info">
-            <span class="enrolled-eyebrow">Your Next Scheduled Initiative</span>
-            <h2 class="enrolled-title">{{ enrolled.activity.title }}</h2>
-            <p class="enrolled-ngo text-sm text-muted" *ngIf="enrolled.ngo">
-              Partner NGO: <strong>{{ enrolled.ngo.name }}</strong>
-            </p>
-            <div class="enrolled-hero-meta">
-              <span class="enrolled-meta-item">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                </svg>
-                <span>{{ enrolled.activity.startDateTime | date:'mediumDate' }} ({{ enrolled.activity.startDateTime | date:'shortTime' }}–{{ enrolled.activity.endDateTime | date:'shortTime' }})</span>
-              </span>
-              <span class="enrolled-meta-item">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                </svg>
-                <span>{{ enrolled.activity.location }}</span>
-              </span>
-              <span class="enrolled-meta-item">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                </svg>
-                <span>Cut-off: {{ enrolled.activity.registrationCutoff | date:'mediumDate' }}</span>
-              </span>
-            </div>
-          </div>
+      <article class="enrolled-hero-card" id="card-upcoming-enrolled">
+        <div class="enrolled-date-stub" aria-hidden="true">
+          <span class="stub-month">{{ enrolled.activity.startDateTime | date:'MMM' }}</span>
+          <span class="stub-day">{{ enrolled.activity.startDateTime | date:'d' }}</span>
+          <span class="stub-weekday">{{ enrolled.activity.startDateTime | date:'EEE' }}</span>
+        </div>
 
-          <div class="enrolled-hero-actions">
-            <a
-              [routerLink]="['/employee/checkin']"
-              [queryParams]="{ activityId: enrolled.activity.id }"
-              class="btn btn-sm btn-primary"
-              id="hero-btn-checkin"
-            >
-              Event Check-In
-            </a>
-            <a
-              [routerLink]="['/employee/activities', enrolled.activity.id]"
-              class="btn btn-sm btn-secondary"
-              id="hero-btn-details"
-            >
-              Session Details
-            </a>
-            <a
-              routerLink="/employee/registrations"
-              class="btn btn-sm btn-secondary"
-              id="hero-btn-manage"
-            >
-              Manage Records
-            </a>
+        <div class="enrolled-hero-info">
+          <span class="enrolled-eyebrow">Your next activity</span>
+          <h2 class="enrolled-title">{{ enrolled.activity.title }}</h2>
+          <p class="enrolled-ngo" *ngIf="enrolled.ngo">with {{ enrolled.ngo.name }}</p>
+          <div class="enrolled-hero-meta">
+            <span class="enrolled-meta-item">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ enrolled.activity.startDateTime | date:'mediumDate' }}, {{ enrolled.activity.startDateTime | date:'shortTime' }}–{{ enrolled.activity.endDateTime | date:'shortTime' }}</span>
+            </span>
+            <span class="enrolled-meta-item">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ enrolled.activity.location }}</span>
+            </span>
+            <span class="enrolled-meta-item">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+              </svg>
+              <span>Changes close {{ enrolled.activity.registrationCutoff | date:'mediumDate' }}</span>
+            </span>
           </div>
         </div>
-      </div>
+
+        <div class="enrolled-hero-actions">
+          <a
+            [routerLink]="['/employee/checkin']"
+            [queryParams]="{ activityId: enrolled.activity.id }"
+            class="btn btn-primary"
+            id="hero-btn-checkin"
+          >
+            Check in
+          </a>
+          <a [routerLink]="['/employee/activities', enrolled.activity.id]" class="btn btn-secondary" id="hero-btn-details">
+            Details
+          </a>
+          <a routerLink="/employee/registrations" class="btn btn-ghost" id="hero-btn-manage">
+            Manage
+          </a>
+        </div>
+      </article>
     </ng-container>
 
     <ng-template #discoverBanner>
-      <div class="card discover-hero-card" id="card-discover-banner">
-        <div class="discover-hero-body">
-          <div class="discover-hero-content">
-            <span class="discover-eyebrow">Service Day 2026 Initiative</span>
-            <h2 class="discover-title">Make Your Corporate Volunteer Hours Count</h2>
-            <p class="discover-desc">
-              You currently have no active registrations scheduled. Discover vetted partner NGO initiatives across environment, education, and community support.
-            </p>
-          </div>
-          <div class="discover-hero-actions">
-            <a routerLink="/employee/activities" class="btn btn-browse-open" id="hero-btn-browse-open">
-              Browse Open Opportunities
-            </a>
-          </div>
+      <article class="discover-hero-card" id="card-discover-banner">
+        <div class="discover-hero-content">
+          <span class="discover-eyebrow">Service Day 2026</span>
+          <h2 class="discover-title">You haven't signed up for anything yet</h2>
+          <p class="discover-desc">
+            Browse activities run with partner NGOs across environment, education and community support.
+          </p>
         </div>
-      </div>
+        <a routerLink="/employee/activities" class="btn btn-primary btn-lg" id="hero-btn-browse-open">
+          Browse opportunities
+        </a>
+      </article>
     </ng-template>
   </section>
 
-  <!-- Operational Metrics Row -->
-  <div class="metrics-grid mb-6">
-    <!-- 1. Approved Opportunities -->
-    <div class="metric-card" id="card-metric-opportunities">
-      <div class="metric-label">Approved Opportunities</div>
-      <div class="metric-val" id="emp-metric-available">
-        {{ (availableActivities$ | async)?.length || 0 }}
-      </div>
-      <div class="metric-meta text-muted mb-3">Open initiatives available for sign-up</div>
-      <a routerLink="/employee/activities" class="btn btn-sm btn-primary" id="btn-browse-opportunities" style="font-size: 0.775rem;">
-        Explore Board &rarr;
-      </a>
-    </div>
+  <!-- At a glance: each tile links to its page -->
+  <h2 class="glance-heading">At a glance</h2>
+  <nav class="glance-grid mb-6" aria-label="Volunteer sections">
+    <a routerLink="/employee/activities" class="glance-tile" id="btn-browse-opportunities">
+      <span class="glance-value" id="emp-metric-available">{{ (availableActivities$ | async)?.length || 0 }}</span>
+      <span class="glance-label">Open opportunities</span>
+      <span class="glance-desc">Filter by focus area and availability</span>
+    </a>
 
-    <!-- 2. My Registrations -->
-    <div class="metric-card" id="card-metric-registrations">
-      <div class="metric-label">My Registrations</div>
-      <div class="metric-val" id="emp-metric-registrations">
-        {{ (myRegistrations$ | async)?.length || 0 }}
-      </div>
-      <div class="metric-meta text-muted mb-3">Active confirmed enrollments</div>
-      <a routerLink="/employee/registrations" class="btn btn-sm btn-secondary" id="btn-view-registrations" style="font-size: 0.775rem;">
-        Manage Records &rarr;
-      </a>
-    </div>
+    <a routerLink="/employee/registrations" class="glance-tile" id="btn-view-registrations">
+      <span class="glance-value" id="emp-metric-registrations">{{ (myRegistrations$ | async)?.length || 0 }}</span>
+      <span class="glance-label">My registrations</span>
+      <span class="glance-desc">View, withdraw or transfer</span>
+    </a>
 
-    <!-- 3. Event Day Check-In -->
-    <div class="metric-card" id="card-metric-checkin">
-      <div class="metric-label">On-Site Check-In</div>
-      <div class="metric-val" style="color: #2563EB;" id="emp-metric-checkin">
-        Active
-      </div>
-      <div class="metric-meta text-muted mb-3">QR scanner & arrival attendance</div>
-      <a routerLink="/employee/checkin" class="btn btn-sm btn-secondary" id="btn-portal-checkin" style="font-size: 0.775rem;">
-        Check-In Station &rarr;
-      </a>
-    </div>
+    <a routerLink="/employee/notifications" class="glance-tile" id="btn-portal-notifications">
+      <span class="glance-value" id="emp-metric-unread">{{ (unreadCount$ | async) || 0 }}</span>
+      <span class="glance-label">Unread notifications</span>
+      <span class="glance-desc">Reminders and company updates</span>
+    </a>
 
-    <!-- 4. Notifications Inbox -->
-    <div class="metric-card" id="card-metric-notifications">
-      <div class="metric-label">In-App Notifications</div>
-      <div class="metric-val" id="emp-metric-unread">
-        {{ (unreadCount$ | async) || 0 }}
-      </div>
-      <div class="metric-meta text-muted mb-3">Unread reminders & broadcast updates</div>
-      <a routerLink="/employee/notifications" class="btn btn-sm btn-secondary" id="btn-portal-notifications" style="font-size: 0.775rem;">
-        Open Inbox &rarr;
-      </a>
-    </div>
-  </div>
-
-  <!-- Quick Access Navigation Grid -->
-  <section class="card p-6" style="border-radius: var(--radius-xl);">
-    <h2 class="text-base font-bold text-deep-slate mb-4">Volunteer Service Hub Shortcuts</h2>
-    <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
-      <a routerLink="/employee/activities" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
-        <div class="flex items-center justify-center bg-white border text-forest font-bold" style="width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <div>
-          <div class="text-sm font-bold text-deep-slate">Browse Opportunities</div>
-          <div class="text-xs text-muted">Filter by focus area and availability</div>
-        </div>
-      </a>
-
-      <a routerLink="/employee/registrations" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
-        <div class="flex items-center justify-center bg-white border text-forest font-bold" style="width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <div>
-          <div class="text-sm font-bold text-deep-slate">My Registrations</div>
-          <div class="text-xs text-muted">View, withdraw, or transfer activities</div>
-        </div>
-      </a>
-
-      <a routerLink="/employee/checkin" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
-        <div class="flex items-center justify-center bg-white border text-forest font-bold" style="width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd" />
-            <path d="M11 12a1 1 0 011-1h1v1h-1v1h2v-1h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v-1h-1v1h-2a1 1 0 01-1-1v-4z" />
-          </svg>
-        </div>
-        <div>
-          <div class="text-sm font-bold text-deep-slate">Event QR Check-In</div>
-          <div class="text-xs text-muted">Scan poster or enter demo code on site</div>
-        </div>
-      </a>
-
-      <a routerLink="/employee/notifications" class="p-3 border rounded-lg hover:border-forest transition flex items-center gap-3 text-decoration-none" style="background: #FAFBFB; border-color: var(--color-border); border-radius: 10px;">
-        <div class="flex items-center justify-center bg-white border text-forest font-bold" style="width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-          </svg>
-        </div>
-        <div>
-          <div class="text-sm font-bold text-deep-slate">Notifications Inbox</div>
-          <div class="text-xs text-muted">Company bulletins and schedule alerts</div>
-        </div>
-      </a>
-    </div>
-  </section>
+    <a routerLink="/employee/checkin" class="glance-tile glance-tile-action" id="btn-portal-checkin">
+      <span class="glance-icon" id="emp-metric-checkin" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <path d="M3 6.5V5a2 2 0 012-2h1.5M13.5 3H15a2 2 0 012 2v1.5M17 13.5V15a2 2 0 01-2 2h-1.5M6.5 17H5a2 2 0 01-2-2v-1.5" />
+          <circle cx="10" cy="10" r="2.5" />
+        </svg>
+      </span>
+      <span class="glance-label">Check in on site</span>
+      <span class="glance-desc">Scan the poster QR or enter the code</span>
+    </a>
+  </nav>
 </div>

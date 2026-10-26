@@ -117,6 +117,19 @@ describe('AuthService', () => {
     expect(authService.isAuthenticated).toBe(false);
   });
 
+  it('should not throw synchronously when credentials are invalid', () => {
+    expect(() => authService.login('unknown.person@corp.example.com')).not.toThrow();
+
+    const errors: Error[] = [];
+    authService.login('unknown.person@corp.example.com').subscribe({
+      error: (err: Error) => {
+        errors.push(err);
+      }
+    });
+
+    expect(errors[0]?.message).toContain('Invalid credentials');
+  });
+
   it('should persist session to StorageService and restore it', () => {
     storage.setItem(CURRENT_USER_KEY, mockUsers[1]); // Alice Chen
     authService.restoreSession();

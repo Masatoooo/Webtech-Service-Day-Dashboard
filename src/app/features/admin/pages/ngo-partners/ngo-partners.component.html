@@ -1,19 +1,15 @@
 <div class="ngo-partners-page">
   <!-- Page Header -->
   <header class="page-header mb-6">
-    <div class="flex justify-between items-center header-row">
-      <div>
-        <div class="eyebrow">Governance Portal / Activities & NGOs</div>
-        <h1 class="page-title">NGO Partners Ecosystem</h1>
-        <p class="header-desc text-muted">
-          Review vetted partner organizations, manage accreditation status, and audit community alliances.
+    <div>
+        <div class="eyebrow">Activities &amp; NGOs</div>
+        <h1 class="page-title">NGO partners</h1>
+        <p class="header-desc">
+          The community organisations that host activities. Approve new partners and keep contacts up to date.
         </p>
-      </div>
+    </div>
 
-      <div class="header-actions flex items-center gap-3">
-        <a routerLink="/admin" class="btn btn-secondary btn-sm" id="btn-back-overview">
-          &larr; Overview
-        </a>
+      <div class="header-actions">
         <button
           type="button"
           class="btn btn-primary"
@@ -23,27 +19,15 @@
           <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
           </svg>
-          Add Partner NGO
+          Add partner
         </button>
       </div>
-    </div>
   </header>
 
   <!-- Subnav Tabs connecting Activities and NGO Partners under one group -->
   <nav class="subnav-tabs-strip mb-6" aria-label="Activities and NGOs Tabs">
-    <a routerLink="/admin/activities" class="subnav-tab-btn" id="tab-nav-activities">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="16" height="16" aria-hidden="true">
-        <rect x="3" y="4" width="14" height="13" rx="2" />
-        <line x1="3" y1="8.5" x2="17" y2="8.5" />
-      </svg>
-      Activities
-    </a>
-    <a routerLink="/admin/ngos" class="subnav-tab-btn active" id="tab-nav-ngos">
-      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
-        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
-      </svg>
-      NGO Partners
-    </a>
+    <a routerLink="/admin/activities" class="subnav-tab-btn" id="tab-nav-activities">Activities</a>
+    <a routerLink="/admin/ngos" class="subnav-tab-btn active" id="tab-nav-ngos" aria-current="page">NGO partners</a>
   </nav>
 
   <!-- In-Page Feedback Toast -->
@@ -72,121 +56,45 @@
   <div class="metrics-strip metrics-strip-4 mb-6">
     <!-- Card 1: Total Partners -->
     <div class="nexus-kpi-card" id="metric-ngo-total">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-blue-light text-blue" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Total Partners</span>
-      </div>
+      <span class="nexus-kpi-label">Partners</span>
       <div class="nexus-kpi-value-wrap">
         <span class="nexus-kpi-value" id="val-ngo-total">{{ metrics.total }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Registered NGO organizations</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-ngo-1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#4355F9" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#4355F9" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 30 C 30 30, 45 14, 75 18 C 105 22, 130 12, 160 16 C 180 20, 190 8, 200 10 L 200 44 L 0 44 Z" fill="url(#spk-ngo-1)" />
-          <path d="M0 30 C 30 30, 45 14, 75 18 C 105 22, 130 12, 160 16 C 180 20, 190 8, 200 10" stroke="#4355F9" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Registered organisations</span>
       </div>
     </div>
 
     <!-- Card 2: Approved & Vetted -->
     <div class="nexus-kpi-card" id="metric-ngo-approved">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-emerald-light text-emerald" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Approved & Vetted</span>
-      </div>
+      <span class="nexus-kpi-label">Approved</span>
       <div class="nexus-kpi-value-wrap">
-        <span class="nexus-kpi-value text-emerald" id="val-ngo-approved">{{ metrics.approved }}</span>
+        <span class="nexus-kpi-value text-forest" id="val-ngo-approved">{{ metrics.approved }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Eligible for CSR initiatives</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-ngo-emerald" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#059669" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#059669" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8 L 200 44 L 0 44 Z" fill="url(#spk-ngo-emerald)" />
-          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Can host activities</span>
       </div>
     </div>
 
     <!-- Card 3: Pending Review -->
     <div class="nexus-kpi-card" id="metric-ngo-pending">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-amber-light text-amber" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Pending Review</span>
-      </div>
+      <span class="nexus-kpi-label">Pending review</span>
       <div class="nexus-kpi-value-wrap">
-        <span class="nexus-kpi-value text-amber" id="val-ngo-pending">{{ metrics.pending }}</span>
+        <span class="nexus-kpi-value text-brass" id="val-ngo-pending">{{ metrics.pending }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Awaiting compliance verification</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-ngo-amber" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#D97706" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#D97706" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 26 C 25 20, 50 28, 75 24 C 105 20, 130 32, 160 22 C 180 16, 195 18, 200 14 L 200 44 L 0 44 Z" fill="url(#spk-ngo-amber)" />
-          <path d="M0 26 C 25 20, 50 28, 75 24 C 105 20, 130 32, 160 22 C 180 16, 195 18, 200 14" stroke="#D97706" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Waiting for approval</span>
       </div>
     </div>
 
     <!-- Card 4: Active Initiatives -->
     <div class="nexus-kpi-card" id="metric-ngo-acts">
-      <div class="nexus-kpi-header">
-        <div class="nexus-kpi-icon-box bg-purple-light text-purple" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <span class="nexus-kpi-label">Active Initiatives</span>
-      </div>
+      <span class="nexus-kpi-label">Activities</span>
       <div class="nexus-kpi-value-wrap">
-        <span class="nexus-kpi-value text-purple" id="val-ngo-activities">{{ metrics.totalActivities }}</span>
+        <span class="nexus-kpi-value" id="val-ngo-activities">{{ metrics.totalActivities }}</span>
       </div>
       <div class="nexus-kpi-footer">
-        <span class="nexus-kpi-sub">Across all partner programs</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-ngo-purple" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 32 C 30 26, 60 30, 90 24 C 120 18, 150 28, 175 20 C 185 16, 195 18, 200 16 L 200 44 L 0 44 Z" fill="url(#spk-ngo-purple)" />
-          <path d="M0 32 C 30 26, 60 30, 90 24 C 120 18, 150 28, 175 20 C 185 16, 195 18, 200 16" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
+        <span class="nexus-kpi-sub">Linked to partners</span>
       </div>
     </div>
   </div>
@@ -195,7 +103,7 @@
   <div class="filter-card mb-6">
     <div class="filter-grid filter-grid-ngo">
       <div class="filter-field search-box">
-        <label for="input-ngo-search" class="filter-label">Search Partner NGOs</label>
+        <label for="input-ngo-search" class="filter-label">Search</label>
         <div class="filter-input-wrap">
           <svg class="filter-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -204,7 +112,7 @@
             id="input-ngo-search"
             type="text"
             class="filter-input"
-            placeholder="Search by NGO name, contact, area..."
+            placeholder="Name, contact or focus area"
             [(ngModel)]="searchTerm"
             (ngModelChange)="applyFilters()"
           />
@@ -212,33 +120,31 @@
       </div>
 
       <div class="filter-field">
-        <label for="select-ngo-status" class="filter-label">Accreditation Status</label>
+        <label for="select-ngo-status" class="filter-label">Status</label>
         <select
           id="select-ngo-status"
           class="filter-select"
           [(ngModel)]="selectedStatus"
           (ngModelChange)="applyFilters()"
         >
-          <option value="ALL">All Accreditation States</option>
-          <option value="APPROVED">Approved & Accredited</option>
-          <option value="PENDING">Pending Compliance</option>
-          <option value="REJECTED">Rejected / Inactive</option>
+          <option value="ALL">All statuses</option>
+          <option value="APPROVED">Approved</option>
+          <option value="PENDING">Pending</option>
+          <option value="REJECTED">Rejected or suspended</option>
         </select>
       </div>
 
       <div class="filter-field filter-actions-field">
-        <label class="filter-label filter-label-spacer">Reset</label>
         <button
           type="button"
-          class="btn btn-secondary flex items-center justify-center gap-2"
+          class="btn btn-ghost w-full"
           (click)="resetFilters()"
           id="btn-reset-ngo-filters"
-          style="height: 42px; font-weight: 600; width: 100%; border-radius: 12px;"
         >
           <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
           </svg>
-          Reset Filters
+          Reset
         </button>
       </div>
     </div>
@@ -247,53 +153,43 @@
       <span class="meta-count" id="text-ngo-results-count">
         Showing <strong>{{ filteredRows.length }}</strong> of <strong>{{ allRows.length }}</strong> partner NGOs
       </span>
-      <span *ngIf="searchTerm || selectedStatus !== 'ALL'" class="active-badge">
-        Filtered Results
+      <span *ngIf="searchTerm || selectedStatus !== 'ALL'" class="badge active-badge">
+        Filtered
       </span>
     </div>
   </div>
 
   <!-- NGO Table View (Desktop & Tablet) -->
   <div class="dash-table-wrap desktop-only-table mb-8">
-    <div class="table-scroll-hint" aria-hidden="true">
-      <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
-      <span>Swipe horizontally to view all columns</span>
-    </div>
-
-    <div style="overflow-x: auto;">
+    <div class="table-responsive">
       <table class="dash-table" aria-label="NGO Partners Registry Table">
         <thead>
           <tr>
-            <th scope="col" style="min-width: 250px;">Organization & Scope</th>
-            <th scope="col" style="min-width: 200px;">Primary Contact</th>
-            <th scope="col" style="min-width: 140px;">Accreditation</th>
-            <th scope="col" style="min-width: 120px; text-align: center;">CSR Initiatives</th>
-            <th scope="col" style="min-width: 190px; text-align: right;">Governance Actions</th>
+            <th scope="col" style="min-width: 280px;">Organisation</th>
+            <th scope="col" style="min-width: 200px;">Contact</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="text-right">Activities</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of filteredRows" [id]="'ngo-row-' + row.ngo.id" class="table-row">
             <!-- Organization & Scope -->
             <td>
-              <div class="font-bold text-slate-900" style="font-size: 0.95rem;">{{ row.ngo.name }}</div>
-              <div class="text-xs text-muted mt-1 description-clamp" style="line-height: 1.45;">{{ row.ngo.description }}</div>
-              <div class="text-xs mt-1.5 flex items-center gap-1.5" *ngIf="row.ngo.serviceArea">
-                <span class="text-muted">Focus Area:</span>
-                <strong style="color: #4338CA;">{{ row.ngo.serviceArea }}</strong>
-              </div>
+              <div class="ngo-org-name">{{ row.ngo.name }}</div>
+              <div class="cell-sub description-clamp">{{ row.ngo.description }}</div>
+              <div class="ngo-focus" *ngIf="row.ngo.serviceArea">{{ row.ngo.serviceArea }}</div>
             </td>
 
             <!-- Contact -->
             <td>
-              <div class="font-bold text-slate-900" style="font-size: 0.875rem;">{{ row.ngo.contactName }}</div>
+              <div class="font-semibold">{{ row.ngo.contactName }}</div>
               <div class="text-xs text-muted flex items-center gap-1 mt-1">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="color: #94A3B8;">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="color: var(--ink-400);">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                <a [href]="'mailto:' + row.ngo.contactEmail" style="color: #2563EB; text-decoration: none;">{{ row.ngo.contactEmail }}</a>
+                <a [href]="'mailto:' + row.ngo.contactEmail">{{ row.ngo.contactEmail }}</a>
               </div>
             </td>
 
@@ -313,15 +209,15 @@
             </td>
 
             <!-- Associated Activities -->
-            <td style="text-align: center;">
+            <td class="text-right">
               <span class="count-badge" [title]="row.activityCount + ' linked activities'">
                 {{ row.activityCount }}
               </span>
             </td>
 
             <!-- Actions -->
-            <td style="text-align: right;">
-              <div class="flex justify-end items-center gap-1.5">
+            <td class="td-actions">
+              <div class="row-actions">
                 <!-- Quick approval toggles -->
                 <button
                   *ngIf="row.ngo.approvalStatus !== 'APPROVED'"
@@ -329,7 +225,6 @@
                   class="btn btn-sm btn-primary"
                   (click)="quickSetStatus(row.ngo, 'APPROVED')"
                   title="Approve NGO"
-                  style="font-size: 0.775rem; padding: 4px 10px;"
                 >
                   Approve
                 </button>
@@ -339,7 +234,6 @@
                   class="btn btn-sm btn-secondary"
                   (click)="quickSetStatus(row.ngo, 'REJECTED')"
                   title="Suspend or reject accreditation"
-                  style="font-size: 0.775rem; padding: 4px 10px;"
                 >
                   Suspend
                 </button>
@@ -349,16 +243,14 @@
                   class="btn btn-sm btn-secondary"
                   (click)="openEditModal(row.ngo)"
                   title="Edit NGO details"
-                  style="font-size: 0.775rem; padding: 4px 10px; border-radius: 8px;"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
-                  class="btn btn-sm btn-outline-danger"
+                  class="btn btn-sm btn-ghost btn-danger-text"
                   (click)="openDeleteDialog(row)"
                   title="Delete NGO record"
-                  style="font-size: 0.775rem; padding: 4px 10px; border-radius: 8px;"
                 >
                   Delete
                 </button>
@@ -378,10 +270,10 @@
 
   <!-- Mobile Cards View for NGO Partners -->
   <div class="mobile-only-cards mb-8" *ngIf="filteredRows.length > 0">
-    <div *ngFor="let row of filteredRows" class="mobile-op-card mb-4" [id]="'mobile-ngo-row-' + row.ngo.id">
+    <div *ngFor="let row of filteredRows" class="mobile-op-card" [id]="'mobile-ngo-row-' + row.ngo.id">
       <div class="flex justify-between items-start gap-2">
         <div>
-          <h3 class="font-bold text-base" style="color: var(--color-deep-slate); margin: 0;">{{ row.ngo.name }}</h3>
+          <h3 class="mobile-card-title" style="margin: 0;">{{ row.ngo.name }}</h3>
           <div class="text-xs text-muted mt-1 description-clamp">{{ row.ngo.description }}</div>
         </div>
         <span
@@ -394,22 +286,22 @@
         </span>
       </div>
 
-      <div class="mt-3 pt-2" style="border-top: 1px dashed #F0F4F2;">
+      <div class="mt-3">
         <div class="mobile-info-row">
-          <span class="mobile-info-lbl">Primary Contact</span>
+          <span class="mobile-info-lbl">Contact</span>
           <span class="mobile-info-val">{{ row.ngo.contactName }} ({{ row.ngo.contactEmail }})</span>
         </div>
         <div class="mobile-info-row" *ngIf="row.ngo.serviceArea">
-          <span class="mobile-info-lbl">Focus Area</span>
+          <span class="mobile-info-lbl">Focus area</span>
           <span class="mobile-info-val">{{ row.ngo.serviceArea }}</span>
         </div>
         <div class="mobile-info-row">
-          <span class="mobile-info-lbl">Initiatives</span>
-          <span class="mobile-info-val font-bold">{{ row.activityCount }} linked</span>
+          <span class="mobile-info-lbl">Activities</span>
+          <span class="mobile-info-val">{{ row.activityCount }}</span>
         </div>
       </div>
 
-      <div class="flex justify-end gap-2 mt-3 pt-2" style="border-top: 1px solid #EEF2F0;">
+      <div class="mobile-card-actions">
         <button
           *ngIf="row.ngo.approvalStatus !== 'APPROVED'"
           type="button"
@@ -435,9 +327,8 @@
         </button>
         <button
           type="button"
-          class="btn btn-sm btn-secondary"
+          class="btn btn-sm btn-danger-ghost"
           (click)="openDeleteDialog(row)"
-          style="color: #DC2626;"
         >
           Delete
         </button>
@@ -455,7 +346,7 @@
   >
     <div class="modal-dialog" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2 class="modal-title">{{ isEditing ? 'Edit Partner NGO' : 'Add New Partner NGO' }}</h2>
+        <h2 class="modal-title">{{ isEditing ? 'Edit partner' : 'Add partner NGO' }}</h2>
         <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close modal">&times;</button>
       </div>
 
@@ -535,7 +426,7 @@
           </div>
 
           <div class="form-group">
-            <label for="modal-ngo-status" class="form-label">Accreditation Status</label>
+            <label for="modal-ngo-status" class="form-label">Status</label>
             <select id="modal-ngo-status" class="form-control" formControlName="approvalStatus">
               <option *ngFor="let s of approvalStatuses" [value]="s.value">{{ s.label }}</option>
             </select>
