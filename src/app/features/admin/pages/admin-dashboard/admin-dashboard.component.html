@@ -63,7 +63,7 @@
     </div>
   </header>
 
-  <!-- Scope 1 & 2: Executive KPI Totals Overview (NEXUS 4-Card Top Row) -->
+  <!-- Scope 1 & 2: Executive KPI Totals Overview (4-Card Top Row) -->
   <section class="admin-kpi-grid mb-6" *ngIf="totals$ | async as m">
     <!-- Card 1: Total Activities -->
     <div class="nexus-kpi-card admin-kpi-card" id="kpi-total-activities">
@@ -80,20 +80,8 @@
       </div>
       <div class="kpi-num" id="kpi-val-activities">{{ m.totalActivities }}</div>
       <div class="kpi-sub">
-        <span style="color: #059669; font-weight: 600;">+{{ m.publishedActivities }}</span>
+        <span style="color: var(--color-csr-emerald); font-weight: 600;">+{{ m.publishedActivities }}</span>
         <span>published initiatives</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="spk-grad-unified" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#4355F9" stop-opacity="0.14" />
-              <stop offset="100%" stop-color="#4355F9" stop-opacity="0.0" />
-            </linearGradient>
-          </defs>
-          <path d="M0 30 C 30 30, 45 12, 75 18 C 105 24, 130 10, 160 16 C 180 20, 190 6, 200 10 L 200 44 L 0 44 Z" fill="url(#spk-grad-unified)" />
-          <path d="M0 30 C 30 30, 45 12, 75 18 C 105 24, 130 10, 160 16 C 180 20, 190 6, 200 10" stroke="#4355F9" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
       </div>
     </div>
 
@@ -114,12 +102,6 @@
       <div class="kpi-sub">
         <span>Across all CSR programs</span>
       </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 32 C 25 34, 50 18, 80 20 C 110 22, 135 10, 165 12 C 185 14, 195 4, 200 6 L 200 44 L 0 44 Z" fill="url(#spk-grad-unified)" />
-          <path d="M0 32 C 25 34, 50 18, 80 20 C 110 22, 135 10, 165 12 C 185 14, 195 4, 200 6" stroke="#4355F9" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
-      </div>
     </div>
 
     <!-- Card 3: Places Taken -->
@@ -132,16 +114,10 @@
           </svg>
         </div>
       </div>
-      <div class="kpi-num" style="color: var(--color-primary-blue);" id="kpi-val-taken">{{ m.placesTaken }}</div>
+      <div class="kpi-num" style="color: var(--color-csr-emerald);" id="kpi-val-taken">{{ m.placesTaken }}</div>
       <div class="kpi-sub">
-        <span style="font-weight: 600; color: #0F172A;">{{ m.activeRegistrations }}</span>
+        <span style="font-weight: 600; color: var(--color-deep-slate);">{{ m.activeRegistrations }}</span>
         <span>confirmed volunteer spots</span>
-      </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8 L 200 44 L 0 44 Z" fill="url(#spk-grad-unified)" />
-          <path d="M0 28 C 30 28, 55 34, 85 22 C 115 12, 140 24, 170 14 C 185 10, 195 8, 200 8" stroke="#4355F9" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
       </div>
     </div>
 
@@ -156,18 +132,132 @@
           </svg>
         </div>
       </div>
-      <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#D97706' : 'var(--color-deep-slate)'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
+      <div class="kpi-num" [style.color]="m.placesRemaining <= 5 ? '#B45309' : 'var(--color-deep-slate)'" id="kpi-val-remaining">{{ m.placesRemaining }}</div>
       <div class="kpi-sub">
         <span>Open capacity for staff sign-up</span>
       </div>
-      <div class="nexus-kpi-sparkline-wrap">
-        <svg class="kpi-sparkline" viewBox="0 0 200 44" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 26 C 25 20, 50 28, 75 24 C 105 20, 130 32, 160 22 C 180 16, 195 18, 200 14 L 200 44 L 0 44 Z" fill="url(#spk-grad-unified)" />
-          <path d="M0 26 C 25 20, 50 28, 75 24 C 105 20, 130 32, 160 22 C 180 16, 195 18, 200 14" stroke="#4355F9" stroke-width="2" stroke-linecap="round" fill="none" />
-        </svg>
-      </div>
     </div>
   </section>
+
+  <!-- Middle Analytics Row: Capacity Utilisation & Partner NGOs (Balanced 50:50 Side-by-Side) -->
+  <div class="dash-analytics-grid mb-6" *ngIf="totals$ | async as m">
+    <!-- Capacity Utilisation Card -->
+    <div class="nexus-card admin-kpi-card" id="kpi-utilisation">
+      <div class="nexus-card-header flex justify-between items-center mb-2">
+        <div>
+          <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Capacity Utilisation</div>
+          <span class="text-xs text-muted">CSR staff enrollment rate</span>
+        </div>
+        <span class="text-xs text-muted">Target: 80%</span>
+      </div>
+
+      <div class="nexus-gauge-wrapper">
+        <!-- Circular SVG Donut Progress Ring -->
+        <div class="nexus-donut-box">
+          <svg class="nexus-donut-svg" viewBox="0 0 120 120" aria-hidden="true">
+            <circle
+              class="nexus-donut-bg"
+              cx="60"
+              cy="60"
+              r="48"
+              fill="none"
+              stroke="#F0F0EC"
+              stroke-width="11"
+            />
+            <circle
+              class="nexus-donut-fg"
+              cx="60"
+              cy="60"
+              r="48"
+              fill="none"
+              [attr.stroke]="m.capacityUtilisationPct >= 90 ? '#B91C1C' : m.capacityUtilisationPct >= 70 ? '#B45309' : '#15803D'"
+              stroke-width="11"
+              stroke-linecap="round"
+              stroke-dasharray="301.59"
+              [style.strokeDashoffset]="301.59 * (1 - (m.capacityUtilisationPct || 0) / 100)"
+            />
+          </svg>
+          <div class="nexus-donut-center">
+            <span class="nexus-donut-val kpi-num" style="margin: 0;" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</span>
+            <span class="nexus-donut-lbl">Utilised</span>
+          </div>
+        </div>
+
+        <!-- Legend / Breakdown -->
+        <div class="nexus-gauge-legend">
+          <div class="legend-row">
+            <span class="legend-indicator dot-blue"></span>
+            <span class="legend-name">Places Taken</span>
+            <span class="legend-value font-semibold">{{ m.placesTaken }}</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-indicator dot-amber"></span>
+            <span class="legend-name">Remaining</span>
+            <span class="legend-value font-semibold">{{ m.placesRemaining }}</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-indicator dot-slate"></span>
+            <span class="legend-name">Total Capacity</span>
+            <span class="legend-value font-semibold">{{ m.totalOfferedPlaces }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-sub mt-2 text-xs">
+        {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
+      </div>
+      <div class="kpi-progress-bar">
+        <div
+          class="kpi-progress-fill"
+          [style.width.%]="m.capacityUtilisationPct"
+          [style.background]="m.capacityUtilisationPct >= 90 ? '#B91C1C' : m.capacityUtilisationPct >= 70 ? '#B45309' : 'var(--color-csr-emerald)'"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Partner NGOs & History Card -->
+    <div class="nexus-card admin-kpi-card" id="kpi-ngos-ratio">
+      <div class="nexus-card-header flex justify-between items-center mb-3">
+        <div>
+          <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Partner NGOs & History</div>
+          <span class="text-xs text-muted">Community partner ecosystem</span>
+        </div>
+        <div class="kpi-num text-ngo" style="font-size: 1.5rem; margin: 0;" id="kpi-val-ngos">{{ m.totalNgos }}</div>
+      </div>
+
+      <div class="kpi-sub mb-3">
+        <strong class="text-ngo">{{ m.approvedNgos }} approved</strong>, {{ m.cancelledRegistrations }} withdrawn
+      </div>
+
+      <div class="ngo-breakdown-list">
+        <div class="ngo-stat-item">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="text-secondary font-medium">Approved Partner NGOs</span>
+            <span class="font-bold text-ngo">{{ m.approvedNgos }} / {{ m.totalNgos }}</span>
+          </div>
+          <div class="ngo-meter-bar">
+            <div
+              class="ngo-meter-fill fill-ngo"
+              [style.width.%]="m.totalNgos > 0 ? (m.approvedNgos / m.totalNgos * 100) : 0"
+            ></div>
+          </div>
+        </div>
+
+        <div class="ngo-stat-item mt-3">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="text-secondary font-medium">Withdrawn Registrations</span>
+            <span class="font-bold text-muted">{{ m.cancelledRegistrations }} total</span>
+          </div>
+          <div class="ngo-meter-bar">
+            <div
+              class="ngo-meter-fill fill-slate"
+              [style.width.%]="m.placesTaken > 0 ? (m.cancelledRegistrations / (m.placesTaken + m.cancelledRegistrations) * 100) : 8"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Operational Attention Radar (Full-Width Command Banner) -->
   <section class="nexus-card attention-card mb-6" id="section-needs-attention">
@@ -220,7 +310,7 @@
           </div>
           <div class="radar-row-meta flex items-center gap-2 text-xs">
             <span class="attention-detail radar-detail">{{ item.detail }}</span>
-            <span class="meta-separator" style="color: #CBD5E1;">/</span>
+            <span class="meta-separator" style="color: #D4D4CE;">/</span>
             <span class="radar-ngo-name">
               <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="display: inline-block; vertical-align: -1px; margin-right: 3px;">
                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
@@ -266,7 +356,7 @@
 
     <ng-template #noAttentionTemplate>
       <div class="nexus-empty-radar p-4 text-center text-muted text-sm mt-3">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" style="color: #10B981; margin: 0 auto 0.5rem;" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" style="color: var(--color-csr-emerald); margin: 0 auto 0.5rem;" aria-hidden="true">
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
@@ -274,126 +364,6 @@
       </div>
     </ng-template>
   </section>
-
-  <!-- Middle Analytics Row: Capacity Utilisation & Partner NGOs (Balanced 50:50 Side-by-Side) -->
-  <div class="dash-analytics-grid mb-6" *ngIf="totals$ | async as m">
-    <!-- Capacity Utilisation Card -->
-    <div class="nexus-card admin-kpi-card" id="kpi-utilisation">
-      <div class="nexus-card-header flex justify-between items-center mb-2">
-        <div>
-          <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Capacity Utilisation</div>
-          <span class="text-xs text-muted">CSR staff enrollment rate</span>
-        </div>
-        <span class="text-xs text-muted">Target: 80%</span>
-      </div>
-
-      <div class="nexus-gauge-wrapper">
-        <!-- Circular SVG Donut Progress Ring -->
-        <div class="nexus-donut-box">
-          <svg class="nexus-donut-svg" viewBox="0 0 120 120" aria-hidden="true">
-            <circle
-              class="nexus-donut-bg"
-              cx="60"
-              cy="60"
-              r="48"
-              fill="none"
-              stroke="#F1F5F9"
-              stroke-width="11"
-            />
-            <circle
-              class="nexus-donut-fg"
-              cx="60"
-              cy="60"
-              r="48"
-              fill="none"
-              [attr.stroke]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : '#2563EB'"
-              stroke-width="11"
-              stroke-linecap="round"
-              stroke-dasharray="301.59"
-              [style.strokeDashoffset]="301.59 * (1 - (m.capacityUtilisationPct || 0) / 100)"
-            />
-          </svg>
-          <div class="nexus-donut-center">
-            <span class="nexus-donut-val kpi-num" style="margin: 0;" id="kpi-val-utilisation">{{ m.capacityUtilisationPct }}%</span>
-            <span class="nexus-donut-lbl">Utilised</span>
-          </div>
-        </div>
-
-        <!-- Legend / Breakdown -->
-        <div class="nexus-gauge-legend">
-          <div class="legend-row">
-            <span class="legend-indicator dot-blue"></span>
-            <span class="legend-name">Places Taken</span>
-            <span class="legend-value font-semibold">{{ m.placesTaken }}</span>
-          </div>
-          <div class="legend-row">
-            <span class="legend-indicator dot-amber"></span>
-            <span class="legend-name">Remaining</span>
-            <span class="legend-value font-semibold">{{ m.placesRemaining }}</span>
-          </div>
-          <div class="legend-row">
-            <span class="legend-indicator dot-slate"></span>
-            <span class="legend-name">Total Capacity</span>
-            <span class="legend-value font-semibold">{{ m.totalOfferedPlaces }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="kpi-sub mt-2 text-xs">
-        {{ m.placesTaken }} of {{ m.totalOfferedPlaces }} places filled
-      </div>
-      <div class="kpi-progress-bar">
-        <div
-          class="kpi-progress-fill"
-          [style.width.%]="m.capacityUtilisationPct"
-          [style.background]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : 'var(--color-sky-gradient)'"
-        ></div>
-      </div>
-    </div>
-
-    <!-- Partner NGOs & History Card -->
-    <div class="nexus-card admin-kpi-card" id="kpi-ngos-ratio">
-      <div class="nexus-card-header flex justify-between items-center mb-3">
-        <div>
-          <div class="kpi-label" style="margin: 0; font-size: 0.85rem;">Partner NGOs & History</div>
-          <span class="text-xs text-muted">Community partner ecosystem</span>
-        </div>
-        <div class="kpi-num text-ngo" style="font-size: 1.5rem; margin: 0;" id="kpi-val-ngos">{{ m.totalNgos }}</div>
-      </div>
-
-      <div class="kpi-sub mb-3">
-        <strong class="text-ngo">{{ m.approvedNgos }} approved</strong>, {{ m.cancelledRegistrations }} withdrawn
-      </div>
-
-      <div class="ngo-breakdown-list">
-        <div class="ngo-stat-item">
-          <div class="flex justify-between items-center text-xs mb-1">
-            <span class="text-secondary font-medium">Approved Partner NGOs</span>
-            <span class="font-bold text-ngo">{{ m.approvedNgos }} / {{ m.totalNgos }}</span>
-          </div>
-          <div class="ngo-meter-bar">
-            <div
-              class="ngo-meter-fill fill-ngo"
-              [style.width.%]="m.totalNgos > 0 ? (m.approvedNgos / m.totalNgos * 100) : 0"
-            ></div>
-          </div>
-        </div>
-
-        <div class="ngo-stat-item mt-3">
-          <div class="flex justify-between items-center text-xs mb-1">
-            <span class="text-secondary font-medium">Withdrawn Registrations</span>
-            <span class="font-bold text-muted">{{ m.cancelledRegistrations }} total</span>
-          </div>
-          <div class="ngo-meter-bar">
-            <div
-              class="ngo-meter-fill fill-slate"
-              [style.width.%]="m.placesTaken > 0 ? (m.cancelledRegistrations / (m.placesTaken + m.cancelledRegistrations) * 100) : 8"
-            ></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="text-xs text-muted" style="margin-top: -0.75rem; margin-bottom: 1.75rem; font-style: italic;">
     * Figures derived dynamically from central observables (demo session data store). Slot counts reconcile: Total Offered = Taken + Remaining.

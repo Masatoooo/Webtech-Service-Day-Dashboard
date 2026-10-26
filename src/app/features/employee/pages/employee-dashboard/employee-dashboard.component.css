@@ -84,23 +84,37 @@
 /* Metrics Grid */
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-4);
+}
+
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 580px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .metric-card {
   background-color: var(--color-surface-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   padding: var(--space-5) var(--space-6);
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .metric-card:hover {
-  border-color: #CBD5E1;
+  border-color: var(--color-border-strong);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
 }
 
 .metric-label {
@@ -113,9 +127,10 @@
 
 .metric-val {
   font-family: var(--font-interface);
-  font-size: 2.25rem;
+  font-size: 2.15rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
   color: var(--color-deep-slate);
   line-height: 1.2;
   margin: var(--space-2) 0 var(--space-1);
@@ -145,13 +160,13 @@
 }
 
 /* ==========================================================================
-   UPCOMING INITIATIVE HERO CARD (Responsive & Mobile-Clean)
+   UPCOMING INITIATIVE HERO CARD (Solid Architectural Surface - Zero Gradients)
    ========================================================================== */
 .enrolled-hero-card {
-  background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
-  border: 1.5px solid #BFDBFE;
-  border-left: 6px solid #2563EB;
-  border-radius: var(--radius-xl);
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-csr-emerald);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   padding: 1.5rem;
 }
@@ -174,7 +189,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #2563EB;
+  color: var(--color-csr-emerald);
   margin-bottom: 0.35rem;
 }
 
@@ -272,13 +287,13 @@
   }
 }
 
-/* Discover Opportunities Hero Card (Unenrolled / New Employee State) */
+/* Discover Opportunities Hero Card (Solid Architectural Obsidian - Zero Gradients) */
 .discover-hero-card {
-  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #38BDF8 100%);
-  border: none;
-  border-radius: var(--radius-xl);
+  background: var(--color-obsidian);
+  border: 1px solid #27272A;
+  border-radius: var(--radius-card);
   color: #FFFFFF;
-  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-card);
   padding: 1.75rem 2rem;
 }
 
@@ -299,7 +314,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.9);
+  color: #A1A1AA;
   margin-bottom: 0.45rem;
 }
 
@@ -313,7 +328,7 @@
 }
 
 .discover-desc {
-  color: rgba(255, 255, 255, 0.88);
+  color: #D4D4D8;
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0;
@@ -325,23 +340,22 @@
 
 .btn-browse-open {
   background: #FFFFFF !important;
-  color: #1D4ED8 !important;
-  font-weight: 700 !important;
-  border: none !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 0.75rem 1.6rem !important;
+  color: var(--color-obsidian) !important;
+  font-weight: 600 !important;
+  border: 1px solid #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  padding: 0.7rem 1.4rem !important;
   border-radius: var(--radius-md) !important;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  transition: transform var(--transition-fast), background var(--transition-fast);
+  transition: background var(--transition-fast);
 }
 
 .btn-browse-open:hover {
-  background: #F8FAFC !important;
-  transform: translateY(-1px);
+  background: #F4F4F0 !important;
 }
 
 @media (max-width: 768px) {

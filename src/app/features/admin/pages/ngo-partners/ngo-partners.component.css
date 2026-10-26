@@ -15,23 +15,23 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.825rem;
   font-weight: 600;
-  color: var(--color-text-secondary);
+  color: var(--color-secondary-text);
   text-decoration: none;
   background: transparent;
   transition: all 0.15s ease;
 }
 
 .subnav-tab-btn:hover {
-  color: var(--color-primary-blue);
-  background: var(--color-surface-hover);
+  color: var(--color-obsidian);
+  background: #F4F4F0;
 }
 
 .subnav-tab-btn.active {
-  color: var(--color-primary-blue);
-  background: #EEF2FF;
+  color: #FFFFFF;
+  background: var(--color-obsidian);
 }
 
 .description-clamp {
