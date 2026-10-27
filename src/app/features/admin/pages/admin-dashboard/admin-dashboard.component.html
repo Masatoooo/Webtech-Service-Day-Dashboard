@@ -134,7 +134,7 @@
       </div>
       <div class="kpi-num" style="color: var(--color-primary-blue);" id="kpi-val-taken">{{ m.placesTaken }}</div>
       <div class="kpi-sub">
-        <span style="font-weight: 600; color: #0F172A;">{{ m.activeRegistrations }}</span>
+        <span style="font-weight: 600; color: #18181B;">{{ m.activeRegistrations }}</span>
         <span>confirmed volunteer spots</span>
       </div>
       <div class="nexus-kpi-sparkline-wrap">
@@ -220,7 +220,7 @@
           </div>
           <div class="radar-row-meta flex items-center gap-2 text-xs">
             <span class="attention-detail radar-detail">{{ item.detail }}</span>
-            <span class="meta-separator" style="color: #CBD5E1;">/</span>
+            <span class="meta-separator" style="color: #D4D4D8;">/</span>
             <span class="radar-ngo-name">
               <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12" aria-hidden="true" style="display: inline-block; vertical-align: -1px; margin-right: 3px;">
                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8H5v2h10v-2z" clip-rule="evenodd" />
@@ -297,7 +297,7 @@
               cy="60"
               r="48"
               fill="none"
-              stroke="#F1F5F9"
+              stroke="#F4F4F5"
               stroke-width="11"
             />
             <circle
@@ -306,7 +306,7 @@
               cy="60"
               r="48"
               fill="none"
-              [attr.stroke]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : '#2563EB'"
+              [attr.stroke]="m.capacityUtilisationPct >= 90 ? '#EF4444' : m.capacityUtilisationPct >= 70 ? '#F59E0B' : '#4355F9'"
               stroke-width="11"
               stroke-linecap="round"
               stroke-dasharray="301.59"

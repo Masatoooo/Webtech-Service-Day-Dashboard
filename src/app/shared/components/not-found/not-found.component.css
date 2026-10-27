@@ -23,7 +23,7 @@
 .not-found-code {
   font-family: var(--font-interface);
   font-size: 3.5rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-forest);
   line-height: 1;
   margin-bottom: var(--space-2);

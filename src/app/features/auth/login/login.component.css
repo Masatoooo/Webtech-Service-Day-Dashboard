@@ -11,7 +11,7 @@
 
 .brand-kicker {
   font-size: 0.725rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--text-secondary);
   display: block;
@@ -38,7 +38,7 @@
 
 .brand-name {
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--color-deep-slate);
   margin: 0;

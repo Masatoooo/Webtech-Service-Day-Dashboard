@@ -5,8 +5,8 @@
 
 .dash-greeting-title {
   font-family: var(--font-interface);
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.375rem;
+  font-weight: 600;
   color: var(--color-deep-slate);
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -53,15 +53,15 @@
   white-space: nowrap;
   flex-shrink: 0;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
 }
 
 .btn-dash-action:hover {
-  background: #F8FAFD;
-  border-color: #CBD5E1;
+  background: #FAFAFA;
+  border-color: #D4D4D8;
   color: var(--color-primary-blue);
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 2px 4px rgba(24, 24, 27, 0.06);
 }
 
 .btn-dash-action:active {
@@ -89,10 +89,10 @@
 /* Top 4 Primary Metric Cards */
 .nexus-kpi-card {
   background: var(--color-surface-white);
-  border: 1px solid #E8ECF2;
-  border-radius: 20px;
+  border: 1px solid #ECECEF;
+  border-radius: 12px;
   padding: 1.35rem 1.4rem 0.9rem 1.4rem;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(24, 24, 27, 0.03);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -103,7 +103,7 @@
 .nexus-kpi-card:hover {
   transform: translateY(-2px);
   border-color: #DCE3ED;
-  box-shadow: 0 10px 28px -4px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 28px -4px rgba(24, 24, 27, 0.06);
 }
 
 .nexus-kpi-header {
@@ -117,9 +117,9 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: #F8FAFD;
-  border: 1px solid #EEF2F6;
-  color: #8C9BA5;
+  background: #FAFAFA;
+  border: 1px solid #F0F0F2;
+  color: #A1A1AA;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,25 +137,25 @@
 .icon-blue,
 .icon-emerald,
 .icon-amber {
-  background: #F8FAFD;
-  border: 1px solid #EEF2F6;
-  color: #8C9BA5;
+  background: #FAFAFA;
+  border: 1px solid #F0F0F2;
+  color: #A1A1AA;
 }
 
 .nexus-kpi-card .kpi-label {
   font-family: var(--font-interface);
   font-size: 0.825rem;
   font-weight: 500;
-  color: #64748B;
+  color: #71717A;
   letter-spacing: 0.01em;
   margin: 0;
 }
 
 .nexus-kpi-card .kpi-num {
   font-family: var(--font-interface);
-  font-size: 2.1rem;
-  font-weight: 700;
-  color: #0F172A;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #18181B;
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 0.35rem;
@@ -163,7 +163,7 @@
 
 .nexus-kpi-card .kpi-sub {
   font-size: 0.775rem;
-  color: #94A3B8;
+  color: #A1A1AA;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -190,8 +190,8 @@
   font-weight: 600;
   padding: 0.12rem 0.45rem;
   border-radius: 9999px;
-  background: #F8FAFD;
-  color: #64748B;
+  background: #FAFAFA;
+  color: #71717A;
 }
 
 .nexus-sub-pill.text-blue {
@@ -272,10 +272,10 @@
 
 .nexus-card {
   background: var(--color-surface-white);
-  border: 1px solid #E2E8F0;
-  border-radius: 20px;
+  border: 1px solid #E9E9EC;
+  border-radius: 12px;
   padding: 1.35rem 1.4rem;
-  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 18px -2px rgba(24, 24, 27, 0.04);
 }
 
 .nexus-card-header {
@@ -295,7 +295,7 @@
 .nexus-radar-row {
   background: transparent !important;
   border: none !important;
-  border-bottom: 1px solid #F1F5F9 !important;
+  border-bottom: 1px solid #F4F4F5 !important;
   border-radius: 12px !important;
   padding: 0.9rem 0.75rem !important;
   display: flex !important;
@@ -314,7 +314,7 @@
 }
 
 .nexus-radar-row:hover {
-  background: #F8FAFD !important;
+  background: #FAFAFA !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -324,9 +324,9 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: #F8FAFD;
-  border: 1px solid #EEF2F6;
-  color: #64748B;
+  background: #FAFAFA;
+  border: 1px solid #F0F0F2;
+  color: #71717A;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -336,7 +336,7 @@
 
 .nexus-radar-row:hover .radar-row-icon {
   background: #FFFFFF;
-  border-color: #E2E8F0;
+  border-color: #E9E9EC;
   color: var(--color-primary-blue);
 }
 
@@ -356,7 +356,7 @@
   font-family: var(--font-interface);
   font-size: 0.885rem;
   font-weight: 600;
-  color: #0F172A;
+  color: #18181B;
   margin: 0;
   line-height: 1.35;
 }
@@ -365,7 +365,7 @@
 .radar-row-meta {
   margin-top: 0.25rem;
   font-size: 0.775rem;
-  color: #64748B;
+  color: #71717A;
   display: flex;
   align-items: center;
   gap: 0.45rem;
@@ -374,17 +374,17 @@
 }
 
 .radar-row-meta .radar-detail {
-  color: #64748B;
+  color: #71717A;
   margin: 0;
 }
 
 .meta-separator {
-  color: #CBD5E1;
+  color: #D4D4D8;
   font-size: 0.75rem;
 }
 
 .radar-ngo-name {
-  color: #64748B;
+  color: #71717A;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
@@ -430,7 +430,7 @@
 }
 
 .radar-tag.tag-info {
-  color: #64748B !important;
+  color: #71717A !important;
   background: transparent !important;
   border: none !important;
 }
@@ -460,26 +460,26 @@
 
 .btn-radar-subtle {
   background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
-  color: #475569 !important;
+  border: 1px solid #E9E9EC !important;
+  color: #52525B !important;
 }
 
 .btn-radar-subtle:hover {
-  background: #F8FAFC !important;
-  border-color: #CBD5E1 !important;
-  color: #0F172A !important;
+  background: #FAFAFA !important;
+  border-color: #D4D4D8 !important;
+  color: #18181B !important;
 }
 
 .btn-radar-action {
-  background: #F1F5F9 !important;
-  border: 1px solid #E2E8F0 !important;
-  color: #1E293B !important;
+  background: #F4F4F5 !important;
+  border: 1px solid #E9E9EC !important;
+  color: #27272A !important;
 }
 
 .btn-radar-action:hover {
-  background: #E2E8F0 !important;
-  border-color: #CBD5E1 !important;
-  color: #0F172A !important;
+  background: #E9E9EC !important;
+  border-color: #D4D4D8 !important;
+  color: #18181B !important;
 }
 
 .radar-card-header {
@@ -499,7 +499,7 @@
   margin: 0;
   font-family: var(--font-interface);
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-deep-slate);
   letter-spacing: -0.01em;
 }
@@ -508,7 +508,7 @@
   font-family: var(--font-interface);
   font-size: 0.8rem;
   font-weight: 600;
-  color: #64748B;
+  color: #71717A;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -516,7 +516,7 @@
 .radar-subtitle {
   margin: 0;
   line-height: 1.45;
-  color: #64748B;
+  color: #71717A;
 }
 
 @media (max-width: 768px) {
@@ -564,9 +564,9 @@
 }
 
 .nexus-empty-radar {
-  border-radius: 16px;
-  background: #F8FAFD;
-  border: 1px dashed #CBD5E1;
+  border-radius: 12px;
+  background: #FAFAFA;
+  border: 1px dashed #D4D4D8;
 }
 
 /* Donut Progress Meter on Right Column */
@@ -610,18 +610,18 @@
 
 .nexus-donut-val {
   font-family: var(--font-interface);
-  font-size: 1.45rem;
-  font-weight: 700;
-  color: #0F172A;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #18181B;
   line-height: 1;
 }
 
 .nexus-donut-lbl {
   font-size: 0.65rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #94A3B8;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #A1A1AA;
   margin-top: 3px;
 }
 
@@ -651,27 +651,27 @@
 }
 
 .dot-amber {
-  background: #94A3B8;
+  background: #A1A1AA;
 }
 
 .dot-slate {
-  background: #CBD5E1;
+  background: #D4D4D8;
 }
 
 .legend-name {
-  color: #64748B;
+  color: #71717A;
   flex: 1;
 }
 
 .legend-value {
-  color: #0F172A;
+  color: #18181B;
   font-weight: 600;
 }
 
 /* NGO Meter Bar in Right Column */
 .ngo-meter-bar {
   height: 6px;
-  background: #F1F5F9;
+  background: #F4F4F5;
   border-radius: 9999px;
   overflow: hidden;
 }
@@ -688,7 +688,7 @@
 }
 
 .fill-slate {
-  background: #94A3B8;
+  background: #A1A1AA;
 }
 
 @media (max-width: 768px) {

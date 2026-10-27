@@ -16,17 +16,17 @@
 
 .role-pretitle {
   font-size: var(--font-size-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
   color: var(--color-forest);
   margin-bottom: var(--space-1);
 }
 
 .page-title {
   font-family: var(--font-interface);
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  font-size: 1.375rem;
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--color-deep-slate);
   margin: 0 0 var(--space-1) 0;
@@ -98,23 +98,23 @@
 }
 
 .metric-card:hover {
-  border-color: #CBD5E1;
+  border-color: #D4D4D8;
   box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
 }
 
 .metric-label {
   font-size: var(--font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: normal;
   color: var(--text-secondary);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .metric-val {
   font-family: var(--font-interface);
-  font-size: 2.25rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--color-deep-slate);
   line-height: 1.2;
@@ -148,9 +148,9 @@
    UPCOMING INITIATIVE HERO CARD (Responsive & Mobile-Clean)
    ========================================================================== */
 .enrolled-hero-card {
-  background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+  background: linear-gradient(135deg, #F0F2FE 0%, #FFFFFF 100%);
   border: 1.5px solid #BFDBFE;
-  border-left: 6px solid #2563EB;
+  border-left: 6px solid #4355F9;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
   padding: 1.5rem;
@@ -171,17 +171,17 @@
 .enrolled-eyebrow {
   display: block;
   font-size: var(--font-size-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #2563EB;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #4355F9;
   margin-bottom: 0.35rem;
 }
 
 .enrolled-title {
   font-family: var(--font-interface);
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-deep-slate);
   letter-spacing: -0.01em;
   line-height: 1.3;
@@ -274,11 +274,11 @@
 
 /* Discover Opportunities Hero Card (Unenrolled / New Employee State) */
 .discover-hero-card {
-  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #38BDF8 100%);
+  background: linear-gradient(135deg, #4355F9 0%, #3446E4 50%, #38BDF8 100%);
   border: none;
   border-radius: var(--radius-xl);
   color: #FFFFFF;
-  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 24px -4px rgba(24, 24, 27, 0.08);
   padding: 1.75rem 2rem;
 }
 
@@ -296,9 +296,9 @@
 .discover-eyebrow {
   display: block;
   font-size: 0.725rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 0.45rem;
 }
@@ -306,7 +306,7 @@
 .discover-title {
   color: #FFFFFF;
   font-size: 1.35rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.3;
   margin: 0 0 0.5rem 0;
@@ -325,8 +325,8 @@
 
 .btn-browse-open {
   background: #FFFFFF !important;
-  color: #1D4ED8 !important;
-  font-weight: 700 !important;
+  color: #3446E4 !important;
+  font-weight: 600 !important;
   border: none !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 0.75rem 1.6rem !important;
@@ -340,7 +340,7 @@
 }
 
 .btn-browse-open:hover {
-  background: #F8FAFC !important;
+  background: #FAFAFA !important;
   transform: translateY(-1px);
 }
 

@@ -106,11 +106,11 @@
         class="opp-card"
         [id]="'my-reg-card-' + item.registration.id"
         [style.border-left-color]="
-          item.registration.status === 'CANCELLED' ? '#CAD2D6' :
+          item.registration.status === 'CANCELLED' ? '#D4D4D8' :
           item.activity?.serviceType === 'ENVIRONMENT' ? '#356859' :
           item.activity?.serviceType === 'EDUCATION' ? '#1B5299' :
           item.activity?.serviceType === 'FOOD_SECURITY' ? '#C9A66B' :
-          item.activity?.serviceType === 'COMMUNITY' ? '#692A8E' : '#202C3B'
+          item.activity?.serviceType === 'COMMUNITY' ? '#692A8E' : '#18181B'
         "
       >
         <!-- Card Main Info -->
@@ -209,7 +209,7 @@
           <div
             *ngIf="item.registration.status === 'CANCELLED'"
             class="p-3 mt-2"
-            style="background: #F8F9FA; border-radius: 8px; border: 1px solid #E4E8EB; font-size: 0.8rem; color: #5F6B76;"
+            style="background: #FAFAFA; border-radius: 8px; border: 1px solid #E4E8EB; font-size: 0.8rem; color: #5F6B76;"
             [id]="'cancellation-note-' + item.registration.id"
           >
             <strong>Withdrawn Record:</strong>
@@ -443,7 +443,7 @@
         </div>
 
         <ng-template #noEligibleTargets>
-          <div class="p-4 text-center" style="background: #F8F9FA; border-radius: 8px; border: 1px solid #E1E8E4; font-size: 0.85rem; color: #5F6B76;">
+          <div class="p-4 text-center" style="background: #FAFAFA; border-radius: 8px; border: 1px solid #E1E8E4; font-size: 0.85rem; color: #5F6B76;">
             No alternative initiatives currently available for transfer (all other activities have reached full capacity, closed cut-offs, or you are already registered).
           </div>
         </ng-template>
